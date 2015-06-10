@@ -9,4 +9,5 @@
     <string name="try_another_search">Try another search</string>
     <string name="no_hymns_found">No hymns were found that match your search</string>
     <string name="search">Search</string>
+    <string name="title_activity_favorites">Favorites</string>
 </resources>
