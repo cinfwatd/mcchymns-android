@@ -2,11 +2,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.bitrient.mcchymns.FavoritesActivity">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
+    <item android:id="@+id/favorites_action_settings" android:title="@string/action_settings"
         android:orderInCategory="100"
         app:showAsAction="never" />
-    <item android:id="@+id/action_search"
+    <item android:id="@+id/favorites_action_search"
         android:icon="@mipmap/ic_search"
         android:title="@string/search"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        app:actionViewClass="android.support.v7.widget.SearchView" />
 </menu>

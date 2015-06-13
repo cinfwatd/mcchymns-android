@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.bitrient.mcchymns.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,6 +23,38 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
 
     private List<String> mTitles;
     private int mIcon;
+
+    private List<String> visibleObjects;
+    private boolean isSearch = false;
+
+    /**
+     * Filters the dataset
+     * This is used with the SearchView to filter listed data.
+     *
+     * @param filterText query string
+     */
+    public void setFilter(String filterText) {
+
+        visibleObjects = new ArrayList<>();
+//        constraints = constraint.toString().toLowerCase();
+        filterText = filterText.toLowerCase();
+
+        for (String item: mTitles) {
+            if (item.toLowerCase().contains(filterText))
+                visibleObjects.add(item);
+        }
+
+        isSearch = true;
+        notifyDataSetChanged();
+    }
+
+    public void flushFilter() {
+        visibleObjects = new ArrayList<>();
+        visibleObjects.addAll(mTitles);
+
+        isSearch = false;
+        notifyDataSetChanged();
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         int holderId;
@@ -43,6 +76,7 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
     public FavoritesAdapter(List<String> titles, int icon) {
         mIcon = icon;
         mTitles = titles;
+        visibleObjects = titles;
     }
 
     @Override
@@ -60,13 +94,13 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         if (viewHolder.holderId == 1) { //item
-            viewHolder.textView.setText(mTitles.get(position));
+            viewHolder.textView.setText(visibleObjects.get(position));
             viewHolder.imageView.setImageResource(mIcon);
         }
     }
 
     @Override
     public int getItemCount() {
-        return mTitles.size();
+        return visibleObjects.size();
     }
 }
