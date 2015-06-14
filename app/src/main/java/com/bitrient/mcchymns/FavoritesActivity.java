@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 public class FavoritesActivity extends AppCompatActivity {
 
+    SearchView searchView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +31,7 @@ public class FavoritesActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_favorites, menu);
 
+        searchView = (SearchView) menu.findItem(R.id.favorites_action_search).getActionView();
         return true;
     }
 
@@ -43,5 +46,17 @@ public class FavoritesActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Take care of popping the fragment back stack or finishing the activity
+     * as appropriate.
+     */
+    @Override
+    public void onBackPressed() {
+        if (!searchView.isIconified()) {
+            searchView.setIconified(true);
+        } else
+            super.onBackPressed();
     }
 }
