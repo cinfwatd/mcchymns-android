@@ -23,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.bitrient.mcchymns.adapter.FavoritesAdapter;
+import com.bitrient.mcchymns.view.EmptiableRecyclerView;
 
 import java.util.Arrays;
 
@@ -37,7 +38,7 @@ public class FavoritesActivityFragment extends Fragment {
     }
 
     private SearchView searchView;
-    private RecyclerView recyclerView;
+    private EmptiableRecyclerView recyclerView;
     private final String QUERY_STRING = "queryString";
     private CharSequence currentFilter;
 
@@ -67,7 +68,8 @@ public class FavoritesActivityFragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_favorites, container, false);
 
 //        Grab recyclerview, recyclerviewfastscroller, and sectiontitleindicator from the layout
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+        recyclerView = (EmptiableRecyclerView) rootView.findViewById(R.id.recycler_view);
+        recyclerView.setEmptyView(rootView.findViewById(R.id.empty_favorites));
         recyclerView.setHasFixedSize(true);
 
         String[] titles = getResources().getStringArray(R.array.fruits_array);

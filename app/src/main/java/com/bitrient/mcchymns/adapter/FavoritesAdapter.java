@@ -46,7 +46,11 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
                 visibleObjects.add(item);
         }
 
-        isSearch = true;
+        if (visibleObjects.isEmpty()) {
+            notifyItemRangeChanged(0,0);
+        }
+
+//        isSearch = true;
         notifyDataSetChanged();
     }
 
@@ -54,7 +58,7 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
         visibleObjects = new ArrayList<>();
         visibleObjects.addAll(mTitles);
 
-        isSearch = false;
+//        isSearch = false;
         notifyDataSetChanged();
     }
 
@@ -71,11 +75,12 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
                 textView = (TextView) itemView.findViewById(R.id.rowText);
                 imageView = (ImageView) itemView.findViewById(R.id.rowIcon);
                 holderId = 1;
-            } else if (viewType == TYPE_EMPTY) {
-                textView = (TextView) itemView.findViewById(R.id.empty_favorites_message);
-                imageView = (ImageView) itemView.findViewById(R.id.empty_favorites_icon);
-                holderId = 2;
             }
+//            else if (viewType == TYPE_EMPTY) {
+//                textView = (TextView) itemView.findViewById(R.id.empty_favorites_message);
+//                imageView = (ImageView) itemView.findViewById(R.id.empty_favorites_icon);
+//                holderId = 2;
+//            }
         }
     }
 
@@ -93,12 +98,13 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
             ViewHolder viewHolder = new ViewHolder(view, viewType);
 
             return viewHolder;
-        } else if (viewType == TYPE_EMPTY) {
-            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.empty_favorites, viewGroup, false);
-            ViewHolder viewHolder = new ViewHolder(view, viewType);
-
-            return viewHolder;
         }
+//        else if (viewType == TYPE_EMPTY) {
+//            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.empty_favorites, viewGroup, false);
+//            ViewHolder viewHolder = new ViewHolder(view, viewType);
+//
+//            return viewHolder;
+//        }
 
         return null;
     }
@@ -108,25 +114,17 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
         if (viewHolder.holderId == 1) { //item
             viewHolder.textView.setText(visibleObjects.get(position));
             viewHolder.imageView.setImageResource(mIcon);
-        } else if (viewHolder.holderId == 2) { //empty
-            if (isSearch) {
-                viewHolder.textView.setText(mContext.getResources().getText(R.string.no_hymns_found));
-                viewHolder.imageView.setImageResource(R.mipmap.ic_search);
-            } // else use defaults
         }
+//        else if (viewHolder.holderId == 2) { //empty
+//            if (isSearch) {
+//                viewHolder.textView.setText(mContext.getResources().getText(R.string.no_hymns_found));
+//                viewHolder.imageView.setImageResource(R.mipmap.ic_search);
+//            } // else use defaults
+//        }
     }
 
     @Override
     public int getItemCount() {
-        return visibleObjects.size() > 0 ? visibleObjects.size() : 1;
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        if (visibleObjects.size() == 0) {
-            return TYPE_EMPTY;
-        }
-
-        return super.getItemViewType(position);
+        return visibleObjects.size();
     }
 }
