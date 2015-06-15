@@ -39,8 +39,6 @@ public class FavoritesActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.favorites_action_settings:
-                return true;
             case R.id.favorites_action_search:
                 return true;
         }

@@ -12,6 +12,11 @@
     <string name="title_activity_favorites">Favorites</string>
     <string name="empty_favorites_title">Nothing in Favorites</string>
     <string name="empty_favorites_message">Add hymn to favorites and it will show up here.</string>
+    <string name="remove_selected">Remove</string>
+    <string name="remove_all">Remove all</string>
+    <string name="delete_selected">Delete</string>
+    <string name="delete_all">Delete All</string>
+    <string name="select_all">Select All</string>
 
     <string-array name="fruits_array">
         <item>Apples</item>

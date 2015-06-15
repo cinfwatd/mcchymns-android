@@ -1,8 +1,6 @@
 package com.bitrient.mcchymns.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,22 +10,22 @@ import android.widget.TextView;
 import com.bitrient.mcchymns.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
  * @author Cinfwat Probity <czprobity@bitrient.com>
  * @since 6/10/15
  */
-public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.ViewHolder>  {
-    private static final int TYPE_ITEM = 0;
-    private static final int TYPE_EMPTY = 1;
+public class FavoritesAdapter extends SelectableAdapter<FavoritesAdapter.ViewHolder>  {
 
     private List<String> mTitles;
     private int mIcon;
-    private Context mContext;
 
     private List<String> visibleObjects;
-    private boolean isSearch = false;
+
+    private ViewHolder.ClickListener clickListener;
 
     /**
      * Filters the dataset
@@ -50,7 +48,6 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
             notifyItemRangeChanged(0,0);
         }
 
-//        isSearch = true;
         notifyDataSetChanged();
     }
 
@@ -58,73 +55,134 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
         visibleObjects = new ArrayList<>();
         visibleObjects.addAll(mTitles);
 
-//        isSearch = false;
         notifyDataSetChanged();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        int holderId;
-
-        private TextView textView;
-        private ImageView imageView;
-
-        public ViewHolder(View view, int viewType) {
-            super(view);
-
-            if (viewType == TYPE_ITEM) {
-                textView = (TextView) itemView.findViewById(R.id.rowText);
-                imageView = (ImageView) itemView.findViewById(R.id.rowIcon);
-                holderId = 1;
-            }
-//            else if (viewType == TYPE_EMPTY) {
-//                textView = (TextView) itemView.findViewById(R.id.empty_favorites_message);
-//                imageView = (ImageView) itemView.findViewById(R.id.empty_favorites_icon);
-//                holderId = 2;
-//            }
-        }
-    }
-
-    public FavoritesAdapter(List<String> titles, int icon, Context context) {
+    public FavoritesAdapter(List<String> titles, int icon, ViewHolder.ClickListener clickListener) {
         mIcon = icon;
         mTitles = titles;
-        mContext = context;
         visibleObjects = titles;
+
+        this.clickListener = clickListener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        if (viewType == TYPE_ITEM) {
-            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_row, viewGroup, false);
-            ViewHolder viewHolder = new ViewHolder(view, viewType);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_row, viewGroup, false);
 
-            return viewHolder;
-        }
-//        else if (viewType == TYPE_EMPTY) {
-//            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.empty_favorites, viewGroup, false);
-//            ViewHolder viewHolder = new ViewHolder(view, viewType);
-//
-//            return viewHolder;
-//        }
-
-        return null;
+        return new ViewHolder(view, clickListener);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        if (viewHolder.holderId == 1) { //item
-            viewHolder.textView.setText(visibleObjects.get(position));
-            viewHolder.imageView.setImageResource(mIcon);
-        }
-//        else if (viewHolder.holderId == 2) { //empty
-//            if (isSearch) {
-//                viewHolder.textView.setText(mContext.getResources().getText(R.string.no_hymns_found));
-//                viewHolder.imageView.setImageResource(R.mipmap.ic_search);
-//            } // else use defaults
-//        }
+        viewHolder.textView.setText(visibleObjects.get(position));
+        viewHolder.imageView.setImageResource(mIcon);
+
+//            highlight the item if it's selected
+        viewHolder.selectedOverlay.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
+
     }
 
     @Override
     public int getItemCount() {
         return visibleObjects.size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+        @SuppressWarnings("unused")
+        private static final String TAG = ViewHolder.class.getSimpleName();
+
+        private TextView textView;
+        private ImageView imageView;
+        private View selectedOverlay;
+
+        private ClickListener listener;
+
+        public ViewHolder(View view, ClickListener listener) {
+            super(view);
+
+            textView = (TextView) itemView.findViewById(R.id.rowText);
+            imageView = (ImageView) itemView.findViewById(R.id.rowIcon);
+            selectedOverlay = itemView.findViewById(R.id.selected_overlay);
+
+            this.listener = listener;
+
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
+        }
+
+        /**
+         * Called when a view has been clicked.
+         *
+         * @param v The view that was clicked.
+         */
+        @Override
+        public void onClick(View v) {
+            if (listener != null) {
+                listener.onItemClicked(getLayoutPosition());
+            }
+        }
+
+        /**
+         * Called when a view has been clicked and held.
+         *
+         * @param v The view that was clicked and held.
+         * @return true if the callback consumed the long click, false otherwise.
+         */
+        @Override
+        public boolean onLongClick(View v) {
+            return listener != null && listener.onItemLongClicked(getLayoutPosition());
+
+        }
+
+        public interface ClickListener {
+            void onItemClicked(int position);
+            boolean onItemLongClicked(int position);
+        }
+    }
+
+    public void removeItem(int position) {
+        visibleObjects.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void removeItems(List<Integer> positions) {
+//        Reveerse-sort the list
+        Collections.sort(positions, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer lhs, Integer rhs) {
+                return rhs - lhs;
+            }
+        });
+
+//        split the list in ranges
+        while (!positions.isEmpty()) {
+            if (positions.size() == 1) {
+                removeItem(positions.get(0));
+                positions.remove(0);
+            } else {
+                int count = 1;
+                while (positions.size() > count && positions.get(count).equals(positions.get(count - 1) - 1)) {
+                    ++count;
+                }
+
+                if (count == 1) {
+                    removeItem(positions.get(0));
+                } else {
+                    removeRange(positions.get(count - 1), count);
+                }
+
+                for (int i = 0; i < count; ++i) {
+                    positions.remove(0);
+                }
+            }
+        }
+    }
+
+    public void removeRange(int positionStart, int itemCount) {
+        for (int i = 0; i < itemCount; ++i) {
+            visibleObjects.remove(positionStart);
+        }
+        notifyItemRangeRemoved(positionStart, itemCount);
     }
 }

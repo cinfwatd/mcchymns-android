@@ -1,46 +1,49 @@
 package com.bitrient.mcchymns;
 
 import android.app.Activity;
-import android.app.SearchManager;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.view.GestureDetectorCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.text.TextUtils;
-import android.view.GestureDetector;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MotionEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.bitrient.mcchymns.adapter.FavoritesAdapter;
 import com.bitrient.mcchymns.view.EmptiableRecyclerView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class FavoritesActivityFragment extends Fragment {
+public class FavoritesActivityFragment extends Fragment implements FavoritesAdapter.ViewHolder.ClickListener{
 
+    @SuppressWarnings("unused")
+    private static final String TAG = FavoritesActivityFragment.class.getSimpleName();
 
-
-    public FavoritesActivityFragment() {
-    }
+    private FavoritesAdapter favoritesAdapter;
+    private ActionModeCallback actionModeCallback = new ActionModeCallback();
+    private ActionMode actionMode;
 
     private SearchView searchView;
     private EmptiableRecyclerView recyclerView;
     private final String QUERY_STRING = "queryString";
+    private final String SELECTED_ITEMS = "selectedItems";
+    private boolean isSelection = false;
     private CharSequence currentFilter;
+    private boolean isSearchViewOpen;
 
     /**
      * Called to do initial creation of a fragment.  This is called after
@@ -71,41 +74,15 @@ public class FavoritesActivityFragment extends Fragment {
         recyclerView = (EmptiableRecyclerView) rootView.findViewById(R.id.recycler_view);
         recyclerView.setEmptyView(rootView.findViewById(R.id.empty_favorites));
         recyclerView.setHasFixedSize(true);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         String[] titles = getResources().getStringArray(R.array.fruits_array);
 
-        FavoritesAdapter adapter = new FavoritesAdapter(Arrays.asList(titles), R.mipmap.ic_hymn_gray, getActivity());
-        recyclerView.setAdapter(adapter);
+        favoritesAdapter = new FavoritesAdapter(Arrays.asList(titles), R.mipmap.ic_hymn_gray, this);
+        recyclerView.setAdapter(favoritesAdapter);
 
         setRecyclerViewLayoutManager(recyclerView);
 
-        final GestureDetectorCompat mGestureDetector = new GestureDetectorCompat(getActivity(), new GestureDetector.SimpleOnGestureListener() {
-            @Override public boolean onSingleTapUp(MotionEvent event) {
-                return true;
-            }
-
-        });
-
-        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            @Override
-            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-                View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
-
-                if (child != null && mGestureDetector.onTouchEvent(e)) {
-                    Toast.makeText(getActivity(), "The Item Clicked is: " + recyclerView.getChildPosition(child), Toast.LENGTH_SHORT).show();
-                    return true;
-                }
-
-                return false;
-            }
-
-            @Override
-            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
-            }
-        });
-
-//        setHasOptionsMenu(true);
         return rootView;
     }
 
@@ -132,7 +109,7 @@ public class FavoritesActivityFragment extends Fragment {
      * for more information.
      *
      * @param menu     The options menu in which you place your items.
-     * @param inflater
+     * @param inflater inflater
      * @see #setHasOptionsMenu
      * @see #onPrepareOptionsMenu
      * @see #onOptionsItemSelected
@@ -150,7 +127,7 @@ public class FavoritesActivityFragment extends Fragment {
 
                 InputMethodManager inputMethodManager =
                         (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                inputMethodManager.hideSoftInputFromWindow(getActivity().findViewById(android.R.id.content).getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 return true;
             }
 
@@ -167,7 +144,7 @@ public class FavoritesActivityFragment extends Fragment {
             }
         });
 
-        if (!TextUtils.isEmpty(currentFilter)) {
+        if (isSearchViewOpen) {
             searchView.setIconified(false);
             searchView.setQuery(currentFilter, false);
         }
@@ -190,6 +167,13 @@ public class FavoritesActivityFragment extends Fragment {
     public void onViewStateRestored(Bundle savedInstanceState) {
         if (savedInstanceState != null && savedInstanceState.containsKey(QUERY_STRING)) {
             currentFilter = savedInstanceState.getCharSequence(QUERY_STRING);
+            isSearchViewOpen = true;
+        }
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_ITEMS)) {
+            favoritesAdapter.setSelectedItems(savedInstanceState.getIntegerArrayList(SELECTED_ITEMS));
+            initializeActionMode();
+            invalidateActionMode();
         }
 
         super.onViewStateRestored(savedInstanceState);
@@ -220,8 +204,122 @@ public class FavoritesActivityFragment extends Fragment {
             outState.putCharSequence(QUERY_STRING, searchView.getQuery());
         }
 
+        if (actionMode != null) {
+            outState.putIntegerArrayList(SELECTED_ITEMS, new ArrayList<>(favoritesAdapter.getSelectedItems()));
+        }
+
+
         super.onSaveInstanceState(outState);
     }
 
 
+    @Override
+    public void onItemClicked(int position) {
+        if (actionMode != null) {
+            toggleSelection(position);
+        }
+    }
+
+    @Override
+    public boolean onItemLongClicked(int position) {
+        initializeActionMode();
+
+        toggleSelection(position);
+
+        return true;
+    }
+
+    private void initializeActionMode() {
+        if (actionMode == null) {
+            actionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(actionModeCallback);
+        }
+    }
+
+    /**
+     * Toggle the selection state of an item
+     *
+     * If the item was the last one in the selection and is unselected, the selection is stopped.
+     * Note that the selection must already be started (actionMode must not be null).
+     *
+     * @param position Position of the item to toggle the selection state
+     */
+    private void toggleSelection(int position) {
+        favoritesAdapter.toggleSelection(position);
+        invalidateActionMode();
+    }
+
+    private void invalidateActionMode() {
+        int count = favoritesAdapter.getSelectedItemCount();
+
+        if (count == 0) {
+            actionMode.finish();
+        } else {
+            actionMode.setTitle(String.format("%d selected", count));
+            actionMode.invalidate();
+        }
+    }
+
+    private class ActionModeCallback implements ActionMode.Callback {
+        @SuppressWarnings("unused")
+        private final String TAG = ActionModeCallback.class.getSimpleName();
+
+        /**
+         * Called when action mode is first created. The menu supplied will be used to
+         * generate action buttons for the action mode.
+         *
+         * @param mode ActionMode being created
+         * @param menu Menu used to populate action buttons
+         * @return true if the action mode should be created, false if entering this
+         * mode should be aborted.
+         */
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mode.getMenuInflater().inflate(R.menu.favorites_menu_selected, menu);
+            return true;
+        }
+
+        /**
+         * Called to refresh an action mode's action menu whenever it is invalidated.
+         *
+         * @param mode ActionMode being prepared
+         * @param menu Menu used to populate action buttons
+         * @return true if the menu or action mode was updated, false otherwise.
+         */
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        /**
+         * Called to report a user click on an action button.
+         *
+         * @param mode The current ActionMode
+         * @param item The item that was clicked
+         * @return true if this callback handled the event, false if the standard MenuItem
+         * invocation should continue.
+         */
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.favorites_selected_action_remove:
+                    favoritesAdapter.removeItems(favoritesAdapter.getSelectedItems());
+                    Log.d(TAG, "favorites menu selected remove");
+                    mode.finish();
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        /**
+         * Called when an action mode is about to be exited and destroyed.
+         *
+         * @param mode The current ActionMode being destroyed
+         */
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            favoritesAdapter.clearSelection();
+            actionMode = null;
+        }
+    }
 }
