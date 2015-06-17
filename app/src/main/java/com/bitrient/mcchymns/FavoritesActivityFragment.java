@@ -1,18 +1,23 @@
 package com.bitrient.mcchymns;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ContentProviderOperation;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.RemoteException;
+import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -35,7 +40,6 @@ import com.bitrient.mcchymns.database.HymnContract;
 import com.bitrient.mcchymns.view.EmptiableRecyclerView;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -206,7 +210,7 @@ public class FavoritesActivityFragment extends Fragment implements
 
                 // hack used to tell the RecyclerView that its empty due to a search filter so that
                 // it can respond with the appropriate background.
-                recyclerView.setSearch(!TextUtils.isEmpty(newText) ? true : false);
+                recyclerView.setSearch(!TextUtils.isEmpty(newText));
 
                 currentFilter = !TextUtils.isEmpty(newText) ? newText : null;
                 getLoaderManager().restartLoader(0, null, FavoritesActivityFragment.this);
@@ -223,6 +227,36 @@ public class FavoritesActivityFragment extends Fragment implements
         }
 
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    /**
+     * This hook is called whenever an item in your options menu is selected.
+     * The default implementation simply returns false to have the normal
+     * processing happen (calling the item's Runnable or sending a message to
+     * its Handler as appropriate).  You can use this method for any items
+     * for which you would like to do processing without those other
+     * facilities.
+     * <p/>
+     * <p>Derived classes should call through to the base class for it to
+     * perform the default menu handling.
+     *
+     * @param item The menu item that was selected.
+     * @return boolean Return false to allow normal menu processing to
+     * proceed, true to consume it here.
+     * @see #onCreateOptionsMenu
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.favorites_action_remove_all:
+                if (favoritesAdapter.getItemCount() == 0) return true;
+
+                final ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance();
+                dialogFragment.show(getFragmentManager(), "confirmDialog");
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -421,11 +455,6 @@ public class FavoritesActivityFragment extends Fragment implements
                 HymnContract.HymnEntry.COLUMN_NAME_HYMN_NUMBER
         };
         String selection = HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE + " IS NOT NULL";
-//        String[] selectionArgs = null;
-//        String sortOrder = null;
-
-
-        //        Log.d(TAG, "ONCREATELOADER CaLled - " + cl);
 
         return new CursorLoader(getActivity(), baseUri, projection, selection, null, null);
     }
@@ -485,7 +514,10 @@ public class FavoritesActivityFragment extends Fragment implements
         favoritesAdapter.swapCursor(null);
     }
 
-
+    /**
+     * Removes the item at specified position from the favorites list.
+     * @param position postion to remove
+     */
     public void removeItem(int position) {
 
         ContentValues values = new ContentValues();
@@ -496,15 +528,17 @@ public class FavoritesActivityFragment extends Fragment implements
                 Long.toString(favoritesAdapter.getItemId(position))
         };
         getActivity().getContentResolver().update(HymnContract.HymnEntry.CONTENT_URI, values, selection, selectionArgs);
-//        favoritesAdapter.notifyItemRemoved(position);
     }
 
+    /**
+     * Removes multiple hymns from favorites based on the specified list
+     * @param positions list of items to remove.
+     */
     public void removeItems(List<Integer> positions) {
 
         if (positions.size() == 1) {
             removeItem(positions.get(0));
         } else {
-//            Collections.sort(positions);
             removeRange(positions);
         }
     }
@@ -528,12 +562,62 @@ public class FavoritesActivityFragment extends Fragment implements
 
         try {
             getActivity().getContentResolver().applyBatch(HymnContract.AUTHORITY, operations);
-        } catch (RemoteException e) {
-            // Do nothing when this error is thrown.
-            e.printStackTrace();
-        } catch (OperationApplicationException e) {
-            // Do nothing when this error is thrown.
-            e.printStackTrace();
+        } catch (RemoteException | OperationApplicationException e) {
+            // If any error is thrown, the operation is implicitly aborted.
+        }
+    }
+
+    public static class ConfirmDialogFragment extends DialogFragment {
+
+        public static ConfirmDialogFragment newInstance() {
+            return new ConfirmDialogFragment();
+        }
+        /**
+         * Override to build your own custom Dialog container.  This is typically
+         * used to show an AlertDialog instead of a generic Dialog; when doing so,
+         * {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)} does not need
+         * to be implemented since the AlertDialog takes care of its own content.
+         * <p>
+         * <p>This method will be called after {@link #onCreate(Bundle)} and
+         * before {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.  The
+         * default implementation simply instantiates and returns a {@link Dialog}
+         * class.
+         * <p>
+         * <p><em>Note: DialogFragment own the {@link Dialog#setOnCancelListener
+         * Dialog.setOnCancelListener} and {@link Dialog#setOnDismissListener
+         * Dialog.setOnDismissListener} callbacks.  You must not set them yourself.</em>
+         * To find out about these events, override {@link #onCancel(DialogInterface)}
+         * and {@link #onDismiss(DialogInterface)}.</p>
+         *
+         * @param savedInstanceState The last saved instance state of the Fragment,
+         *                           or null if this is a freshly created Fragment.
+         * @return Return a new Dialog instance to be displayed by the Fragment.
+         */
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Remove all from favorites?");
+            builder.setIcon(R.mipmap.ic_action_discard);
+            builder.setPositiveButton("Remove", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ContentValues values = new ContentValues();
+                    values.putNull(HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE);
+
+                    String selection = HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE + " IS NOT NULL";
+
+                    getActivity().getContentResolver().update(HymnContract.HymnEntry.CONTENT_URI, values, selection, null);
+                }
+            });
+
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            return builder.create();
         }
     }
 }
