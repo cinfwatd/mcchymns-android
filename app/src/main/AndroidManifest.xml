@@ -21,10 +21,6 @@
 
         </activity>
         <activity
-            android:name=".HymnPagerActivity"
-            android:label="@string/title_activity_hymn_pager" >
-        </activity>
-        <activity
             android:name=".SearchableActivity"
             android:label="@string/title_activity_searchable"
             android:launchMode="singleTop" >
