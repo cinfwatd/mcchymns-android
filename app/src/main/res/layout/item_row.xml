@@ -18,25 +18,34 @@
             android:layout_height="wrap_content"
             android:id="@+id/rowIcon"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="8dp"
-            android:layout_marginEnd="8dp" />
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/hymn_icon"/>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/rowText"
-            android:layout_toRightOf="@+id/rowIcon"
-            android:layout_centerVertical="true" />
-
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/rowIcon"
+            android:layout_toEndOf="@+id/rowIcon"
+            android:layout_centerVertical="true"
+            android:textAppearance="?android:attr/textAppearanceSmallPopupMenu"/>
+
+        <TextView
             android:id="@+id/rowNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_toRightOf="@+id/rowText"
+            android:layout_toEndOf="@+id/rowText"
+            android:gravity="end"
             android:layout_marginRight="8dp"
-            android:textStyle="bold"/>
+            android:layout_marginEnd="8dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"/>
     </RelativeLayout>
 
     <View
