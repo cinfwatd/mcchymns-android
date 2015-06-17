@@ -38,10 +38,12 @@ public class HymnsProvider extends ContentProvider {
     private static final UriMatcher URIMatcher;
     private static final int HYMNS = 1;
     private static final int HYMNS_ID = 2;
+    private static final int HYMNS_FILTER = 3;
     static {
         URIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         URIMatcher.addURI(HymnContract.AUTHORITY, "hymns", HYMNS);
         URIMatcher.addURI(HymnContract.AUTHORITY, "hymns/#", HYMNS_ID);
+        URIMatcher.addURI(HymnContract.AUTHORITY, "hymns/filter/*", HYMNS_FILTER);
     }
 
     public HymnsProvider() {
@@ -77,6 +79,8 @@ public class HymnsProvider extends ContentProvider {
                 return HymnContract.HymnEntry.CONTENT_TYPE;
             case HYMNS_ID:
                 return HymnContract.HymnEntry.CONTENT_ITEM_TYPE;
+            case HYMNS_FILTER:
+                return HymnContract.HymnEntry.CONTENT_TYPE;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -97,6 +101,8 @@ public class HymnsProvider extends ContentProvider {
 
             return insertedHymnUri;
         }
+
+        Log.i(TAG, "ROW_ID = " + rowId);
 
         throw new SQLException("Failed to insert row into " + uri);
     }
@@ -126,6 +132,13 @@ public class HymnsProvider extends ContentProvider {
                 queryBuilder.appendWhere(
                         HymnContract.HymnEntry._ID + "=" +
                                 uri.getPathSegments().get(1));
+                break;
+            case HYMNS_FILTER:
+                queryBuilder.setTables(HymnContract.HymnEntry.TABLE_NAME);
+                queryBuilder.setProjectionMap(hymnsProjectionMap);
+                queryBuilder.appendWhere(
+                        HymnContract.HymnEntry.COLUMN_NAME_FIRST_LINE + " LIKE \"%" + uri.getPathSegments().get(2) + "%\"");
+                Log.d(TAG, "QUERY BUILDER = " + queryBuilder.buildQuery(null, null, null, null, null, null));
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);

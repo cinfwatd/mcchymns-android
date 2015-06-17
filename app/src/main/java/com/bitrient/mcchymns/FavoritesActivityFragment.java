@@ -1,15 +1,25 @@
 package com.bitrient.mcchymns;
 
 import android.app.Activity;
+import android.content.ContentProviderOperation;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.OperationApplicationException;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.RemoteException;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,30 +28,34 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CursorAdapter;
 
 import com.bitrient.mcchymns.adapter.FavoritesAdapter;
+import com.bitrient.mcchymns.database.HymnContract;
 import com.bitrient.mcchymns.view.EmptiableRecyclerView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class FavoritesActivityFragment extends Fragment implements FavoritesAdapter.ViewHolder.ClickListener{
+public class FavoritesActivityFragment extends Fragment implements
+        FavoritesAdapter.ViewHolder.ClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     @SuppressWarnings("unused")
     private static final String TAG = FavoritesActivityFragment.class.getSimpleName();
+
+    private EmptiableRecyclerView recyclerView;
 
     private FavoritesAdapter favoritesAdapter;
     private ActionModeCallback actionModeCallback = new ActionModeCallback();
     private ActionMode actionMode;
 
     private SearchView searchView;
-    private EmptiableRecyclerView recyclerView;
     private final String QUERY_STRING = "queryString";
     private final String SELECTED_ITEMS = "selectedItems";
-    private boolean isSelection = false;
     private CharSequence currentFilter;
     private boolean isSearchViewOpen;
 
@@ -49,7 +63,7 @@ public class FavoritesActivityFragment extends Fragment implements FavoritesAdap
      * Called to do initial creation of a fragment.  This is called after
      * {@link #onAttach(Activity)} and before
      * {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
-     * <p>
+     * <p/>
      * <p>Note that this can be called while the fragment's activity is
      * still in the process of being created.  As such, you can not rely
      * on things like the activity's content view hierarchy being initialized
@@ -62,7 +76,42 @@ public class FavoritesActivityFragment extends Fragment implements FavoritesAdap
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+
+//        ContentValues values = new ContentValues();
+////        values.put(HymnContract.HymnEntry._ID, "");
+//        values.put(HymnContract.HymnEntry.COLUMN_NAME_HYMN_NUMBER, "9");
+//        values.put(HymnContract.HymnEntry.COLUMN_NAME_FIRST_LINE, "Thank you Jesus 9");
+//        values.put(HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE, "True");
+//
+//        getActivity().getContentResolver().insert(HymnContract.HymnEntry.CONTENT_URI, values);
+//
+//        values.clear();
+////        values.put(HymnContract.HymnEntry._ID, "");
+//        values.put(HymnContract.HymnEntry.COLUMN_NAME_HYMN_NUMBER, "10");
+//        values.put(HymnContract.HymnEntry.COLUMN_NAME_FIRST_LINE, "Thank you Jesus 10");
+//        values.put(HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE, "True");
+//
+//        getActivity().getContentResolver().insert(HymnContract.HymnEntry.CONTENT_URI, values);
+//
+//        values.clear();
+////        values.put(HymnContract.HymnEntry._ID, "");
+//        values.put(HymnContract.HymnEntry.COLUMN_NAME_HYMN_NUMBER, "11");
+//        values.put(HymnContract.HymnEntry.COLUMN_NAME_FIRST_LINE, "Thank you Jesus 11");
+//        values.put(HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE, "True");
+//        getActivity().getContentResolver().insert(HymnContract.HymnEntry.CONTENT_URI, values);
+//
+//        values.clear();
+////        values.put(HymnContract.HymnEntry._ID, "");
+//        values.put(HymnContract.HymnEntry.COLUMN_NAME_HYMN_NUMBER, "12");
+//        values.put(HymnContract.HymnEntry.COLUMN_NAME_FIRST_LINE, "Thank you Jesus 12 ");
+//        values.put(HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE, "True");
+//        getActivity().getContentResolver().insert(HymnContract.HymnEntry.CONTENT_URI, values);
+
+//        add all to favorites
+        ContentValues values = new ContentValues();
+        values.put(HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE, "True");
+        getActivity().getContentResolver().update(HymnContract.HymnEntry.CONTENT_URI,
+                values, null, null);
     }
 
     @Override
@@ -70,20 +119,41 @@ public class FavoritesActivityFragment extends Fragment implements FavoritesAdap
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_favorites, container, false);
 
-//        Grab recyclerview, recyclerviewfastscroller, and sectiontitleindicator from the layout
         recyclerView = (EmptiableRecyclerView) rootView.findViewById(R.id.recycler_view);
         recyclerView.setEmptyView(rootView.findViewById(R.id.empty_favorites));
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        String[] titles = getResources().getStringArray(R.array.fruits_array);
+//        String[] titles = getResources().getStringArray(R.array.fruits_array);
 
-        favoritesAdapter = new FavoritesAdapter(Arrays.asList(titles), R.mipmap.ic_hymn_gray, this);
+        favoritesAdapter = new FavoritesAdapter(null, R.mipmap.ic_hymn_gray, this);
         recyclerView.setAdapter(favoritesAdapter);
 
         setRecyclerViewLayoutManager(recyclerView);
 
         return rootView;
+    }
+
+    /**
+     * Called when the fragment's activity has been created and this
+     * fragment's view hierarchy instantiated.  It can be used to do final
+     * initialization once these pieces are in place, such as retrieving
+     * views or restoring state.  It is also useful for fragments that use
+     * {@link #setRetainInstance(boolean)} to retain their instance,
+     * as this callback tells the fragment when it is fully associated with
+     * the new activity instance.  This is called after {@link #onCreateView}
+     * and before {@link #onViewStateRestored(Bundle)}.
+     *
+     * @param savedInstanceState If the fragment is being re-created from
+     *                           a previous saved state, this is the state.
+     */
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        setHasOptionsMenu(true);
+
+        getLoaderManager().initLoader(0, null, this);
     }
 
     private void setRecyclerViewLayoutManager(RecyclerView recyclerView) {
@@ -133,15 +203,18 @@ public class FavoritesActivityFragment extends Fragment implements FavoritesAdap
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (!newText.isEmpty()) {
-                    ((FavoritesAdapter) recyclerView.getAdapter()).setFilter(newText);
-                } else {
-                    ((FavoritesAdapter) recyclerView.getAdapter()).flushFilter();
-                }
 
+                // hack used to tell the RecyclerView that its empty due to a search filter so that
+                // it can respond with the appropriate background.
+                recyclerView.setSearch(!TextUtils.isEmpty(newText) ? true : false);
+
+                currentFilter = !TextUtils.isEmpty(newText) ? newText : null;
+                getLoaderManager().restartLoader(0, null, FavoritesActivityFragment.this);
 
                 return false;
             }
+
+
         });
 
         if (isSearchViewOpen) {
@@ -302,7 +375,8 @@ public class FavoritesActivityFragment extends Fragment implements FavoritesAdap
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.favorites_selected_action_remove:
-                    favoritesAdapter.removeItems(favoritesAdapter.getSelectedItems());
+                    removeItems(favoritesAdapter.getSelectedItems());
+//                    favoritesAdapter.removeItems(favoritesAdapter.getSelectedItems());
                     Log.d(TAG, "favorites menu selected remove");
                     mode.finish();
                     return true;
@@ -320,6 +394,146 @@ public class FavoritesActivityFragment extends Fragment implements FavoritesAdap
         public void onDestroyActionMode(ActionMode mode) {
             favoritesAdapter.clearSelection();
             actionMode = null;
+        }
+    }
+
+    /**
+     * Instantiate and return a new Loader for the given ID.
+     *
+     * @param id   The ID whose loader is to be created.
+     * @param args Any arguments supplied by the caller.
+     * @return Return a new Loader instance that is ready to start loading.
+     */
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Uri baseUri;
+
+        // Pick the base URI to use depending on whether we are currently filtering.
+        if (currentFilter != null) {
+            baseUri = Uri.withAppendedPath(HymnContract.HymnEntry.CONTENT_FILTER_URI, Uri.encode(currentFilter.toString()));
+        } else {
+            baseUri = HymnContract.HymnEntry.CONTENT_URI;
+        }
+
+        String[] projection = new String[] {
+                HymnContract.HymnEntry._ID,
+                HymnContract.HymnEntry.COLUMN_NAME_FIRST_LINE,
+                HymnContract.HymnEntry.COLUMN_NAME_HYMN_NUMBER
+        };
+        String selection = HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE + " IS NOT NULL";
+//        String[] selectionArgs = null;
+//        String sortOrder = null;
+
+
+        //        Log.d(TAG, "ONCREATELOADER CaLled - " + cl);
+
+        return new CursorLoader(getActivity(), baseUri, projection, selection, null, null);
+    }
+
+    /**
+     * Called when a previously created loader has finished its load.  Note
+     * that normally an application is <em>not</em> allowed to commit fragment
+     * transactions while in this call, since it can happen after an
+     * activity's state is saved.
+     * <p>
+     * <p>This function is guaranteed to be called prior to the release of
+     * the last data that was supplied for this Loader.  At this point
+     * you should remove all use of the old data (since it will be released
+     * soon), but should not do your own release of the data since its Loader
+     * owns it and will take care of that.  The Loader will take care of
+     * management of its data so you don't have to.  In particular:
+     * <p>
+     * <ul>
+     * <li> <p>The Loader will monitor for changes to the data, and report
+     * them to you through new calls here.  You should not monitor the
+     * data yourself.  For example, if the data is a {@link Cursor}
+     * and you place it in a {@link CursorAdapter}, use
+     * the {@link CursorAdapter#CursorAdapter(Context,
+     * Cursor, int)} constructor <em>without</em> passing
+     * in either {@link CursorAdapter#FLAG_AUTO_REQUERY}
+     * or {@link CursorAdapter#FLAG_REGISTER_CONTENT_OBSERVER}
+     * (that is, use 0 for the flags argument).  This prevents the CursorAdapter
+     * from doing its own observing of the Cursor, which is not needed since
+     * when a change happens you will get a new Cursor throw another call
+     * here.
+     * <li> The Loader will release the data once it knows the application
+     * is no longer using it.  For example, if the data is
+     * a {@link Cursor} from a {@link CursorLoader},
+     * you should not call close() on it yourself.  If the Cursor is being placed in a
+     * {@link CursorAdapter}, you should use the
+     * {@link CursorAdapter#swapCursor(Cursor)}
+     * method so that the old Cursor is not closed.
+     * </ul>
+     *
+     * @param loader The Loader that has finished.
+     * @param data   The data generated by the Loader.
+     */
+    @Override
+    public void onLoadFinished(Loader loader, Cursor data) {
+        favoritesAdapter.swapCursor(data);
+    }
+
+    /**
+     * Called when a previously created loader is being reset, and thus
+     * making its data unavailable.  The application should at this point
+     * remove any references it has to the Loader's data.
+     *
+     * @param loader The Loader that is being reset.
+     */
+    @Override
+    public void onLoaderReset(Loader loader) {
+        favoritesAdapter.swapCursor(null);
+    }
+
+
+    public void removeItem(int position) {
+
+        ContentValues values = new ContentValues();
+        values.putNull(HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE);
+
+        String selection = HymnContract.HymnEntry._ID + " = ?";
+        String[] selectionArgs = new String[] {
+                Long.toString(favoritesAdapter.getItemId(position))
+        };
+        getActivity().getContentResolver().update(HymnContract.HymnEntry.CONTENT_URI, values, selection, selectionArgs);
+//        favoritesAdapter.notifyItemRemoved(position);
+    }
+
+    public void removeItems(List<Integer> positions) {
+
+        if (positions.size() == 1) {
+            removeItem(positions.get(0));
+        } else {
+//            Collections.sort(positions);
+            removeRange(positions);
+        }
+    }
+
+    public void removeRange(List<Integer> positions) {
+
+        ArrayList<ContentProviderOperation> operations = new ArrayList<>();
+
+        ContentValues values = new ContentValues();
+        for (int position: positions) {
+            Uri baseUri = Uri.withAppendedPath(HymnContract.HymnEntry.CONTENT_URI,
+                    Uri.encode(Long.toString(favoritesAdapter.getItemId(position))));
+
+            values.clear();
+            values.putNull(HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE);
+            ContentProviderOperation.Builder builder = ContentProviderOperation.newUpdate(baseUri);
+            builder.withValues(values);
+
+            operations.add(builder.build());
+        }
+
+        try {
+            getActivity().getContentResolver().applyBatch(HymnContract.AUTHORITY, operations);
+        } catch (RemoteException e) {
+            // Do nothing when this error is thrown.
+            e.printStackTrace();
+        } catch (OperationApplicationException e) {
+            // Do nothing when this error is thrown.
+            e.printStackTrace();
         }
     }
 }

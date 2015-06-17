@@ -28,6 +28,15 @@
             android:id="@+id/rowText"
             android:layout_toRightOf="@+id/rowIcon"
             android:layout_centerVertical="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rowNumber"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="8dp"
+            android:textStyle="bold"/>
     </RelativeLayout>
 
     <View

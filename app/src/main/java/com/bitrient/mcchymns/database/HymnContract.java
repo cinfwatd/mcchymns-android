@@ -19,6 +19,7 @@ public final class HymnContract {
 
     public static abstract class HymnEntry implements BaseColumns {
         public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/hymns");
+        public static final Uri CONTENT_FILTER_URI = Uri.parse("content://" + AUTHORITY + "/hymns/filter");
         public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.bitrient.hymn";
         public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.bitrient.hymn";
 
@@ -33,7 +34,7 @@ public final class HymnContract {
         public static final String COLUMN_NAME_NEW_HYMNS = "new_hymns";
         public static final String COLUMN_NAME_FIRST_LINE = "first_line";
         public static final String COLUMN_NAME_TOPIC_ID = "topic_id";
-        public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_HYMN_NUMBER + " DESC";
+        public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_HYMN_NUMBER + " COLLATE LOCALIZED ASC";
 
         public static final String SQL_CREATE_ENTRIES =
                 "CREATE TABLE " + TABLE_NAME + " (" +

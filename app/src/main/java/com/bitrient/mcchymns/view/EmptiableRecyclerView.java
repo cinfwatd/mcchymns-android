@@ -16,6 +16,7 @@ import com.bitrient.mcchymns.R;
 public class EmptiableRecyclerView extends RecyclerView {
 
     private View emptyView;
+    private boolean mIsSearch;
     private AdapterDataObserver emptyObserver = new AdapterDataObserver() {
         @Override
         public void onChanged() {
@@ -23,6 +24,19 @@ public class EmptiableRecyclerView extends RecyclerView {
 
             if (adapter != null && emptyView != null) {
                 if (adapter.getItemCount() == 0) {
+
+                    TextView message = (TextView) emptyView.findViewById(R.id.empty_favorites_message);
+                    ImageView icon = (ImageView) emptyView.findViewById(R.id.empty_favorites_icon);
+                    if (mIsSearch && adapter.getItemCount() == 0) {
+                        message.setText(getResources().getText(R.string.no_hymns_found));
+                        icon.setImageResource(R.mipmap.ic_search);
+
+                        mIsSearch = false;
+                    } else {
+                        message.setText(getResources().getText(R.string.empty_favorites_message));
+                        icon.setImageResource(R.mipmap.ic_hymn_gray);
+                    }
+
                     emptyView.setVisibility(VISIBLE);
                     EmptiableRecyclerView.this.setVisibility(GONE);
                 } else {
@@ -31,22 +45,11 @@ public class EmptiableRecyclerView extends RecyclerView {
                 }
             }
         }
-
-        @Override
-        public void onItemRangeChanged(int positionStart, int itemCount) {
-            Adapter<?> adapter = getAdapter();
-
-            if (adapter != null && emptyView != null) {
-//                onChanged();
-
-                TextView message = (TextView) emptyView.findViewById(R.id.empty_favorites_message);
-                ImageView icon = (ImageView) emptyView.findViewById(R.id.empty_favorites_icon);
-
-                message.setText(getResources().getText(R.string.no_hymns_found));
-                icon.setImageResource(R.mipmap.ic_search);
-            }
-        }
     };
+
+    public void setSearch(boolean isSearch) {
+        mIsSearch = isSearch;
+    }
 
     public EmptiableRecyclerView(Context context) {
         super(context);
