@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.bitrient.mcchymns.R;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,7 +30,7 @@ import java.sql.SQLException;
 public class HymnDbHelper extends SQLiteOpenHelper{
     private static final String TAG = "DB_HELPER";
 
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "MCCHymns.db";
 
     private Context mContext;
@@ -59,21 +61,20 @@ public class HymnDbHelper extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(HymnContract.SubjectEntry.SQL_CREATE_ENTRIES);
         db.execSQL(HymnContract.TopicEntry.SQL_CREATE_ENTRIES);
-        db.execSQL(HymnContract.HymnEntry.SQL_CREATE_ENTRIES);
+//        db.execSQL(HymnContract.HymnEntry.SQL_CREATE_ENTRIES);
         db.execSQL(HymnContract.StanzaEntry.SQL_CREATE_ENTRIES);
         db.execSQL(HymnContract.ChorusEntry.SQL_CREATE_ENTRIES);
 
         //TODO: pre-populate the db here.
 
-//        try {
-//            insertHymn(db, downloadData(HymnContract.HymnEntry.TABLE_NAME));
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+        final SQLiteDatabase dBase = db;
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+                insertSubjects(dBase, HymnContract.SubjectEntry.TABLE_NAME);
+//            }
+//        }).start();
+
     }
 
     private void insertHymn(SQLiteDatabase db, JSONArray jsonArray) throws JSONException {
@@ -154,7 +155,7 @@ public class HymnDbHelper extends SQLiteOpenHelper{
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(HymnContract.ChorusEntry.SQL_DELETE_ENTRIES);
         db.execSQL(HymnContract.StanzaEntry.SQL_DELETE_ENTRIES);
-        db.execSQL(HymnContract.HymnEntry.SQL_DELETE_ENTRIES);
+//        db.execSQL(HymnContract.HymnEntry.SQL_DELETE_ENTRIES);
         db.execSQL(HymnContract.TopicEntry.SQL_DELETE_ENTRIES);
         db.execSQL(HymnContract.SubjectEntry.SQL_DELETE_ENTRIES);
 
@@ -172,5 +173,54 @@ public class HymnDbHelper extends SQLiteOpenHelper{
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         onUpgrade(db, oldVersion, newVersion);
+    }
+
+    private String loadJson(String table) {
+        String json = null;
+
+        InputStream inputStream = null;
+
+        switch (table) {
+            case HymnContract.SubjectEntry.TABLE_NAME:
+                inputStream = mContext.getResources().openRawResource(R.raw.subject);
+                break;
+        }
+        try {
+
+            int size = inputStream.available();
+            byte[] buffer = new byte[size];
+
+            inputStream.read(buffer);
+            inputStream.close();
+
+            json = new String(buffer, "UTF-8");
+
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+
+        return json;
+    }
+
+    private void insertSubjects(SQLiteDatabase db, String table) {
+        String json = loadJson(table);
+
+        try {
+            JSONArray jsonArray = new JSONArray(json);
+
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                ContentValues values = new ContentValues();
+                values.put(HymnContract.SubjectEntry._ID, jsonObject.getInt("_id"));
+                values.put(HymnContract.SubjectEntry.COLUMN_NAME_SUBJECT, jsonObject.getString("subject"));
+
+                db.insert(HymnContract.SubjectEntry.TABLE_NAME, null, values);
+            }
+
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

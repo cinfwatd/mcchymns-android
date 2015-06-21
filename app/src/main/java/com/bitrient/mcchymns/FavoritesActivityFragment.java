@@ -37,6 +37,7 @@ import android.widget.CursorAdapter;
 
 import com.bitrient.mcchymns.adapter.FavoritesAdapter;
 import com.bitrient.mcchymns.database.HymnContract;
+import com.bitrient.mcchymns.dialog.ConfirmDialogFragment;
 import com.bitrient.mcchymns.view.EmptiableRecyclerView;
 
 import java.util.ArrayList;
@@ -123,7 +124,7 @@ public class FavoritesActivityFragment extends Fragment implements
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_favorites, container, false);
 
-        recyclerView = (EmptiableRecyclerView) rootView.findViewById(R.id.recycler_view);
+        recyclerView = (EmptiableRecyclerView) rootView.findViewById(R.id.favorites_recycler_view);
         recyclerView.setEmptyView(rootView.findViewById(R.id.empty_favorites));
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -193,6 +194,9 @@ public class FavoritesActivityFragment extends Fragment implements
         searchView = (SearchView) menu.findItem(R.id.favorites_action_search).getActionView();
 
         searchView.setQueryHint(getActivity().getResources().getString(R.string.search_hint));
+
+        View searchPlate = searchView.findViewById(android.support.v7.appcompat.R.id.search_plate);
+        searchPlate.setBackgroundResource(R.drawable.textfield_search_selected_dashed);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -307,7 +311,7 @@ public class FavoritesActivityFragment extends Fragment implements
      */
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        if (!searchView.isIconified()) {
+        if (searchView != null && !searchView.isIconified()) {
             outState.putCharSequence(QUERY_STRING, searchView.getQuery());
         }
 
@@ -564,60 +568,6 @@ public class FavoritesActivityFragment extends Fragment implements
             getActivity().getContentResolver().applyBatch(HymnContract.AUTHORITY, operations);
         } catch (RemoteException | OperationApplicationException e) {
             // If any error is thrown, the operation is implicitly aborted.
-        }
-    }
-
-    public static class ConfirmDialogFragment extends DialogFragment {
-
-        public static ConfirmDialogFragment newInstance() {
-            return new ConfirmDialogFragment();
-        }
-        /**
-         * Override to build your own custom Dialog container.  This is typically
-         * used to show an AlertDialog instead of a generic Dialog; when doing so,
-         * {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)} does not need
-         * to be implemented since the AlertDialog takes care of its own content.
-         * <p>
-         * <p>This method will be called after {@link #onCreate(Bundle)} and
-         * before {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.  The
-         * default implementation simply instantiates and returns a {@link Dialog}
-         * class.
-         * <p>
-         * <p><em>Note: DialogFragment own the {@link Dialog#setOnCancelListener
-         * Dialog.setOnCancelListener} and {@link Dialog#setOnDismissListener
-         * Dialog.setOnDismissListener} callbacks.  You must not set them yourself.</em>
-         * To find out about these events, override {@link #onCancel(DialogInterface)}
-         * and {@link #onDismiss(DialogInterface)}.</p>
-         *
-         * @param savedInstanceState The last saved instance state of the Fragment,
-         *                           or null if this is a freshly created Fragment.
-         * @return Return a new Dialog instance to be displayed by the Fragment.
-         */
-        @NonNull
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("Remove all from favorites?");
-            builder.setIcon(R.mipmap.ic_action_discard);
-            builder.setPositiveButton("Remove", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    ContentValues values = new ContentValues();
-                    values.putNull(HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE);
-
-                    String selection = HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE + " IS NOT NULL";
-
-                    getActivity().getContentResolver().update(HymnContract.HymnEntry.CONTENT_URI, values, selection, null);
-                }
-            });
-
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-            return builder.create();
         }
     }
 }

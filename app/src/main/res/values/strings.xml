@@ -17,4 +17,13 @@
     <string name="delete_all">Delete All</string>
     <string name="select_all">Select All</string>
     <string name="hymn_icon">Image representation of hymns</string>
+    <string name="open_navigation_drawer_description">Open navigation drawer</string>
+    <string name="close_navigation_drawer_desc">Close navigation drawer.</string>
+    <string name="favorites_confirm_remove">Remove from favorites?</string>
+    <string name="favorites_confirm_accept">Remove</string>
+    <string name="favorites_confirm_decline">Cancel</string>
+    <string name="title_activity_search">Search</string>
+    <string name="apply_filter">Apply filter</string>
+    <string name="clear_filter">Clear filter</string>
+    <string name="dialog_icon">Dialog Icon</string>
 </resources>

@@ -34,7 +34,7 @@ public class FavoritesAdapter extends SelectableAdapter<FavoritesAdapter.ViewHol
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_row, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.favorites_row, viewGroup, false);
 
         return new ViewHolder(view, clickListener);
     }
@@ -81,6 +81,20 @@ public class FavoritesAdapter extends SelectableAdapter<FavoritesAdapter.ViewHol
         return mCursor.getCount();
     }
 
+    public void swapCursor(Cursor cursor) {
+        if (mCursor == cursor) return;
+
+        mCursor = cursor;
+        if (mCursor != null) {
+            mRowIdColumn = cursor.getColumnIndexOrThrow(HymnContract.HymnEntry._ID);
+        } else {
+            mRowIdColumn = -1;
+        }
+
+        notifyDataSetChanged();
+
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         @SuppressWarnings("unused")
         private static final String TAG = ViewHolder.class.getSimpleName();
@@ -96,9 +110,9 @@ public class FavoritesAdapter extends SelectableAdapter<FavoritesAdapter.ViewHol
         public ViewHolder(View view, ClickListener listener) {
             super(view);
 
-            firstLineTextView = (TextView) itemView.findViewById(R.id.rowText);
-            hymnNumberTextView = (TextView) itemView.findViewById(R.id.rowNumber);
-            hymnIcon = (ImageView) itemView.findViewById(R.id.rowIcon);
+            firstLineTextView = (TextView) itemView.findViewById(R.id.favorites_row_title);
+            hymnNumberTextView = (TextView) itemView.findViewById(R.id.favorites_row_number);
+            hymnIcon = (ImageView) itemView.findViewById(R.id.favorites_row_icon);
             selectedOverlay = itemView.findViewById(R.id.selected_overlay);
 
             this.listener = listener;
@@ -114,9 +128,7 @@ public class FavoritesAdapter extends SelectableAdapter<FavoritesAdapter.ViewHol
          */
         @Override
         public void onClick(View v) {
-            if (listener != null) {
-                listener.onItemClicked(getLayoutPosition());
-            }
+            if (listener != null) listener.onItemClicked(getLayoutPosition());
         }
 
         /**
@@ -135,20 +147,4 @@ public class FavoritesAdapter extends SelectableAdapter<FavoritesAdapter.ViewHol
             boolean onItemLongClicked(int position);
         }
     }
-
-    public void swapCursor(Cursor cursor) {
-        if (mCursor == cursor) return;
-
-        mCursor = cursor;
-        if (mCursor != null) {
-            mRowIdColumn = cursor.getColumnIndexOrThrow(HymnContract.HymnEntry._ID);
-        } else {
-            mRowIdColumn = -1;
-        }
-
-        notifyDataSetChanged();
-
-    }
-
-    public Cursor getCursor() { return mCursor; }
 }

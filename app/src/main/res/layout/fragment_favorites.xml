@@ -5,7 +5,7 @@
     tools:context="com.bitrient.mcchymns.FavoritesActivityFragment">
 
     <com.bitrient.mcchymns.view.EmptiableRecyclerView
-        android:id="@+id/recycler_view"
+        android:id="@+id/favorites_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -13,7 +13,7 @@
         android:id="@+id/empty_favorites"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:padding="16dp" >
+        android:padding="@dimen/medium_padding" >
 
         <LinearLayout
 
@@ -29,13 +29,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/ic_hymn_gray"
-                android:layout_marginBottom="5dp"/>
+                android:layout_marginBottom="@dimen/small_margin"/>
 
             <TextView
                 android:id="@+id/empty_favorites_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
+                android:textSize="@dimen/medium_text_size"
                 android:textColor="@color/gray"
                 android:text="@string/empty_favorites_title" />
 

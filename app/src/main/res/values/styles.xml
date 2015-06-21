@@ -7,5 +7,9 @@
         <!--<item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>-->
         <item name="windowActionModeOverlay">true</item>
     </style>
+
+    <style name="AlertDialogTheme" parent="android:Theme.Dialog">
+        <item name="android:textSize">14sp</item>
+    </style>
     
 </resources>

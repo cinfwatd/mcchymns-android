@@ -19,6 +19,8 @@ public class FavoritesActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.favorites_toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.mipmap.ic_hymn);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 
