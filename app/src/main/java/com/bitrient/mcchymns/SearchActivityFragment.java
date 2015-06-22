@@ -3,12 +3,10 @@ package com.bitrient.mcchymns;
 import android.app.SearchManager;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -23,8 +21,8 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 
 import com.bitrient.mcchymns.adapter.CategoryAdapter;
+import com.bitrient.mcchymns.adapter.SimpleCursorLoader;
 import com.bitrient.mcchymns.database.HymnContract;
-import com.bitrient.mcchymns.database.HymnDbHelper;
 import com.bitrient.mcchymns.dialog.TopicDialogFragment;
 
 
@@ -40,7 +38,6 @@ public class SearchActivityFragment extends Fragment implements LoaderManager.Lo
 
     private RecyclerView mRecyclerView;
     private CategoryAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
 
     private Cursor mCursor;
 
@@ -60,7 +57,7 @@ public class SearchActivityFragment extends Fragment implements LoaderManager.Lo
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.search_category_recycler_view);
 
         mAdapter = new CategoryAdapter(null, this);
-        mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        RecyclerView.LayoutManager mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
 
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -124,9 +121,13 @@ public class SearchActivityFragment extends Fragment implements LoaderManager.Lo
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Loader loader = new SimpleCursorLoader(getActivity());
+        String[] columns = new String[] {
+                HymnContract.SubjectEntry._ID,
+                HymnContract.SubjectEntry.COLUMN_NAME_SUBJECT
+        };
 
-        return loader;
+        return new SimpleCursorLoader(getActivity(), HymnContract.SubjectEntry.TABLE_NAME, columns,
+                null, null, null, null, null);
     }
 
     @Override
@@ -151,24 +152,5 @@ public class SearchActivityFragment extends Fragment implements LoaderManager.Lo
     @Override
     public void onDialogNegativeClicked(DialogFragment dialog) {
         Log.d(TAG, "DIALOG== negative clicked.");
-    }
-
-    private static class SimpleCursorLoader extends CursorLoader {
-
-        public SimpleCursorLoader(Context context) {
-            super(context);
-        }
-
-        @Override
-        public Cursor loadInBackground() {
-            HymnDbHelper dbHelper = HymnDbHelper.getInstance(getContext());
-            SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-            String[] columns = new String[] {
-                    HymnContract.SubjectEntry._ID,
-                    HymnContract.SubjectEntry.COLUMN_NAME_SUBJECT
-            };
-            return db.query(HymnContract.SubjectEntry.TABLE_NAME, columns, null, null, null, null, null);
-        }
     }
 }

@@ -28,9 +28,10 @@ import java.sql.SQLException;
  * @since 6/10/15
  */
 public class HymnDbHelper extends SQLiteOpenHelper{
-    private static final String TAG = "DB_HELPER";
+    @SuppressWarnings("unused")
+    private static final String TAG = HymnDbHelper.class.getSimpleName();
 
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "MCCHymns.db";
 
     private Context mContext;
@@ -59,7 +60,7 @@ public class HymnDbHelper extends SQLiteOpenHelper{
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(HymnContract.SubjectEntry.SQL_CREATE_ENTRIES);
+//        db.execSQL(HymnContract.SubjectEntry.SQL_CREATE_ENTRIES);
         db.execSQL(HymnContract.TopicEntry.SQL_CREATE_ENTRIES);
 //        db.execSQL(HymnContract.HymnEntry.SQL_CREATE_ENTRIES);
         db.execSQL(HymnContract.StanzaEntry.SQL_CREATE_ENTRIES);
@@ -67,80 +68,8 @@ public class HymnDbHelper extends SQLiteOpenHelper{
 
         //TODO: pre-populate the db here.
 
-        final SQLiteDatabase dBase = db;
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-                insertSubjects(dBase, HymnContract.SubjectEntry.TABLE_NAME);
-//            }
-//        }).start();
-
-    }
-
-    private void insertHymn(SQLiteDatabase db, JSONArray jsonArray) throws JSONException {
-//        JSONArray jsonArray = new JSONArray(jsonString);
-
-        for (int i = 0; i < jsonArray.length(); i++) {
-            JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-            ContentValues values = new ContentValues();
-            values.put(HymnContract.HymnEntry._ID, jsonObject.getInt("_id"));
-            values.put(HymnContract.HymnEntry.COLUMN_NAME_HYMN_NUMBER, jsonObject.getInt("number"));
-            values.put(HymnContract.HymnEntry.COLUMN_NAME_FIRST_LINE, jsonObject.getString("first_line"));
-            values.put(HymnContract.HymnEntry.COLUMN_NAME_TOPIC_ID, jsonObject.getInt("topic_id"));
-
-            //TODO: fetch other details: author, year, story, sacred_songs, new_hymns, christian_choir
-            db.insert(HymnContract.HymnEntry.TABLE_NAME, HymnContract.HymnEntry.COLUMN_NAME_CREATION_STORY, values);
-        }
-    }
-
-    private JSONArray downloadData(String tableName) throws IOException, SQLException, JSONException {
-        if (isNetworkAvailable()) {
-            InputStream inputStream;
-            HttpURLConnection urlConnection;
-            String requestUrl = HymnContract.BASE_URL + tableName;
-
-            URL url = new URL(requestUrl);
-            urlConnection = (HttpURLConnection) url.openConnection();
-
-//        optional request header
-            urlConnection.setRequestProperty("Content-Type", "application/json");
-            urlConnection.setRequestProperty("Accept", "application/json");
-
-//        Get request
-            urlConnection.setRequestMethod("GET");
-            int statusCode = urlConnection.getResponseCode();
-
-//        200 == HTTP OK
-            if  (statusCode == HttpURLConnection.HTTP_OK) {
-                inputStream = new BufferedInputStream(urlConnection.getInputStream());
-
-                return new JSONArray(convertInputStreamToString(inputStream));
-            } else {
-                throw new SQLDataException("Failed to fetch data!! - Database (Table - " + tableName + ")");
-            }
-        } else {
-            throw new SQLDataException("Please enable your network.");
-        }
-    }
-
-    private boolean isNetworkAvailable() {
-        return true;
-    }
-
-    private String convertInputStreamToString(InputStream inputStream) throws IOException{
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-        String line;
-        String result = "";
-
-        while ((line = bufferedReader.readLine()) != null) {
-            result += line;
-        }
-
-//        close stream
-        inputStream.close();
-
-        return result;
+//        insertSubjects(db, HymnContract.SubjectEntry.TABLE_NAME);
+        insertTopics(db, HymnContract.TopicEntry.TABLE_NAME);
     }
 
     /**
@@ -157,7 +86,7 @@ public class HymnDbHelper extends SQLiteOpenHelper{
         db.execSQL(HymnContract.StanzaEntry.SQL_DELETE_ENTRIES);
 //        db.execSQL(HymnContract.HymnEntry.SQL_DELETE_ENTRIES);
         db.execSQL(HymnContract.TopicEntry.SQL_DELETE_ENTRIES);
-        db.execSQL(HymnContract.SubjectEntry.SQL_DELETE_ENTRIES);
+//        db.execSQL(HymnContract.SubjectEntry.SQL_DELETE_ENTRIES);
 
         onCreate(db);
     }
@@ -176,13 +105,16 @@ public class HymnDbHelper extends SQLiteOpenHelper{
     }
 
     private String loadJson(String table) {
-        String json = null;
+        String json;
 
         InputStream inputStream = null;
 
         switch (table) {
             case HymnContract.SubjectEntry.TABLE_NAME:
                 inputStream = mContext.getResources().openRawResource(R.raw.subject);
+                break;
+            case HymnContract.TopicEntry.TABLE_NAME:
+                inputStream = mContext.getResources().openRawResource(R.raw.topic);
                 break;
         }
         try {
@@ -217,6 +149,29 @@ public class HymnDbHelper extends SQLiteOpenHelper{
                 values.put(HymnContract.SubjectEntry.COLUMN_NAME_SUBJECT, jsonObject.getString("subject"));
 
                 db.insert(HymnContract.SubjectEntry.TABLE_NAME, null, values);
+            }
+
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void insertTopics(SQLiteDatabase db, String table) {
+        String json = loadJson(table);
+
+        try {
+            JSONArray jsonArray = new JSONArray(json);
+
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                ContentValues values = new ContentValues();
+                values.put(HymnContract.TopicEntry._ID, jsonObject.getInt("_id"));
+                values.put(HymnContract.TopicEntry.COLUMN_NAME_SUBJECT_ID, jsonObject.getString("subject_id"));
+                values.put(HymnContract.TopicEntry.COLUMN_NAME_TOPIC, jsonObject.getString("topic"));
+
+                db.insert(HymnContract.TopicEntry.TABLE_NAME, null, values);
             }
 
         } catch (JSONException e) {

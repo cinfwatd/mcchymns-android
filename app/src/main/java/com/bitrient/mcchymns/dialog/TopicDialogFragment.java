@@ -2,24 +2,35 @@ package com.bitrient.mcchymns.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
+import android.support.v4.widget.CursorAdapter;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AlertDialog;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bitrient.mcchymns.R;
+import com.bitrient.mcchymns.database.HymnContract;
+import com.bitrient.mcchymns.database.HymnDbHelper;
 
 /**
  * @author Cinfwat Probity <czprobity@bitrient.com>
  * @since 6/21/15
  */
-public class TopicDialogFragment extends DialogFragment {
+public class TopicDialogFragment extends DialogFragment implements LoaderManager.LoaderCallbacks{
     private static String INDEX = "index";
     private static String TITLE = "title";
 
@@ -39,7 +50,28 @@ public class TopicDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        CharSequence title = getArguments().getCharSequence(TITLE);
+        CharSequence subject = getArguments().getCharSequence(TITLE);
+        int subjectId = getArguments().getInt(INDEX);
+
+        HymnDbHelper dbHelper = HymnDbHelper.getInstance(getActivity());
+        final SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String[] columns = new String[] {
+                HymnContract.TopicEntry._ID,
+//                HymnContract.TopicEntry.COLUMN_NAME_SUBJECT_ID,
+                HymnContract.TopicEntry.COLUMN_NAME_TOPIC
+        };
+
+        String selection = HymnContract.TopicEntry.COLUMN_NAME_SUBJECT_ID + " = ?";
+        String[] selectionArgs = new String[] {
+                subject.toString()
+        };
+
+        String groupBy = null;
+        String having = null;
+        String orderBy = null;
+
+        final Cursor cursor = db.query(HymnContract.TopicEntry.TABLE_NAME, columns, selection, selectionArgs, groupBy, having, orderBy);
+
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
@@ -48,11 +80,12 @@ public class TopicDialogFragment extends DialogFragment {
         final TextView dialogTitle = (TextView) dialogHeader.findViewById(R.id.dialog_title);
         final ProgressBar dialogProgressBar = (ProgressBar) dialogHeader.findViewById(R.id.dialog_progress_spinner);
 
-        dialogTitle.setText(title);
+        dialogTitle.setText(subject);
 //            dialogProgressBar
 
+        ContextThemeWrapper wrapper = new ContextThemeWrapper(getActivity(), R.style.AlertDialogTheme);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(wrapper);
         builder.setCustomTitle(dialogHeader);
 
 //            builder.setIcon(R.mipmap.ic_action_view_as_list);
@@ -71,21 +104,28 @@ public class TopicDialogFragment extends DialogFragment {
                         mListener.onDialogNegativeClicked(TopicDialogFragment.this);
                     }
                 });
-        CharSequence[] charsequeneArr = new  CharSequence[] {
-                "I Love Matjey",
-                "I Love Matlong"
-        };
 
-        boolean[] checked = new boolean[2];
-        checked[0] = true;
-
-        int checkedInt = 0;
-        builder.setMultiChoiceItems(charsequeneArr, checked, new DialogInterface.OnMultiChoiceClickListener() {
+        builder.setMultiChoiceItems(cursor, null, HymnContract.TopicEntry.COLUMN_NAME_TOPIC, new DialogInterface.OnMultiChoiceClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which, boolean isChecked) {
 
             }
         });
+//        CharSequence[] charsequeneArr = new  CharSequence[] {
+//                "Love",
+//                "Peace"
+//        };
+//
+//        boolean[] checked = new boolean[2];
+//        checked[0] = true;
+//
+//        int checkedInt = 0;
+//        builder.setMultiChoiceItems(charsequeneArr, checked, new DialogInterface.OnMultiChoiceClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+//
+//            }
+//        });
         return builder.create();
     }
 
@@ -105,6 +145,20 @@ public class TopicDialogFragment extends DialogFragment {
         }
     }
 
+    @Override
+    public Loader onCreateLoader(int id, Bundle args) {
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader loader, Object data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader loader) {
+
+    }
 
 
     /**
