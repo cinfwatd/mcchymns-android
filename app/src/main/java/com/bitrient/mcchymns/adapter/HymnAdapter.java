@@ -15,7 +15,7 @@ import com.bitrient.mcchymns.database.HymnContract;
  * @author Cinfwat Probity <czprobity@bitrient.com>
  * @since 6/10/15
  */
-public class FavoritesAdapter extends SelectableAdapter<FavoritesAdapter.ViewHolder>  {
+public class HymnAdapter extends SelectableAdapter<HymnAdapter.ViewHolder>  {
 
     private int mIcon;
     private Cursor mCursor;
@@ -23,7 +23,7 @@ public class FavoritesAdapter extends SelectableAdapter<FavoritesAdapter.ViewHol
 
     private ViewHolder.ClickListener clickListener;
 
-    public FavoritesAdapter(Cursor cursor, int icon, ViewHolder.ClickListener clickListener) {
+    public HymnAdapter(Cursor cursor, int icon, ViewHolder.ClickListener clickListener) {
         mIcon = icon;
         mCursor = cursor;
 
@@ -34,7 +34,7 @@ public class FavoritesAdapter extends SelectableAdapter<FavoritesAdapter.ViewHol
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.favorites_row, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.hymn_row, viewGroup, false);
 
         return new ViewHolder(view, clickListener);
     }
@@ -110,9 +110,9 @@ public class FavoritesAdapter extends SelectableAdapter<FavoritesAdapter.ViewHol
         public ViewHolder(View view, ClickListener listener) {
             super(view);
 
-            firstLineTextView = (TextView) itemView.findViewById(R.id.favorites_row_title);
-            hymnNumberTextView = (TextView) itemView.findViewById(R.id.favorites_row_number);
-            hymnIcon = (ImageView) itemView.findViewById(R.id.favorites_row_icon);
+            firstLineTextView = (TextView) itemView.findViewById(R.id.hymn_row_title);
+            hymnNumberTextView = (TextView) itemView.findViewById(R.id.hymn_row_number);
+            hymnIcon = (ImageView) itemView.findViewById(R.id.hymn_row_icon);
             selectedOverlay = itemView.findViewById(R.id.selected_overlay);
 
             this.listener = listener;

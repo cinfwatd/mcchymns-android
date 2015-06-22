@@ -31,7 +31,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.CursorAdapter;
 
 import com.bitrient.mcchymns.R;
-import com.bitrient.mcchymns.adapter.FavoritesAdapter;
+import com.bitrient.mcchymns.adapter.HymnAdapter;
 import com.bitrient.mcchymns.database.HymnContract;
 import com.bitrient.mcchymns.fragment.dialog.ConfirmDialogFragment;
 import com.bitrient.mcchymns.view.EmptiableRecyclerView;
@@ -43,14 +43,14 @@ import java.util.List;
  * A placeholder fragment containing a simple view.
  */
 public class FavoritesActivityFragment extends Fragment implements
-        FavoritesAdapter.ViewHolder.ClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+        HymnAdapter.ViewHolder.ClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     @SuppressWarnings("unused")
     private static final String TAG = FavoritesActivityFragment.class.getSimpleName();
 
     private EmptiableRecyclerView recyclerView;
 
-    private FavoritesAdapter favoritesAdapter;
+    private HymnAdapter hymnAdapter;
     private ActionModeCallback actionModeCallback = new ActionModeCallback();
     private ActionMode actionMode;
 
@@ -127,8 +127,8 @@ public class FavoritesActivityFragment extends Fragment implements
 
 //        String[] titles = getResources().getStringArray(R.array.fruits_array);
 
-        favoritesAdapter = new FavoritesAdapter(null, R.mipmap.ic_hymn_gray, this);
-        recyclerView.setAdapter(favoritesAdapter);
+        hymnAdapter = new HymnAdapter(null, R.mipmap.ic_hymn_gray, this);
+        recyclerView.setAdapter(hymnAdapter);
 
         setRecyclerViewLayoutManager(recyclerView);
 
@@ -249,7 +249,7 @@ public class FavoritesActivityFragment extends Fragment implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.favorites_action_remove_all:
-                if (favoritesAdapter.getItemCount() == 0) return true;
+                if (hymnAdapter.getItemCount() == 0) return true;
 
                 final ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance();
                 dialogFragment.show(getFragmentManager(), "confirmDialog");
@@ -278,7 +278,7 @@ public class FavoritesActivityFragment extends Fragment implements
         }
 
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_ITEMS)) {
-            favoritesAdapter.setSelectedItems(savedInstanceState.getIntegerArrayList(SELECTED_ITEMS));
+            hymnAdapter.setSelectedItems(savedInstanceState.getIntegerArrayList(SELECTED_ITEMS));
             initializeActionMode();
             invalidateActionMode();
         }
@@ -312,7 +312,7 @@ public class FavoritesActivityFragment extends Fragment implements
         }
 
         if (actionMode != null) {
-            outState.putIntegerArrayList(SELECTED_ITEMS, new ArrayList<>(favoritesAdapter.getSelectedItems()));
+            outState.putIntegerArrayList(SELECTED_ITEMS, new ArrayList<>(hymnAdapter.getSelectedItems()));
         }
 
 
@@ -351,12 +351,12 @@ public class FavoritesActivityFragment extends Fragment implements
      * @param position Position of the item to toggle the selection state
      */
     private void toggleSelection(int position) {
-        favoritesAdapter.toggleSelection(position);
+        hymnAdapter.toggleSelection(position);
         invalidateActionMode();
     }
 
     private void invalidateActionMode() {
-        int count = favoritesAdapter.getSelectedItemCount();
+        int count = hymnAdapter.getSelectedItemCount();
 
         if (count == 0) {
             actionMode.finish();
@@ -409,8 +409,8 @@ public class FavoritesActivityFragment extends Fragment implements
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.favorites_selected_action_remove:
-                    removeItems(favoritesAdapter.getSelectedItems());
-//                    favoritesAdapter.removeItems(favoritesAdapter.getSelectedItems());
+                    removeItems(hymnAdapter.getSelectedItems());
+//                    hymnAdapter.removeItems(hymnAdapter.getSelectedItems());
                     Log.d(TAG, "favorites menu selected remove");
                     mode.finish();
                     return true;
@@ -426,7 +426,7 @@ public class FavoritesActivityFragment extends Fragment implements
          */
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            favoritesAdapter.clearSelection();
+            hymnAdapter.clearSelection();
             actionMode = null;
         }
     }
@@ -499,7 +499,7 @@ public class FavoritesActivityFragment extends Fragment implements
      */
     @Override
     public void onLoadFinished(Loader loader, Cursor data) {
-        favoritesAdapter.swapCursor(data);
+        hymnAdapter.swapCursor(data);
     }
 
     /**
@@ -511,7 +511,7 @@ public class FavoritesActivityFragment extends Fragment implements
      */
     @Override
     public void onLoaderReset(Loader loader) {
-        favoritesAdapter.swapCursor(null);
+        hymnAdapter.swapCursor(null);
     }
 
     /**
@@ -525,7 +525,7 @@ public class FavoritesActivityFragment extends Fragment implements
 
         String selection = HymnContract.HymnEntry._ID + " = ?";
         String[] selectionArgs = new String[] {
-                Long.toString(favoritesAdapter.getItemId(position))
+                Long.toString(hymnAdapter.getItemId(position))
         };
         getActivity().getContentResolver().update(HymnContract.HymnEntry.CONTENT_URI, values, selection, selectionArgs);
     }
@@ -550,7 +550,7 @@ public class FavoritesActivityFragment extends Fragment implements
         ContentValues values = new ContentValues();
         for (int position: positions) {
             Uri baseUri = Uri.withAppendedPath(HymnContract.HymnEntry.CONTENT_URI,
-                    Uri.encode(Long.toString(favoritesAdapter.getItemId(position))));
+                    Uri.encode(Long.toString(hymnAdapter.getItemId(position))));
 
             values.clear();
             values.putNull(HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE);
