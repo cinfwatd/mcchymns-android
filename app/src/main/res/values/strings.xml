@@ -26,4 +26,8 @@
     <string name="apply_filter">Apply filter</string>
     <string name="clear_filter">Clear filter</string>
     <string name="dialog_icon">Dialog Icon</string>
+    <string name="advance_search">Advanced search</string>
+    <string name="favorites">Favorites</string>
+    <string name="settings">Settings</string>
+    <string name="about">About</string>
 </resources>

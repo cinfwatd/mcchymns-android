@@ -30,6 +30,7 @@
             android:layout_toRightOf="@+id/navigation_drawer_row_icon"
             android:layout_toEndOf="@+id/navigation_drawer_row_icon"
             android:layout_centerVertical="true"
+            android:textSize="16sp"
             android:textAppearance="?android:attr/textAppearanceSmallPopupMenu"/>
     </RelativeLayout>
 

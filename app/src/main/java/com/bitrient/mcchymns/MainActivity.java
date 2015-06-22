@@ -20,8 +20,7 @@ import com.bitrient.mcchymns.adapter.NavigationDrawerAdapter;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationDrawerAdapter.ViewHolder.ClickListener{
-    private final String TITLES[] = {"Search", "Index to Subjects", "Goto Hymn #No", "Favorites", "About"};
-    private final int ICONS[] = {R.mipmap.ic_action_discard, R.mipmap.ic_action_accept, R.mipmap.ic_hymn_gray, R.mipmap.ic_favorite, R.mipmap.ic_info};
+
 
     Toolbar mToolbar;
 
@@ -42,6 +41,20 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerA
 
         mRecyclerView = (RecyclerView) findViewById(R.id.navigation_recycler_view);
         mRecyclerView.setHasFixedSize(true);
+
+        final String TITLES[] = {
+                getResources().getString(R.string.favorites),
+                getResources().getString(R.string.advance_search),
+                getResources().getString(R.string.settings),
+                getResources().getString(R.string.about)
+        };
+
+        final int ICONS[] = {
+                R.mipmap.ic_favorite,
+                R.mipmap.ic_action_search,
+                R.mipmap.ic_action_settings,
+                R.mipmap.ic_info
+        };
         mAdapter = new NavigationDrawerAdapter(TITLES, ICONS, this);
 
         mRecyclerView.setAdapter(mAdapter);
@@ -114,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerA
     public void onItemClicked(int position) {
         mDrawerLayout.closeDrawers();
 //        Toast.makeText(this, String.format("Item %d is clicked", position), Toast.LENGTH_SHORT).show();
-        if (position == 3) {
+        if (position == 0) {
             Intent intent = new Intent(this, FavoritesActivity.class);
             startActivity(intent);
         }
