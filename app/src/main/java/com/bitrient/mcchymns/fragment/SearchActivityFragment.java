@@ -1,4 +1,4 @@
-package com.bitrient.mcchymns;
+package com.bitrient.mcchymns.fragment;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -20,10 +20,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 
+import com.bitrient.mcchymns.R;
 import com.bitrient.mcchymns.adapter.CategoryAdapter;
 import com.bitrient.mcchymns.adapter.SimpleCursorLoader;
 import com.bitrient.mcchymns.database.HymnContract;
-import com.bitrient.mcchymns.dialog.TopicDialogFragment;
+import com.bitrient.mcchymns.fragment.dialog.TopicDialogFragment;
 
 
 /**

@@ -1,4 +1,4 @@
-package com.bitrient.mcchymns;
+package com.bitrient.mcchymns.fragment;
 
 import android.app.Activity;
 import android.content.ContentProviderOperation;
@@ -30,9 +30,10 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CursorAdapter;
 
+import com.bitrient.mcchymns.R;
 import com.bitrient.mcchymns.adapter.FavoritesAdapter;
 import com.bitrient.mcchymns.database.HymnContract;
-import com.bitrient.mcchymns.dialog.ConfirmDialogFragment;
+import com.bitrient.mcchymns.fragment.dialog.ConfirmDialogFragment;
 import com.bitrient.mcchymns.view.EmptiableRecyclerView;
 
 import java.util.ArrayList;

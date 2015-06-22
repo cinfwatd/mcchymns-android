@@ -7,7 +7,7 @@
     <include android:id="@+id/search_toolbar" layout="@layout/toolbar" />
 
     <fragment  android:id="@+id/fragment"
-        android:name="com.bitrient.mcchymns.SearchActivityFragment"
+        android:name="com.bitrient.mcchymns.fragment.SearchActivityFragment"
         tools:layout="@layout/fragment_search" android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

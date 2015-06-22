@@ -1,4 +1,4 @@
-package com.bitrient.mcchymns.dialog;
+package com.bitrient.mcchymns.fragment.dialog;
 
 import android.app.Dialog;
 import android.content.ContentValues;
@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
 
 import com.bitrient.mcchymns.R;
 import com.bitrient.mcchymns.database.HymnContract;

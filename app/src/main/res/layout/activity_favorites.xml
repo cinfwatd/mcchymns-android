@@ -9,7 +9,7 @@
         layout="@layout/toolbar" />
 
     <fragment  android:id="@+id/fragment"
-        android:name="com.bitrient.mcchymns.FavoritesActivityFragment"
+        android:name="com.bitrient.mcchymns.fragment.FavoritesActivityFragment"
         tools:layout="@layout/fragment_favorites" android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
