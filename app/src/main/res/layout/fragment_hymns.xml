@@ -32,7 +32,7 @@
                 android:layout_marginBottom="@dimen/small_margin"/>
 
             <TextView
-                android:id="@+id/empty_hymns_title"
+                android:id="@+id/empty_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/medium_text_size"

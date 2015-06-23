@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.bitrient.mcchymns.R;
 
+import org.w3c.dom.Text;
+
 /**
  * @author Cinfwat Probity <czprobity@bitrient.com>
  * @since 6/14/15
@@ -25,14 +27,18 @@ public class EmptiableRecyclerView extends RecyclerView {
             if (adapter != null && emptyView != null) {
                 if (adapter.getItemCount() == 0) {
 
+                    TextView title = (TextView) emptyView.findViewById(R.id.empty_title);
                     TextView message = (TextView) emptyView.findViewById(R.id.empty_message);
                     ImageView icon = (ImageView) emptyView.findViewById(R.id.empty_icon);
+
                     if (mIsSearch && adapter.getItemCount() == 0) {
+                        title.setText(getResources().getText(R.string.try_another_search));
                         message.setText(getResources().getText(R.string.no_hymns_found));
                         icon.setImageResource(R.mipmap.ic_search);
 
                         mIsSearch = false;
                     } else {
+                        title.setText(getResources().getText(R.string.empty_favorites_title));
                         message.setText(getResources().getText(R.string.empty_favorites_message));
                         icon.setImageResource(R.mipmap.ic_hymn_gray);
                     }
