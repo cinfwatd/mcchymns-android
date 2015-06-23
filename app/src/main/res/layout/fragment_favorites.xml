@@ -25,14 +25,14 @@
             android:background="@color/gransboro">
 
             <ImageView
-                android:id="@+id/empty_favorites_icon"
+                android:id="@+id/empty_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/ic_hymn_gray"
                 android:layout_marginBottom="@dimen/small_margin"/>
 
             <TextView
-                android:id="@+id/empty_favorites_title"
+                android:id="@+id/empty_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/medium_text_size"
@@ -40,7 +40,7 @@
                 android:text="@string/empty_favorites_title" />
 
             <TextView
-                android:id="@+id/empty_favorites_message"
+                android:id="@+id/empty_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/empty_favorites_message"

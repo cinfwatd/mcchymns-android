@@ -3,18 +3,15 @@ package com.bitrient.mcchymns;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.bitrient.mcchymns.adapter.NavigationDrawerAdapter;
 
@@ -23,10 +20,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerA
 
 
     Toolbar mToolbar;
-
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    SearchView mSearchView;
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -39,8 +33,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerA
         mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(mToolbar);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.navigation_recycler_view);
-        mRecyclerView.setHasFixedSize(true);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.navigation_recycler_view);
+        recyclerView.setHasFixedSize(true);
 
         final String TITLES[] = {
                 getResources().getString(R.string.favorites),
@@ -55,12 +49,12 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerA
                 R.mipmap.ic_action_settings,
                 R.mipmap.ic_info
         };
-        mAdapter = new NavigationDrawerAdapter(TITLES, ICONS, this);
+        RecyclerView.Adapter adapter = new NavigationDrawerAdapter(TITLES, ICONS, this);
 
-        mRecyclerView.setAdapter(mAdapter);
-        mLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setAdapter(adapter);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
 
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setLayoutManager(layoutManager);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.navigation_drawer);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar,
@@ -73,33 +67,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerA
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                return true;
-            case R.id.action_search:
-//                onSearchRequested();
-//                Toast.makeText(this, "Search is clicked", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(this, SearchActivity.class);
-                startActivity(intent);
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -116,10 +86,16 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerA
 
     @Override
     public void onBackPressed() {
-        if (mDrawerLayout.isDrawerOpen(Gravity.START|Gravity.LEFT)) {
+        if (mDrawerLayout.isDrawerOpen(Gravity.START)) {
             mDrawerLayout.closeDrawers();
             return;
         }
+
+        if (!mSearchView.isIconified()) {
+            mSearchView.setIconified(true);
+            return;
+        }
+
         super.onBackPressed();
     }
 

@@ -25,8 +25,8 @@ public class EmptiableRecyclerView extends RecyclerView {
             if (adapter != null && emptyView != null) {
                 if (adapter.getItemCount() == 0) {
 
-                    TextView message = (TextView) emptyView.findViewById(R.id.empty_favorites_message);
-                    ImageView icon = (ImageView) emptyView.findViewById(R.id.empty_favorites_icon);
+                    TextView message = (TextView) emptyView.findViewById(R.id.empty_message);
+                    ImageView icon = (ImageView) emptyView.findViewById(R.id.empty_icon);
                     if (mIsSearch && adapter.getItemCount() == 0) {
                         message.setText(getResources().getText(R.string.no_hymns_found));
                         icon.setImageResource(R.mipmap.ic_search);

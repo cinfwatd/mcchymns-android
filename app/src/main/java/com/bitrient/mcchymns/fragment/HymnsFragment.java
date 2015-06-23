@@ -1,110 +1,210 @@
 package com.bitrient.mcchymns.fragment;
 
-import android.app.Activity;
+import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import com.bitrient.mcchymns.R;
+import com.bitrient.mcchymns.adapter.HymnAdapter;
+import com.bitrient.mcchymns.database.HymnContract;
+import com.bitrient.mcchymns.view.EmptiableRecyclerView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link HymnsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link HymnsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class HymnsFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.ClickListener,
+        LoaderManager.LoaderCallbacks<Cursor> {
+    @SuppressWarnings("unused")
+    private static final String TAG = FavoritesActivityFragment.class.getSimpleName();
+    private static final int LOADER_ID = 5;
+    private final String QUERY_STRING = "queryString";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private EmptiableRecyclerView mRecyclerView;
+    private SearchView mSearchView;
 
-    private OnFragmentInteractionListener mListener;
+    private HymnAdapter mHymnAdapter;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HymnsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HymnsFragment newInstance(String param1, String param2) {
-        HymnsFragment fragment = new HymnsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private CharSequence mCurrentFilter;
+    private boolean mIsSearchViewOpen;
 
     public HymnsFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        setHasOptionsMenu(true);
+
+        getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_hymns, container, false);
-    }
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_hymns, container, false);
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
+        mRecyclerView = (EmptiableRecyclerView) rootView.findViewById(R.id.hymns_recycler_view);
+        mRecyclerView.setEmptyView(rootView.findViewById(R.id.empty_hymns));
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+        mHymnAdapter = new HymnAdapter(null, R.mipmap.ic_hymn, this);
+        mRecyclerView.setAdapter(mHymnAdapter);
+
+        setRecyclerViewLayoutManager(mRecyclerView);
+
+        return rootView;
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+
+        mSearchView.setQueryHint(getActivity().getResources().getString(R.string.search_hint));
+
+        View searchPlate = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_plate);
+        searchPlate.setBackgroundResource(R.drawable.textfield_search_selected_dashed);
+
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+//                searchView.onActionViewCollapsed();
+
+                InputMethodManager inputMethodManager =
+                        (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(getActivity().findViewById(android.R.id.content).getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                // hack used to tell the RecyclerView that its empty due to a search filter so that
+                // it can respond with the appropriate background.
+                mRecyclerView.setSearch(!TextUtils.isEmpty(newText));
+
+                mCurrentFilter = !TextUtils.isEmpty(newText) ? newText : null;
+                getLoaderManager().restartLoader(LOADER_ID, null, HymnsFragment.this);
+
+                return false;
+            }
+
+
+        });
+
+        if (mIsSearchViewOpen) {
+            mSearchView.setIconified(false);
+            mSearchView.setQuery(mCurrentFilter, false);
+        }
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if (mSearchView != null && !mSearchView.isIconified()) {
+            outState.putCharSequence(QUERY_STRING, mSearchView.getQuery());
+
+            Log.d(TAG, "YES - Is iconified. - " + mSearchView.getQuery());
+        }
+
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        if (savedInstanceState != null && savedInstanceState.containsKey(QUERY_STRING)) {
+            mCurrentFilter = savedInstanceState.getCharSequence(QUERY_STRING);
+            mIsSearchViewOpen = true;
+
+            Log.d(TAG, "YES - Contains Query String.");
+        }
+        Log.d(TAG, "YES - Does not Contain Query String.");
+
+        if (savedInstanceState != null)
+            for (String key : savedInstanceState.keySet()) {
+                Log.d(TAG, "YES KEY = " + key);
+            }
+
+
+        super.onViewStateRestored(savedInstanceState);
+    }
+
+    private void setRecyclerViewLayoutManager(EmptiableRecyclerView recyclerView) {
+        int scrollPosition = 0;
+
+//        If a layout manager has already been set, get current scroll position
+        if (recyclerView.getLayoutManager() != null) {
+            scrollPosition =
+                    ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+        }
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.scrollToPosition(scrollPosition);
+    }
+
+    @Override
+    public void onItemClicked(int position) {
+
+    }
+
+    @Override
+    public boolean onItemLongClicked(int position) {
+        return false;
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Uri baseUri;
+
+        // Pick the base URI to use depending on whether we are currently filtering.
+        if (mCurrentFilter != null) {
+            baseUri = Uri.withAppendedPath(HymnContract.HymnEntry.CONTENT_FILTER_URI, Uri.encode(mCurrentFilter.toString()));
+        } else {
+            baseUri = HymnContract.HymnEntry.CONTENT_URI;
+        }
+
+        String[] projection = new String[] {
+                HymnContract.HymnEntry._ID,
+                HymnContract.HymnEntry.COLUMN_NAME_FIRST_LINE,
+                HymnContract.HymnEntry.COLUMN_NAME_HYMN_NUMBER
+        };
+
+        return new CursorLoader(getActivity(), baseUri, projection, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mHymnAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mHymnAdapter.swapCursor(null);
+    }
 }

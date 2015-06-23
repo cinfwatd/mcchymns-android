@@ -5,12 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/cv"
-    android:padding="@dimen/small_padding">
+    android:paddingLeft="@dimen/small_padding"
+    android:paddingRight="@dimen/small_padding">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="0dp">
+        android:paddingTop="8dp">
 
         <ImageView
             android:id="@+id/navigation_drawer_row_icon"
@@ -25,13 +26,20 @@
 
         <TextView
             android:id="@+id/navigation_drawer_row_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_toRightOf="@+id/navigation_drawer_row_icon"
             android:layout_toEndOf="@+id/navigation_drawer_row_icon"
             android:layout_centerVertical="true"
             android:textSize="16sp"
-            android:textAppearance="?android:attr/textAppearanceSmallPopupMenu"/>
+            android:gravity="center_vertical"
+            android:textAppearance="?android:attr/textAppearanceSmallPopupMenu" />
+        <View
+            android:id="@+id/divider"
+            android:layout_marginTop="18dp"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp" android:background="@color/gransboro"
+            android:layout_below="@+id/navigation_drawer_row_title"/>
     </RelativeLayout>
 
     <View
