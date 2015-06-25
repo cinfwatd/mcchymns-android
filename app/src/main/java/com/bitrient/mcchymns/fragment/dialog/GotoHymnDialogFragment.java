@@ -3,6 +3,7 @@ package com.bitrient.mcchymns.fragment.dialog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -14,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
+import com.bitrient.mcchymns.HymnViewActivity;
 import com.bitrient.mcchymns.R;
 
 /**
@@ -30,7 +32,7 @@ public class GotoHymnDialogFragment extends DialogFragment {
 
     @SuppressWarnings("unused")
     private static final String TAG = GotoHymnDialogFragment.class.getSimpleName();
-    private static final String SELECTED_HYMN = "selected";
+    public static final String SELECTED_HYMN = "selected";
 
     View mDialogHeader;
     LinearLayout mDialogView;
@@ -76,8 +78,12 @@ public class GotoHymnDialogFragment extends DialogFragment {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mSelectorListener.hymnSelected(mNumberPicker.getValue());
-//                        startActivity();
+                        int selectedHymn = mNumberPicker.getValue();
+                        mSelectorListener.hymnSelected(selectedHymn);
+
+                        Intent hymnIntent = new Intent(getActivity(), HymnViewActivity.class);
+                        hymnIntent.putExtra(SELECTED_HYMN, selectedHymn);
+                        startActivity(hymnIntent);
                     }
                 });
 

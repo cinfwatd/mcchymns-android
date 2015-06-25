@@ -118,8 +118,8 @@ public class MainActivity extends AppCompatActivity implements
                 startActivity(favorites);
                 break;
             case 1: // Advance Search
-                Intent search = new Intent(this, SearchActivity.class);
-                startActivity(search);
+                Intent searchIntent = new Intent(this, SearchActivity.class);
+                startActivity(searchIntent);
                 break;
             case 2: // Settings
                 break;
