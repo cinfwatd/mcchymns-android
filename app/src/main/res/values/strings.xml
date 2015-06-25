@@ -30,6 +30,12 @@
     <string name="favorites">Favorites</string>
     <string name="settings">Settings</string>
     <string name="about">About</string>
+    <string name="help">Help</string>
+    <string name="terms_of_service">Terms of service</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="get_feedback">Feedback</string>
+    <string name="report_problem">Report a problem</string>
+    <string name="credits">Credits</string>
     <string name="goto_hymn">Goto Hymn</string>
     <string name="open_hymn">Open</string>
     <string name="select_hymn_number">Select hymn number</string>

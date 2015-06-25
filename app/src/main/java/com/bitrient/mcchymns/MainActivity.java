@@ -43,16 +43,16 @@ public class MainActivity extends AppCompatActivity implements
 
         final String TITLES[] = {
                 getResources().getString(R.string.favorites),
-                getResources().getString(R.string.advance_search),
+                getResources().getString(R.string.search),
                 getResources().getString(R.string.settings),
-                getResources().getString(R.string.about)
+                getResources().getString(R.string.help)
         };
 
         final int ICONS[] = {
-                R.mipmap.ic_favorite,
-                R.mipmap.ic_action_search,
-                R.mipmap.ic_action_settings,
-                R.mipmap.ic_info
+                R.mipmap.ic_action_badge,
+                R.mipmap.ic_action_magnifier,
+                R.mipmap.ic_action_sliders,
+                R.mipmap.ic_action_bulb
         };
         RecyclerView.Adapter adapter = new NavigationDrawerAdapter(TITLES, ICONS, this);
 

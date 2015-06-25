@@ -38,7 +38,7 @@
             android:id="@+id/divider"
             android:layout_marginTop="18dp"
             android:layout_width="wrap_content"
-            android:layout_height="1dp" android:background="@color/gransboro"
+            android:layout_height="1dp" android:background="@color/selected_overlay"
             android:layout_below="@+id/navigation_drawer_row_title"/>
     </RelativeLayout>
 
