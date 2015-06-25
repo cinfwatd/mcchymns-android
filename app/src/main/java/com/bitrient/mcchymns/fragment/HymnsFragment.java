@@ -24,6 +24,7 @@ import android.view.inputmethod.InputMethodManager;
 import com.bitrient.mcchymns.R;
 import com.bitrient.mcchymns.adapter.HymnAdapter;
 import com.bitrient.mcchymns.database.HymnContract;
+import com.bitrient.mcchymns.fragment.dialog.GotoHymnDialogFragment;
 import com.bitrient.mcchymns.view.EmptiableRecyclerView;
 
 public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.ClickListener,
@@ -31,7 +32,7 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
     @SuppressWarnings("unused")
     private static final String TAG = FavoritesActivityFragment.class.getSimpleName();
     private static final int LOADER_ID = 5;
-    private final String QUERY_STRING = "queryString";
+    private final String QUERY_STRING = "queryString4";
 
     private EmptiableRecyclerView mRecyclerView;
     private SearchView mSearchView;
@@ -40,10 +41,6 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
 
     private CharSequence mCurrentFilter;
     private boolean mIsSearchViewOpen;
-
-    public HymnsFragment() {
-        // Required empty public constructor
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -120,6 +117,16 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_goto:
+//                Log.d(TAG, "YES - got to clicked.");
+                GotoHymnDialogFragment hymnDialogFragment
+                        = GotoHymnDialogFragment.newInstance();
+                hymnDialogFragment.show(getFragmentManager(), "HymnDialogFragment");
+                return true;
+
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -131,6 +138,7 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
             Log.d(TAG, "YES - Is iconified. - " + mSearchView.getQuery());
         }
 
+        Log.d(TAG, "YES - saved instance state called. ");
         super.onSaveInstanceState(outState);
     }
 
@@ -139,19 +147,12 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
         if (savedInstanceState != null && savedInstanceState.containsKey(QUERY_STRING)) {
             mCurrentFilter = savedInstanceState.getCharSequence(QUERY_STRING);
             mIsSearchViewOpen = true;
-
-            Log.d(TAG, "YES - Contains Query String.");
         }
-        Log.d(TAG, "YES - Does not Contain Query String.");
-
-        if (savedInstanceState != null)
-            for (String key : savedInstanceState.keySet()) {
-                Log.d(TAG, "YES KEY = " + key);
-            }
-
 
         super.onViewStateRestored(savedInstanceState);
     }
+
+
 
     private void setRecyclerViewLayoutManager(EmptiableRecyclerView recyclerView) {
         int scrollPosition = 0;

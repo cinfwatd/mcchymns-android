@@ -71,7 +71,7 @@ public class TopicDialogFragment extends DialogFragment implements LoaderManager
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        final View dialogHeader = inflater.inflate(R.layout.custom_dialog_header, null);
+        final View dialogHeader = inflater.inflate(R.layout.dialog_header, null);
 
         final TextView dialogTitle = (TextView) dialogHeader.findViewById(R.id.dialog_title);
         final ProgressBar dialogProgressBar = (ProgressBar) dialogHeader.findViewById(R.id.dialog_progress_spinner);

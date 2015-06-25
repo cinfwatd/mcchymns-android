@@ -40,7 +40,7 @@ public class ConfirmDialogFragment extends DialogFragment {
                     }
                 });
 
-        builder.setNegativeButton(getActivity().getResources().getString(R.string.favorites_confirm_decline),
+        builder.setNegativeButton(getActivity().getResources().getString(R.string.confirm_decline),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

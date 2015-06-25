@@ -32,7 +32,7 @@ public class SearchActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-       overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+//       overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
 

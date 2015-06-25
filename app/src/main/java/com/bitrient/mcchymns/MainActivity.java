@@ -10,14 +10,19 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 
 import com.bitrient.mcchymns.adapter.NavigationDrawerAdapter;
+import com.bitrient.mcchymns.fragment.dialog.GotoHymnDialogFragment;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationDrawerAdapter.ViewHolder.ClickListener{
+public class MainActivity extends AppCompatActivity implements
+        NavigationDrawerAdapter.ViewHolder.ClickListener, GotoHymnDialogFragment.HymnSelectorListener {
 
+    @SuppressWarnings("unused")
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     Toolbar mToolbar;
     SearchView mSearchView;
@@ -107,5 +112,25 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerA
             Intent intent = new Intent(this, FavoritesActivity.class);
             startActivity(intent);
         }
+        switch (position) {
+            case 0: // Favorites
+                Intent favorites = new Intent(this, FavoritesActivity.class);
+                startActivity(favorites);
+                break;
+            case 1: // Advance Search
+                Intent search = new Intent(this, SearchActivity.class);
+                startActivity(search);
+                break;
+            case 2: // Settings
+                break;
+            case 3: // About
+                break;
+        }
+    }
+
+
+    @Override
+    public void hymnSelected(int number) {
+        Log.d(TAG, "YES - Hymn clicked - " + number);
     }
 }
