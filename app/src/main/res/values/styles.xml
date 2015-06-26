@@ -12,4 +12,8 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="AppTheme.Toolbar" parent="ThemeOverlay.AppCompat.Dark">
+        <item name="android:colorBackground">@android:color/white</item>
+        <item name="android:textColor">@color/dimgray</item>
+    </style>
 </resources>

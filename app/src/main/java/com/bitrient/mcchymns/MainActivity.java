@@ -107,11 +107,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onItemClicked(int position) {
         mDrawerLayout.closeDrawers();
-//        Toast.makeText(this, String.format("Item %d is clicked", position), Toast.LENGTH_SHORT).show();
-        if (position == 0) {
-            Intent intent = new Intent(this, FavoritesActivity.class);
-            startActivity(intent);
-        }
+
         switch (position) {
             case 0: // Favorites
                 Intent favorites = new Intent(this, FavoritesActivity.class);
