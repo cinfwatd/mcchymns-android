@@ -40,5 +40,6 @@
     <string name="goto_hymn">Goto Hymn</string>
     <string name="open_hymn">Open</string>
     <string name="select_hymn_number">Select hymn number</string>
+    <string name="select_hymn_desc">Set hymn number and open.</string>
     <string name="title_activity_hymn_view">HymnView</string>
 </resources>
