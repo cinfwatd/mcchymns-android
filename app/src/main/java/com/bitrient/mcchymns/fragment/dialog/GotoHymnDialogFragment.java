@@ -28,8 +28,6 @@ public class GotoHymnDialogFragment extends DialogFragment {
         return new GotoHymnDialogFragment();
     }
 
-    private HymnSelectorListener mSelectorListener;
-
     @SuppressWarnings("unused")
     private static final String TAG = GotoHymnDialogFragment.class.getSimpleName();
     public static final String SELECTED_HYMN = "selected";
@@ -79,7 +77,6 @@ public class GotoHymnDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         int selectedHymn = mNumberPicker.getValue();
-                        mSelectorListener.hymnSelected(selectedHymn);
 
                         Intent hymnIntent = new Intent(getActivity(), HymnViewActivity.class);
                         hymnIntent.putExtra(SELECTED_HYMN, selectedHymn);
@@ -96,28 +93,6 @@ public class GotoHymnDialogFragment extends DialogFragment {
                 });
 
         return builder.create();
-    }
-
-    public interface HymnSelectorListener {
-        void hymnSelected(int number);
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-
-        try {
-            mSelectorListener = (HymnSelectorListener) activity;
-        } catch (ClassCastException ex) {
-            throw new RuntimeException(activity.getLocalClassName() + " must implement the HymnSelectorListener.");
-        }
-
-        super.onAttach(activity);
-    }
-
-    @Override
-    public void onDetach() {
-        mSelectorListener = null;
-        super.onDetach();
     }
 
     @Override

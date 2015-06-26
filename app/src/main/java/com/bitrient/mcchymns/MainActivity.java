@@ -19,7 +19,7 @@ import com.bitrient.mcchymns.fragment.dialog.GotoHymnDialogFragment;
 
 
 public class MainActivity extends AppCompatActivity implements
-        NavigationDrawerAdapter.ViewHolder.ClickListener, GotoHymnDialogFragment.HymnSelectorListener {
+        NavigationDrawerAdapter.ViewHolder.ClickListener {
 
     @SuppressWarnings("unused")
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -122,11 +122,5 @@ public class MainActivity extends AppCompatActivity implements
             case 3: // About
                 break;
         }
-    }
-
-
-    @Override
-    public void hymnSelected(int number) {
-        Log.d(TAG, "YES - Hymn clicked - " + number);
     }
 }
