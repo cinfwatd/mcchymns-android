@@ -1,17 +1,30 @@
 package com.bitrient.mcchymns;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class HymnViewActivity extends ActionBarActivity {
+public class HymnViewActivity extends AppCompatActivity {
+
+    public static final String SELECTED_HYMN = "selected";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hymn_view);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.hymn_view_toolbar);
+        setSupportActionBar(toolbar);
+
+        final Bundle extras = getIntent().getExtras();
+
+        if (extras != null) {
+            int hymnNumber = extras.getInt(SELECTED_HYMN, 40);
+            toolbar.setSubtitle(Integer.toString(hymnNumber));
+        }
     }
 
 
@@ -35,5 +48,10 @@ public class HymnViewActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return super.onPrepareOptionsMenu(menu);
     }
 }

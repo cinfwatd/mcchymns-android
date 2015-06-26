@@ -1,6 +1,5 @@
 package com.bitrient.mcchymns.fragment.dialog;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,7 +29,6 @@ public class GotoHymnDialogFragment extends DialogFragment {
 
     @SuppressWarnings("unused")
     private static final String TAG = GotoHymnDialogFragment.class.getSimpleName();
-    public static final String SELECTED_HYMN = "selected";
 
     View mDialogHeader;
     LinearLayout mDialogView;
@@ -60,7 +58,7 @@ public class GotoHymnDialogFragment extends DialogFragment {
         mNumberPicker.setMaxValue(1200);
 
         if (savedInstanceState != null) {
-            mNumberPicker.setValue(savedInstanceState.getInt(SELECTED_HYMN));
+            mNumberPicker.setValue(savedInstanceState.getInt(HymnViewActivity.SELECTED_HYMN));
         }
     }
 
@@ -79,7 +77,7 @@ public class GotoHymnDialogFragment extends DialogFragment {
                         int selectedHymn = mNumberPicker.getValue();
 
                         Intent hymnIntent = new Intent(getActivity(), HymnViewActivity.class);
-                        hymnIntent.putExtra(SELECTED_HYMN, selectedHymn);
+                        hymnIntent.putExtra(HymnViewActivity.SELECTED_HYMN, selectedHymn);
                         startActivity(hymnIntent);
                     }
                 });
@@ -97,7 +95,7 @@ public class GotoHymnDialogFragment extends DialogFragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putInt(SELECTED_HYMN, mNumberPicker.getValue());
+        outState.putInt(HymnViewActivity.SELECTED_HYMN, mNumberPicker.getValue());
         super.onSaveInstanceState(outState);
     }
 }

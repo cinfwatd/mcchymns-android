@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ContentProviderOperation;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.net.Uri;
@@ -30,6 +31,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CursorAdapter;
 
+import com.bitrient.mcchymns.HymnViewActivity;
 import com.bitrient.mcchymns.R;
 import com.bitrient.mcchymns.adapter.HymnAdapter;
 import com.bitrient.mcchymns.database.HymnContract;
@@ -324,6 +326,11 @@ public class FavoritesActivityFragment extends Fragment implements
     public void onItemClicked(int position) {
         if (actionMode != null) {
             toggleSelection(position);
+        } else {
+            final long itemId = hymnAdapter.getItemId(position);
+            Intent hymnIntent = new Intent(getActivity(), HymnViewActivity.class);
+            hymnIntent.putExtra(HymnViewActivity.SELECTED_HYMN, (int) itemId);
+            startActivity(hymnIntent);
         }
     }
 

@@ -2,6 +2,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.bitrient.mcchymns.HymnViewActivity">
+
+    <item android:id="@+id/action_add_to_favorite"
+        android:title="@string/add_to_favorites"
+        android:icon="@mipmap/ic_action_favorite_off"
+        android:orderInCategory="100" app:showAsAction="ifRoom" />
+
+    <item android:id="@+id/action_goto" android:title="@string/goto_hymn"
+        android:icon="@mipmap/ic_action_goto_hymn" android:orderInCategory="200"
+        app:showAsAction="never" />
+
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+        android:orderInCategory="300" app:showAsAction="never" />
 </menu>

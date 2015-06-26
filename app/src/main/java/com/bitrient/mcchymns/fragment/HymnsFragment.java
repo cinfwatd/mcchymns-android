@@ -1,6 +1,7 @@
 package com.bitrient.mcchymns.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
+import com.bitrient.mcchymns.HymnViewActivity;
 import com.bitrient.mcchymns.R;
 import com.bitrient.mcchymns.adapter.HymnAdapter;
 import com.bitrient.mcchymns.database.HymnContract;
@@ -171,7 +173,10 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
 
     @Override
     public void onItemClicked(int position) {
-
+        final long itemId = mHymnAdapter.getItemId(position);
+        Intent hymnIntent = new Intent(getActivity(), HymnViewActivity.class);
+        hymnIntent.putExtra(HymnViewActivity.SELECTED_HYMN, (int) itemId);
+        startActivity(hymnIntent);
     }
 
     @Override

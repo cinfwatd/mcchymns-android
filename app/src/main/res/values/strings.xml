@@ -9,6 +9,7 @@
     <string name="no_hymns_found">No hymns were found that match your search</string>
     <string name="search">Search</string>
     <string name="title_activity_favorites">Favorites</string>
+    <string name="add_to_favorites">Add to Favorites</string>
     <string name="empty_favorites_title">Nothing in Favorites</string>
     <string name="empty_favorites_message">Add hymn to favorites and it will show up here.</string>
     <string name="remove_selected">Remove</string>
