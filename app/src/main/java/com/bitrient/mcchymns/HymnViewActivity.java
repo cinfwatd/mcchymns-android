@@ -18,6 +18,7 @@ public class HymnViewActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.hymn_view_toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final Bundle extras = getIntent().getExtras();
 
