@@ -10,49 +10,87 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:columnCount="3"
-        android:rowCount="5">
+        android:rowCount="5"
+        android:layout_marginTop="@dimen/tiny"
+        android:layout_marginBottom="@dimen/tiny">
 
         <EditText
             android:id="@+id/selected_hymn"
-            android:layout_columnSpan="2"
             android:layout_width="60dp"
             android:layout_height="match_parent"
             android:gravity="center"
             android:focusable="false"
             android:cursorVisible="false"
             android:inputType="none"
-            android:textAppearance="?android:attr/textAppearanceLarge"/>
+            android:layout_gravity="center_horizontal"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:background="@drawable/textfield_search_selected"/>
 
         <Button
+            android:layout_columnSpan="2"
+            android:layout_gravity="end"
             android:id="@+id/btn_clear"
-            android:text="" android:drawableLeft="@mipmap/ic_action_clear"
-            android:drawableStart="@mipmap/ic_action_clear" />
+            android:text=""
+            android:drawableLeft="@mipmap/ic_action_clear"
+            android:drawableStart="@mipmap/ic_action_clear"
+            android:background="@drawable/button_background"
+            android:paddingLeft="22dp" />
 
-        <Button android:text="@string/one" android:id="@+id/btn_one"/>
-        <Button android:text="@string/two" android:id="@+id/btn_two"/>
-        <Button android:text="@string/three" android:id="@+id/btn_three"/>
-        <Button android:text="@string/four" android:id="@+id/btn_four"/>
-        <Button android:text="@string/five" android:id="@+id/btn_five"/>
-        <Button android:text="@string/six" android:id="@+id/btn_six"/>
-        <Button android:text="@string/seven" android:id="@+id/btn_seven"/>
-        <Button android:text="@string/eight" android:id="@+id/btn_eight"/>
-        <Button android:text="@string/nine" android:id="@+id/btn_nine"/>
+        <Button android:text="@string/one"
+            android:id="@+id/btn_one"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:background="@drawable/button_background"/>
+        <Button android:text="@string/two"
+            android:id="@+id/btn_two"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:background="@drawable/button_background"/>
+        <Button android:text="@string/three"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/btn_three"
+            android:background="@drawable/button_background"/>
+        <Button android:text="@string/four"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/btn_four"
+            android:background="@drawable/button_background"/>
+        <Button android:text="@string/five"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/btn_five"
+            android:background="@drawable/button_background"/>
+        <Button android:text="@string/six"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/btn_six"
+            android:background="@drawable/button_background"/>
+        <Button android:text="@string/seven"
+            android:id="@+id/btn_seven"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:background="@drawable/button_background"/>
+        <Button android:text="@string/eight"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/btn_eight"
+            android:background="@drawable/button_background"/>
+        <Button android:text="@string/nine"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/btn_nine"
+            android:background="@drawable/button_background"/>
 
         <Button android:text="@string/confirm_decline"
             style="?android:attr/borderlessButtonStyle"
-            android:textColor="@color/gray"
-            android:id="@+id/btn_cancel"/>
+            android:textColor="@color/abc_search_url_text"
+            android:textSize="16sp"
+            android:id="@+id/btn_cancel" />
 
         <Button
             android:id="@+id/btn_zero"
-            android:text="@string/zero" android:layout_column="1" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/zero" android:layout_column="1" android:background="@drawable/button_background"/>
 
         <Button
             android:id="@+id/btn_accept"
             android:text="@string/confirm_accept"
             style="?android:attr/borderlessButtonStyle"
-            android:textColor="@color/gray"
-            android:gravity="end"
+            android:textColor="@color/abc_search_url_text"
+            android:gravity="center"
+            android:textSize="16sp"
             android:layout_gravity="end"/>
     </GridLayout>
 </LinearLayout>
