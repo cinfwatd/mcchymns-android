@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <GridLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="3"
+        android:rowCount="5">
+
+        <EditText
+            android:id="@+id/selected_hymn"
+            android:layout_columnSpan="2"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:focusable="false"
+            android:cursorVisible="false"
+            android:inputType="none"
+            android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+        <Button
+            android:id="@+id/btn_clear"
+            android:text="" android:drawableLeft="@mipmap/ic_action_clear"
+            android:drawableStart="@mipmap/ic_action_clear" />
+
+        <Button android:text="@string/one" android:id="@+id/btn_one"/>
+        <Button android:text="@string/two" android:id="@+id/btn_two"/>
+        <Button android:text="@string/three" android:id="@+id/btn_three"/>
+        <Button android:text="@string/four" android:id="@+id/btn_four"/>
+        <Button android:text="@string/five" android:id="@+id/btn_five"/>
+        <Button android:text="@string/six" android:id="@+id/btn_six"/>
+        <Button android:text="@string/seven" android:id="@+id/btn_seven"/>
+        <Button android:text="@string/eight" android:id="@+id/btn_eight"/>
+        <Button android:text="@string/nine" android:id="@+id/btn_nine"/>
+
+        <Button android:text="@string/confirm_decline"
+            style="?android:attr/borderlessButtonStyle"
+            android:textColor="@color/gray"
+            android:id="@+id/btn_cancel"/>
+
+        <Button
+            android:id="@+id/btn_zero"
+            android:text="@string/zero" android:layout_column="1" />
+
+        <Button
+            android:id="@+id/btn_accept"
+            android:text="@string/confirm_accept"
+            style="?android:attr/borderlessButtonStyle"
+            android:textColor="@color/gray"
+            android:gravity="end"
+            android:layout_gravity="end"/>
+    </GridLayout>
+</LinearLayout>

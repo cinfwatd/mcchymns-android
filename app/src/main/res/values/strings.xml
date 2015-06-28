@@ -23,6 +23,7 @@
     <string name="favorites_confirm_remove">Remove from favorites?</string>
     <string name="favorites_confirm_accept">Remove</string>
     <string name="confirm_decline">Cancel</string>
+    <string name="confirm_accept">Open</string>
     <string name="title_activity_search">Search</string>
     <string name="apply_filter">Apply filter</string>
     <string name="clear_filter">Clear filter</string>
@@ -39,7 +40,48 @@
     <string name="credits">Credits</string>
     <string name="goto_hymn">Goto Hymn</string>
     <string name="open_hymn">Open</string>
-    <string name="select_hymn_number">Select hymn number</string>
+    <string name="select_hymn_number">Enter hymn number</string>
+    <string name="empty_hymn_number">Please enter hymn number</string>
     <string name="select_hymn_desc">Set hymn number and open.</string>
     <string name="title_activity_hymn_view">HymnView</string>
+    <string name="chorus">Chorus</string>
+    <string name="stanza">Stanza</string>
+    <!-- keypad-->
+    <string name="one">1</string>
+    <string name="two">2</string>
+    <string name="three">3</string>
+    <string name="four">4</string>
+    <string name="five">5</string>
+    <string name="six">6</string>
+    <string name="seven">7</string>
+    <string name="eight">8</string>
+    <string name="nine">9</string>
+    <string name="zero">0</string>
+    <string name="clear">Cls</string>
+    <!-- preference-->
+    <string name="pref_title_favorites">Favorites</string>
+    <string name="pref_summary_favorites">Show favorites on start</string>
+    <string name="pref_font">Fonts</string>
+    <string name="pref_font_size">Font size</string>
+    <string name="pref_font_color">Font color</string>
+    <string name="pref_category_font_settings">Font settings</string>
+    <string name="pref_category_color_settings">Color settings</string>
+    <string name="pref_title_chorus_font">Chorus font</string>
+    <string name="pref_title_stanza_font">Stanza font</string>
+    <string name="pref_title_chorus_size">Chorus font size</string>
+    <string name="pref_title_stanza_size">Stanza font size</string>
+
+    <string-array name="pref_font_size_entries">
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+    </string-array>
+
+    <string-array name="pref_font_size_values">
+        <item>14sp</item>
+        <item>18sp</item>
+        <item>22sp</item>
+    </string-array>
+    <string name="pref_default_font"></string>
+    <string name="pref_default_font_size">18sp</string>
 </resources>
