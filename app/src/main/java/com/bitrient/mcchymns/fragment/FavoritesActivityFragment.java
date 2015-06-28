@@ -36,6 +36,7 @@ import com.bitrient.mcchymns.R;
 import com.bitrient.mcchymns.adapter.HymnAdapter;
 import com.bitrient.mcchymns.database.HymnContract;
 import com.bitrient.mcchymns.fragment.dialog.ConfirmDialogFragment;
+import com.bitrient.mcchymns.fragment.dialog.GotoHymnDialogFragment;
 import com.bitrient.mcchymns.view.EmptiableRecyclerView;
 
 import java.util.ArrayList;
@@ -189,6 +190,8 @@ public class FavoritesActivityFragment extends Fragment implements
      */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_goto_hymn, menu);
+
         searchView = (SearchView) menu.findItem(R.id.favorites_action_search).getActionView();
 
         searchView.setQueryHint(getActivity().getResources().getString(R.string.search_hint));
@@ -255,6 +258,12 @@ public class FavoritesActivityFragment extends Fragment implements
 
                 final ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance();
                 dialogFragment.show(getFragmentManager(), "confirmDialog");
+                return true;
+
+            case R.id.action_goto:
+                GotoHymnDialogFragment hymnDialogFragment
+                        = GotoHymnDialogFragment.newInstance();
+                hymnDialogFragment.show(getFragmentManager(), "HymnDialogFragment");
                 return true;
         }
 
@@ -418,7 +427,6 @@ public class FavoritesActivityFragment extends Fragment implements
                 case R.id.favorites_selected_action_remove:
                     removeItems(hymnAdapter.getSelectedItems());
 //                    hymnAdapter.removeItems(hymnAdapter.getSelectedItems());
-                    Log.d(TAG, "favorites menu selected remove");
                     mode.finish();
                     return true;
                 default:

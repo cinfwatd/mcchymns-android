@@ -8,10 +8,6 @@
         android:icon="@mipmap/ic_action_favorite_off"
         android:orderInCategory="100" app:showAsAction="ifRoom" />
 
-    <item android:id="@+id/action_goto" android:title="@string/goto_hymn"
-        android:icon="@mipmap/ic_action_goto_hymn" android:orderInCategory="200"
-        app:showAsAction="never" />
-
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="300" app:showAsAction="never" />
 </menu>

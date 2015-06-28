@@ -102,6 +102,7 @@ public class GotoHymnDialogFragment extends DialogFragment implements View.OnCli
                     Intent hymnIntent = new Intent(getActivity(), HymnViewActivity.class);
                     hymnIntent.putExtra(HymnViewActivity.SELECTED_HYMN, Integer.parseInt(String.valueOf(mSelectedHymnTextView.getText())));
                     startActivity(hymnIntent);
+                    dismiss();
                 } else {
                     Toast.makeText(getActivity(),
                             getResources().getString(R.string.empty_hymn_number), Toast.LENGTH_SHORT).show();

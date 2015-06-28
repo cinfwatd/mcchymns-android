@@ -74,6 +74,8 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        add goto hymn dialog button
+        inflater.inflate(R.menu.menu_goto_hymn, menu);
 
         mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
 
