@@ -118,6 +118,15 @@ public class GotoHymnDialogFragment extends DialogFragment implements View.OnCli
                 if (length >= 1) mSelectedHymnTextView.setText(TextUtils.substring(value, 0, length -1));
             }
         });
+
+        clearBtn.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String value = mSelectedHymnTextView.getText().toString();
+                if (!TextUtils.isEmpty(value)) mSelectedHymnTextView.setText("");
+                return true;
+            }
+        });
     }
 
     @NonNull
