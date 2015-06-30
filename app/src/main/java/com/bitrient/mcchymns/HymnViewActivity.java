@@ -1,10 +1,13 @@
 package com.bitrient.mcchymns;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.bitrient.mcchymns.fragment.HymnViewActivityFragment;
 
 
 public class HymnViewActivity extends AppCompatActivity {
@@ -20,11 +23,9 @@ public class HymnViewActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final Bundle extras = getIntent().getExtras();
-
-        if (extras != null) {
-            int hymnNumber = extras.getInt(SELECTED_HYMN, 40);
-            toolbar.setSubtitle(Integer.toString(hymnNumber));
+        if (savedInstanceState == null) {
+            HymnViewActivityFragment hymnViewActivityFragment = HymnViewActivityFragment.newInstance(getIntent().getExtras());
+            getSupportFragmentManager().beginTransaction().replace(R.id.hymn_view_fragment, hymnViewActivityFragment).commit();
         }
     }
 
@@ -38,21 +39,6 @@ public class HymnViewActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        return super.onPrepareOptionsMenu(menu);
     }
 }
