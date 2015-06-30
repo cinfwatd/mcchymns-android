@@ -109,7 +109,6 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onItemClicked(int position) {
-        mDrawerLayout.closeDrawers();
 
         switch (position) {
             case 0: // Favorites
@@ -127,5 +126,7 @@ public class MainActivity extends AppCompatActivity implements
             case 3: // About
                 break;
         }
+
+        mDrawerLayout.closeDrawers();
     }
 }

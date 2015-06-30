@@ -6,6 +6,7 @@
         <!--<item name="android:colorPrimary">@color/colorPrimary</item>-->
         <!--<item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>-->
         <item name="windowActionModeOverlay">true</item>
+        <item name="android:windowAnimationStyle">@style/windowAnimationTransition</item>
     </style>
 
     <style name="AlertDialogTheme" parent="android:Theme.Dialog">
@@ -15,5 +16,10 @@
     <style name="AppTheme.Toolbar" parent="ThemeOverlay.AppCompat.Dark">
         <item name="android:colorBackground">@android:color/white</item>
         <item name="android:textColor">@color/dimgray</item>
+    </style>
+
+    <style name="windowAnimationTransition">
+        <item name="android:windowEnterAnimation">@android:anim/slide_in_left</item>
+        <item name="android:windowExitAnimation">@android:anim/slide_out_right</item>
     </style>
 </resources>
