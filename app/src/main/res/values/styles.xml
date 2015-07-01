@@ -22,4 +22,9 @@
         <item name="android:windowEnterAnimation">@android:anim/slide_in_left</item>
         <item name="android:windowExitAnimation">@android:anim/slide_out_right</item>
     </style>
+
+    <style name="NoWindowBackground" parent="AppTheme">
+        <item name="android:windowBackground">@color/selected_overlay</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
 </resources>
