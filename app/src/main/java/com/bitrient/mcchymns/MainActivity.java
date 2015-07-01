@@ -124,6 +124,8 @@ public class MainActivity extends AppCompatActivity implements
                 startActivity(settingsIntent);
                 break;
             case 3: // About
+                Intent splashIntent = new Intent(this, SplashScreenActivity.class);
+                startActivity(splashIntent);
                 break;
         }
 
