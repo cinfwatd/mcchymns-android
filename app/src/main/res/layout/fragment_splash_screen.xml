@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:orientation="vertical"
-    tools:context="com.bitrient.mcchymns.SplashScreenActivityFragment"
+    tools:context="com.bitrient.mcchymns.fragment.SplashScreenActivityFragment"
     android:gravity="center_vertical">
 
     <LinearLayout
@@ -60,6 +60,7 @@
     </LinearLayout>
 
     <ProgressBar
+        android:id="@+id/splash_progress"
         android:layout_marginTop="-7dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

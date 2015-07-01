@@ -112,10 +112,10 @@ public class FavoritesActivityFragment extends Fragment implements
 //        getActivity().getContentResolver().insert(HymnContract.HymnEntry.CONTENT_URI, values);
 
 //        add all to favorites
-        ContentValues values = new ContentValues();
-        values.put(HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE, "True");
-        getActivity().getContentResolver().update(HymnContract.HymnEntry.CONTENT_URI,
-                values, null, null);
+//        ContentValues values = new ContentValues();
+//        values.put(HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE, "True");
+//        getActivity().getContentResolver().update(HymnContract.HymnEntry.CONTENT_URI,
+//                values, null, null);
     }
 
     @Override
