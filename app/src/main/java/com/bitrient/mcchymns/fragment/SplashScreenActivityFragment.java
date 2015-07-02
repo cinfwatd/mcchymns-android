@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import com.bitrient.mcchymns.R;
 import com.bitrient.mcchymns.database.HymnDbHelper;
 
+import java.io.IOException;
+
 
 /**
  * A placeholder fragment containing a simple view.
@@ -57,6 +59,7 @@ public class SplashScreenActivityFragment extends Fragment {
         protected Void doInBackground(Context... params) {
 //            mActivity = params[0];
             HymnDbHelper.getInstance(params[0]).getReadableDatabase();
+
 
             return null;
         }

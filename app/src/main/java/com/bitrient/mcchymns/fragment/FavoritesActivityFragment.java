@@ -336,9 +336,9 @@ public class FavoritesActivityFragment extends Fragment implements
         if (actionMode != null) {
             toggleSelection(position);
         } else {
-            final long itemId = hymnAdapter.getItemId(position);
+            final long itemNumber = hymnAdapter.getItemNumber(position);
             Intent hymnIntent = new Intent(getActivity(), HymnViewActivity.class);
-            hymnIntent.putExtra(HymnViewActivity.SELECTED_HYMN, (int) itemId);
+            hymnIntent.putExtra(HymnViewActivity.SELECTED_HYMN, (int) itemNumber);
             startActivity(hymnIntent);
         }
     }

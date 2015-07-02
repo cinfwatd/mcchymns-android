@@ -29,9 +29,6 @@ public final class HymnContract {
         public static final String COLUMN_NAME_CREATION_DATE = "date";
         public static final String COLUMN_NAME_CREATION_STORY = "story";
         public static final String COLUMN_NAME_FAVOURITE = "favourite";
-        public static final String COLUMN_NAME_SACRED_SONGS = "sacred_songs";
-        public static final String COLUMN_NAME_CHRISTIAN_CHOIR = "christian_choir";
-        public static final String COLUMN_NAME_NEW_HYMNS = "new_hymns";
         public static final String COLUMN_NAME_FIRST_LINE = "first_line";
         public static final String COLUMN_NAME_TOPIC_ID = "topic_id";
         public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_HYMN_NUMBER + " COLLATE LOCALIZED ASC";
@@ -40,14 +37,11 @@ public final class HymnContract {
                 "CREATE TABLE " + TABLE_NAME + " (" +
                         HymnEntry._ID + INTEGER_TYPE + "PRIMARY KEY AUTOINCREMENT" + SEPARATOR +
                         COLUMN_NAME_HYMN_NUMBER + INTEGER_TYPE +  " NOT NULL UNIQUE" + SEPARATOR +
+                        COLUMN_NAME_FIRST_LINE + TEXT_TYPE + SEPARATOR +
                         COLUMN_NAME_AUTHOR + TEXT_TYPE + SEPARATOR +
                         COLUMN_NAME_CREATION_DATE + TEXT_TYPE + SEPARATOR +
                         COLUMN_NAME_CREATION_STORY + TEXT_TYPE + SEPARATOR +
                         COLUMN_NAME_FAVOURITE + TEXT_TYPE + SEPARATOR +
-                        COLUMN_NAME_SACRED_SONGS + INTEGER_TYPE + SEPARATOR +
-                        COLUMN_NAME_CHRISTIAN_CHOIR + INTEGER_TYPE + SEPARATOR +
-                        COLUMN_NAME_NEW_HYMNS + INTEGER_TYPE + SEPARATOR +
-                        COLUMN_NAME_FIRST_LINE + TEXT_TYPE + SEPARATOR +
                         COLUMN_NAME_TOPIC_ID + INTEGER_TYPE + "REFERENCES " +
                         TopicEntry.TABLE_NAME + "(" + TopicEntry._ID + "))";
 
@@ -92,9 +86,9 @@ public final class HymnContract {
         public static final String SQL_CREATE_ENTRIES =
                 "CREATE TABLE " + TABLE_NAME + " (" +
                         TopicEntry._ID + INTEGER_TYPE + "PRIMARY KEY AUTOINCREMENT" + SEPARATOR +
+                        COLUMN_NAME_TOPIC + TEXT_TYPE + SEPARATOR +
                         COLUMN_NAME_SUBJECT_ID + INTEGER_TYPE + "REFERENCES " +
-                        SubjectEntry.TABLE_NAME + "(" + SubjectEntry._ID + ")" + SEPARATOR +
-                        COLUMN_NAME_TOPIC + TEXT_TYPE + " )";
+                        SubjectEntry.TABLE_NAME + "(" + SubjectEntry._ID + "))";
 
         public static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }

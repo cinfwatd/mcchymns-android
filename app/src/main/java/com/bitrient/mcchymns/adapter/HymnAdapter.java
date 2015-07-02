@@ -20,6 +20,7 @@ public class HymnAdapter extends SelectableAdapter<HymnAdapter.ViewHolder>  {
     private int mIcon;
     private Cursor mCursor;
     private int mRowIdColumn;
+    private int mRowNumberColumn;
 
     private ViewHolder.ClickListener clickListener;
 
@@ -28,6 +29,7 @@ public class HymnAdapter extends SelectableAdapter<HymnAdapter.ViewHolder>  {
         mCursor = cursor;
 
         mRowIdColumn = cursor != null ? cursor.getColumnIndex(HymnContract.HymnEntry._ID) : -1;
+        mRowNumberColumn = cursor != null ? cursor.getColumnIndex(HymnContract.HymnEntry.COLUMN_NAME_HYMN_NUMBER) : -1;
 
         this.clickListener = clickListener;
     }
@@ -73,7 +75,13 @@ public class HymnAdapter extends SelectableAdapter<HymnAdapter.ViewHolder>  {
         return 0;
     }
 
+    public long getItemNumber(int position) {
+        if (mCursor != null && mCursor.moveToPosition(position)) {
+            return mCursor.getLong(mRowNumberColumn);
+        }
 
+        return 0;
+    }
 
     @Override
     public int getItemCount() {
@@ -87,8 +95,10 @@ public class HymnAdapter extends SelectableAdapter<HymnAdapter.ViewHolder>  {
         mCursor = cursor;
         if (mCursor != null) {
             mRowIdColumn = cursor.getColumnIndexOrThrow(HymnContract.HymnEntry._ID);
+            mRowNumberColumn = cursor.getColumnIndexOrThrow(HymnContract.HymnEntry.COLUMN_NAME_HYMN_NUMBER);
         } else {
             mRowIdColumn = -1;
+            mRowNumberColumn = -1;
         }
 
         notifyDataSetChanged();
