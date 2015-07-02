@@ -30,6 +30,8 @@ public class HymnsProvider extends ContentProvider {
                 HymnContract.HymnEntry.COLUMN_NAME_HYMN_NUMBER);
         hymnsProjectionMap.put(HymnContract.HymnEntry.COLUMN_NAME_FIRST_LINE,
                 HymnContract.HymnEntry.COLUMN_NAME_FIRST_LINE);
+        hymnsProjectionMap.put(HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE,
+                HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE);
     }
 
     /**
