@@ -3,6 +3,7 @@ package com.bitrient.mcchymns.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.bitrient.mcchymns.R;
 
@@ -51,7 +52,6 @@ public class HymnDbHelper extends SQLiteOpenHelper{
         db.execSQL(HymnContract.TopicEntry.SQL_CREATE_ENTRIES);
         db.execSQL(HymnContract.HymnEntry.SQL_CREATE_ENTRIES);
         db.execSQL(HymnContract.StanzaEntry.SQL_CREATE_ENTRIES);
-        db.execSQL(HymnContract.ChorusEntry.SQL_CREATE_ENTRIES);
 
         //TODO: pre-populate the db here.
         db.beginTransaction();
@@ -75,6 +75,7 @@ public class HymnDbHelper extends SQLiteOpenHelper{
 
         db.setTransactionSuccessful();
         db.endTransaction();
+        Log.d(TAG, "THe number of inserts - " + result);
     }
 
     /**
@@ -87,7 +88,6 @@ public class HymnDbHelper extends SQLiteOpenHelper{
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(HymnContract.ChorusEntry.SQL_DELETE_ENTRIES);
         db.execSQL(HymnContract.StanzaEntry.SQL_DELETE_ENTRIES);
         db.execSQL(HymnContract.HymnEntry.SQL_DELETE_ENTRIES);
         db.execSQL(HymnContract.TopicEntry.SQL_DELETE_ENTRIES);

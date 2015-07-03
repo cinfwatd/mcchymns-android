@@ -11,12 +11,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 
 import com.bitrient.mcchymns.adapter.NavigationDrawerAdapter;
-import com.bitrient.mcchymns.fragment.dialog.GotoHymnDialogFragment;
 
 
 public class MainActivity extends AppCompatActivity implements
@@ -109,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onItemClicked(int position) {
-
         switch (position) {
             case 0: // Favorites
                 Intent favorites = new Intent(this, FavoritesActivity.class);
@@ -124,8 +121,6 @@ public class MainActivity extends AppCompatActivity implements
                 startActivity(settingsIntent);
                 break;
             case 3: // About
-                Intent splashIntent = new Intent(this, SplashScreenActivity.class);
-                startActivity(splashIntent);
                 break;
         }
 

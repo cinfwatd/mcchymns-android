@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/stanzaContainer"
+    android:paddingBottom="-30dp">
+
+    <View style="@style/Divider"
+        android:id="@+id/divider1"
+        android:layout_alignTop="@+id/divider2"
+        android:layout_toLeftOf="@+id/stanza_number"
+        android:layout_toStartOf="@+id/stanza_number" />
+
+    <TextView
+        android:id="@+id/stanza_number"
+        android:layout_width="20dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true" />
+
+    <View style="@style/Divider"
+        android:id="@+id/divider2"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/stanza_number"
+        android:layout_toEndOf="@+id/stanza_number" />
+
+    <TextView
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lineSpacingMultiplier="1.2"
+        android:textSize="16sp"
+        android:id="@+id/stanza_body"
+        android:layout_below="@id/stanza_number"/>
+
+</RelativeLayout>

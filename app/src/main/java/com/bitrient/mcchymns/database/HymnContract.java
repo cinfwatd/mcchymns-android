@@ -52,15 +52,24 @@ public final class HymnContract {
         public static final String TABLE_NAME = "stanza";
         public static final String COLUMN_NAME_STANZA_NUMBER = "number";
         public static final String COLUMN_NAME_HYMN_NUMBER = "hymn_number";
-        public static final String COLUMN_NAME_STANZA = "stanza";
+        public static final String COLUMN_NAME_STANZA = "stanza_";
+        public static final String COLUMN_NAME_IS_CHORUS = "is_chorus";
 
         public static final String SQL_CREATE_ENTRIES =
-                "CREATE TABLE " + TABLE_NAME + " (" +
+                "CREATE VIRTUAL TABLE " + TABLE_NAME + " USING fts3 (" +
                         StanzaEntry._ID + INTEGER_TYPE + "PRIMARY KEY AUTOINCREMENT" + SEPARATOR +
                         COLUMN_NAME_STANZA_NUMBER + INTEGER_TYPE + SEPARATOR +
+                        COLUMN_NAME_STANZA + TEXT_TYPE + SEPARATOR +
+                        COLUMN_NAME_IS_CHORUS + INTEGER_TYPE + SEPARATOR +
                         COLUMN_NAME_HYMN_NUMBER + INTEGER_TYPE + "REFERENCES " +
-                        HymnEntry.TABLE_NAME + "(" + HymnEntry.COLUMN_NAME_HYMN_NUMBER + ")" + SEPARATOR +
-                        COLUMN_NAME_STANZA + TEXT_TYPE + " )";
+                        HymnEntry.TABLE_NAME + "(" + HymnEntry.COLUMN_NAME_HYMN_NUMBER + "))";
+
+
+        public static final String SQL_CREATE_ENTRIES_FST =
+                "CREATE VIRTUAL TABLE " + TABLE_NAME + " USING fts3 (" +
+                        StanzaEntry._ID + SEPARATOR + COLUMN_NAME_STANZA_NUMBER + SEPARATOR +
+                        COLUMN_NAME_STANZA + SEPARATOR + COLUMN_NAME_IS_CHORUS + SEPARATOR +
+                        COLUMN_NAME_HYMN_NUMBER + ")";
 
         public static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
@@ -89,21 +98,6 @@ public final class HymnContract {
                         COLUMN_NAME_TOPIC + TEXT_TYPE + SEPARATOR +
                         COLUMN_NAME_SUBJECT_ID + INTEGER_TYPE + "REFERENCES " +
                         SubjectEntry.TABLE_NAME + "(" + SubjectEntry._ID + "))";
-
-        public static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TABLE_NAME;
-    }
-
-    public static abstract class ChorusEntry implements BaseColumns {
-        public static final String TABLE_NAME = "chorus";
-        public static final String COLUMN_NAME_CHORUS = "chorus";
-        public static final String COLUMN_NAME_HYMN_NUMBER = "hymn_number";
-
-        public static final String SQL_CREATE_ENTRIES =
-                "CREATE TABLE " + TABLE_NAME + " (" +
-                        ChorusEntry._ID + INTEGER_TYPE + "PRIMARY KEY AUTOINCREMENT" + SEPARATOR +
-                        COLUMN_NAME_CHORUS + TEXT_TYPE + SEPARATOR +
-                        COLUMN_NAME_HYMN_NUMBER + INTEGER_TYPE + "REFERENCES " +
-                        HymnEntry.TABLE_NAME + "(" + HymnEntry.COLUMN_NAME_HYMN_NUMBER + "))";
 
         public static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
