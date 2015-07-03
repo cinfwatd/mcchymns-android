@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,6 +36,7 @@ import com.bitrient.mcchymns.R;
 import com.bitrient.mcchymns.database.HymnContract;
 import com.bitrient.mcchymns.database.HymnDbHelper;
 import com.bitrient.mcchymns.fragment.dialog.GotoHymnDialogFragment;
+import com.bitrient.mcchymns.util.FontCache;
 
 
 /**
@@ -79,7 +82,6 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         mActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-//        mActionBar.setSubtitle(Integer.toString(getHymnNumber()));
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_hymn_view, container, false);
 
         mGestureDetector = new GestureDetector(getActivity(), new GestureDetector.SimpleOnGestureListener() {
@@ -158,6 +160,7 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
         int end = TextUtils.indexOf(cursor.getString(1), "\\n");
         String title = TextUtils.substring(cursor.getString(1), 0, end);
         mActionBar.setTitle(String.valueOf(title));
+        final Typeface typeface = FontCache.get("lilac_malaria.ttf", getActivity());
 
         do {
             RelativeLayout stanza = (RelativeLayout) inflater.inflate(R.layout.stanza, null);
@@ -171,11 +174,15 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
 //                TextView chorusTitle = (TextView) rootView.findViewById(R.id.chorus_title);
                 TextView chorus = (TextView) rootView.findViewById(R.id.chorus);
                 chorus.setText(cursorStanzaBody);
+                chorus.setTypeface(typeface);
                 chorusContainer.setVisibility(View.VISIBLE);
                 continue;
             }
             stanzaNumber.setText(cursorStanzaNumber);
             stanzaBody.setText(cursorStanzaBody);
+            stanzaNumber.setTypeface(typeface);
+            stanzaBody.setTypeface(typeface);
+            stanzaBody.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
 
             hymnContainer.addView(stanza);
         }  while (cursor.moveToNext());
