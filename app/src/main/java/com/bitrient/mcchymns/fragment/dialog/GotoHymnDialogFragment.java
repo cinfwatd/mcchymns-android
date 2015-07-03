@@ -25,8 +25,18 @@ import com.bitrient.mcchymns.R;
  */
 public class GotoHymnDialogFragment extends DialogFragment implements View.OnClickListener{
 
+    private static final String CURRENT_HYMN = "currentHymn";
+
     public static GotoHymnDialogFragment newInstance() {
         return new GotoHymnDialogFragment();
+    }
+    public static GotoHymnDialogFragment newInstance(int currentHymnNumber) {
+        final GotoHymnDialogFragment hymnDialogFragment = new GotoHymnDialogFragment();
+        Bundle args = new Bundle();
+        args.putInt(CURRENT_HYMN, currentHymnNumber);
+        hymnDialogFragment.setArguments(args);
+
+        return hymnDialogFragment;
     }
 
     @SuppressWarnings("unused")
@@ -99,8 +109,19 @@ public class GotoHymnDialogFragment extends DialogFragment implements View.OnCli
 
                 if (!TextUtils.isEmpty(mSelectedHymnTextView.getText())
                         && (Integer.parseInt(String.valueOf(mSelectedHymnTextView.getText())) > 0)) {
+
+                    int selectedHymn = Integer.parseInt(String.valueOf(mSelectedHymnTextView.getText()));
+
+                    // check if the selected Hymn == current hymnn
+                    final Bundle arguments = getArguments();
+                    if (arguments != null && arguments.getInt(CURRENT_HYMN, 0) == selectedHymn) {
+                        dismiss();
+                        return;
+                    }
+
+
                     Intent hymnIntent = new Intent(getActivity(), HymnViewActivity.class);
-                    hymnIntent.putExtra(HymnViewActivity.SELECTED_HYMN, Integer.parseInt(String.valueOf(mSelectedHymnTextView.getText())));
+                    hymnIntent.putExtra(HymnViewActivity.SELECTED_HYMN, selectedHymn);
                     startActivity(hymnIntent);
                     dismiss();
                 } else {
