@@ -1576,8 +1576,8 @@ INSERT INTO "stanza" VALUES(324,0,'" Have life for evermore,\nHave life for ever
 INSERT INTO "stanza" VALUES(325,3,'Oh, precious words that Jesus said ! —\n" Come, weary souls oppressed,\nCome, take My yoke and learn of Me ;\nAnd I will give you rest."',NULL,71);
 INSERT INTO "stanza" VALUES(326,0,'" And I will give you rest,\nAnd I will give you rest ;\nCome, take My yoke and learn of Me ;\nAnd I will give you rest."',1,71);
 INSERT INTO "stanza" VALUES(327,4,'Oh, precious words that Jesus said ! —\n" The world I overcame ;\nAnd they who follow where I lead,\nShall conquer in My name."',NULL,71);
-INSERT INTO "stanza" VALUES(328,1,'0',NULL,72);
-INSERT INTO "stanza" VALUES(329,0,'my precious Saviour,\nSo wonderfully kind !\nShould I search the wide world over,\nI could none like Jesus find.',1,72);
+INSERT INTO "stanza" VALUES(328,1,'O Thou precious Saviour,\nSo kind and good to me :\nThat I might live, Thy blood was shed\nOn Calvary''s cruel tree.',NULL,72);
+INSERT INTO "stanza" VALUES(329,0,'O my precious Saviour,\nSo wonderfully kind !\nShould I search the wide world over,\nI could none like Jesus find.',1,72);
 INSERT INTO "stanza" VALUES(330,2,'O Thou precious Saviour,\nTo whose kind, loving heart\nThe burdened soul may tell its grief,\nAnd in Thy love have part.',NULL,72);
 INSERT INTO "stanza" VALUES(331,3,'O Thou precious Saviour,\nWho suffer''d long for me,\nThy power alone can save from guilt,\nFrom Satan''s yoke set free.',NULL,72);
 INSERT INTO "stanza" VALUES(332,4,'O Thou precious Saviour,\nWhose love will give the prize,\nWhen life''s toils o''er, my soul wings\nTo realms beyond the skies. [on',NULL,72);

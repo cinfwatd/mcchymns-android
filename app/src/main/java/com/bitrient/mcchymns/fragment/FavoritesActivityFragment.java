@@ -21,7 +21,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -130,7 +129,7 @@ public class FavoritesActivityFragment extends Fragment implements
 
 //        String[] titles = getResources().getStringArray(R.array.fruits_array);
 
-        hymnAdapter = new HymnAdapter(null, R.mipmap.ic_hymn_gray, this);
+        hymnAdapter = new HymnAdapter(null, this);
         recyclerView.setAdapter(hymnAdapter);
 
         setRecyclerViewLayoutManager(recyclerView);
