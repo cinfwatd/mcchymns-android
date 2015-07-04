@@ -3,6 +3,7 @@ package com.bitrient.mcchymns.fragment.dialog;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -31,12 +32,7 @@ public class ConfirmDialogFragment extends DialogFragment {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ContentValues values = new ContentValues();
-                        values.putNull(HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE);
-
-                        String selection = HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE + " IS NOT NULL";
-
-                        getActivity().getContentResolver().update(HymnContract.HymnEntry.CONTENT_URI, values, selection, null);
+                        new RemoveTask().execute();
                     }
                 });
 
@@ -48,5 +44,19 @@ public class ConfirmDialogFragment extends DialogFragment {
                     }
                 });
         return builder.create();
+    }
+
+    private class RemoveTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            ContentValues values = new ContentValues();
+            values.putNull(HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE);
+
+            String selection = HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE + " IS NOT NULL";
+            getActivity().getContentResolver().update(HymnContract.HymnEntry.CONTENT_FTS_URI, values, selection, null);
+
+            return null;
+        }
     }
 }
