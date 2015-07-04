@@ -28,10 +28,16 @@ public class HymnsProvider extends ContentProvider {
         hymnsProjectionMap.put(HymnContract.HymnEntry._ID, HymnContract.HymnEntry._ID);
         hymnsProjectionMap.put(HymnContract.HymnEntry.COLUMN_NAME_HYMN_NUMBER,
                 HymnContract.HymnEntry.COLUMN_NAME_HYMN_NUMBER);
-        hymnsProjectionMap.put(HymnContract.HymnEntry.COLUMN_NAME_FIRST_LINE,
-                HymnContract.HymnEntry.COLUMN_NAME_FIRST_LINE);
+
         hymnsProjectionMap.put(HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE,
                 HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE);
+
+        hymnsProjectionMap.put(HymnContract.StanzaEntry.COLUMN_NAME_STANZA,
+                HymnContract.StanzaEntry.COLUMN_NAME_STANZA);
+        hymnsProjectionMap.put(HymnContract.StanzaEntry.COLUMN_NAME_HYMN_NUMBER,
+                HymnContract.StanzaEntry.COLUMN_NAME_HYMN_NUMBER);
+        hymnsProjectionMap.put(HymnContract.StanzaEntry.COLUMN_NAME_STANZA_NUMBER,
+                HymnContract.StanzaEntry.COLUMN_NAME_STANZA_NUMBER);
     }
 
     /**
@@ -39,13 +45,18 @@ public class HymnsProvider extends ContentProvider {
      */
     private static final UriMatcher URIMatcher;
     private static final int HYMNS = 1;
+    private static final int HYMNS_FTS = 10;
     private static final int HYMNS_ID = 2;
-    private static final int HYMNS_FILTER = 3;
+    private static final int HYMNS_FTS_ID = 20;
+    private static final int HYMNS_FILTER_FTS = 30;
+
     static {
         URIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         URIMatcher.addURI(HymnContract.AUTHORITY, "hymns", HYMNS);
-        URIMatcher.addURI(HymnContract.AUTHORITY, "hymns/#", HYMNS_ID);
-        URIMatcher.addURI(HymnContract.AUTHORITY, "hymns/filter/*", HYMNS_FILTER);
+        URIMatcher.addURI(HymnContract.AUTHORITY, "hymns_fts", HYMNS_FTS);
+//        URIMatcher.addURI(HymnContract.AUTHORITY, "hymns/#", HYMNS_ID);
+        URIMatcher.addURI(HymnContract.AUTHORITY, "hymns_fts/#", HYMNS_FTS_ID);
+        URIMatcher.addURI(HymnContract.AUTHORITY, "hymns/filter_fts/*", HYMNS_FILTER_FTS);
     }
 
     public HymnsProvider() {
@@ -59,13 +70,13 @@ public class HymnsProvider extends ContentProvider {
             case HYMNS:
                 count = db.delete(HymnContract.HymnEntry.TABLE_NAME, selection, selectionArgs);
                 break;
-            case HYMNS_ID:
-                String rowId = uri.getPathSegments().get(1);
-                count = db.delete(HymnContract.HymnEntry.TABLE_NAME,
-                        HymnContract.HymnEntry._ID + "=" + rowId
-                        + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), selectionArgs
-                );
-                break;
+//            case HYMNS_ID:
+//                String rowId = uri.getPathSegments().get(1);
+//                count = db.delete(HymnContract.HymnEntry.TABLE_NAME,
+//                        HymnContract.HymnEntry._ID + "=" + rowId
+//                        + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), selectionArgs
+//                );
+//                break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -78,10 +89,11 @@ public class HymnsProvider extends ContentProvider {
     public String getType(Uri uri) {
         switch (URIMatcher.match(uri)) {
             case HYMNS:
+            case HYMNS_FTS:
                 return HymnContract.HymnEntry.CONTENT_TYPE;
-            case HYMNS_ID:
-                return HymnContract.HymnEntry.CONTENT_ITEM_TYPE;
-            case HYMNS_FILTER:
+//            case HYMNS_ID:
+//                return HymnContract.HymnEntry.CONTENT_ITEM_TYPE;
+            case HYMNS_FILTER_FTS:
                 return HymnContract.HymnEntry.CONTENT_TYPE;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
@@ -122,24 +134,38 @@ public class HymnsProvider extends ContentProvider {
                         String[] selectionArgs, String sortOrder) {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 
+        String having = null;
+        String groupBy = null;
         switch (URIMatcher.match(uri)) {
             case HYMNS:
                 queryBuilder.setTables(HymnContract.HymnEntry.TABLE_NAME);
                 queryBuilder.setProjectionMap(hymnsProjectionMap);
+
                 break;
 
-            case HYMNS_ID:
-                queryBuilder.setTables(HymnContract.HymnEntry.TABLE_NAME);
+            case HYMNS_FTS:
+
+                queryBuilder.setTables(HymnContract.HYMNS_VIEW);
+                queryBuilder.setDistinct(true);
                 queryBuilder.setProjectionMap(hymnsProjectionMap);
-                queryBuilder.appendWhere(
-                        HymnContract.HymnEntry._ID + "=" +
-                                uri.getPathSegments().get(1));
+
+                groupBy = HymnContract.StanzaEntry.COLUMN_NAME_HYMN_NUMBER + ", " + HymnContract.StanzaEntry.COLUMN_NAME_STANZA_NUMBER;
+                having = HymnContract.StanzaEntry.COLUMN_NAME_STANZA_NUMBER + " = 1";
                 break;
-            case HYMNS_FILTER:
-                queryBuilder.setTables(HymnContract.HymnEntry.TABLE_NAME);
+
+//            case HYMNS_ID:
+//                queryBuilder.setTables(HymnContract.HymnEntry.TABLE_NAME);
+//                queryBuilder.setProjectionMap(hymnsProjectionMap);
+//                queryBuilder.appendWhere(
+//                        HymnContract.HymnEntry._ID + "=" +
+//                                uri.getPathSegments().get(1));
+//                break;
+
+            case HYMNS_FILTER_FTS:
+                queryBuilder.setTables(HymnContract.HYMNS_VIEW);
                 queryBuilder.setProjectionMap(hymnsProjectionMap);
                 queryBuilder.appendWhere(
-                        HymnContract.HymnEntry.COLUMN_NAME_FIRST_LINE + " LIKE \"%" + uri.getPathSegments().get(2) + "%\"");
+                        HymnContract.StanzaEntry.COLUMN_NAME_STANZA + " MATCH '" + uri.getPathSegments().get(2) + "'");
                 Log.d(TAG, "QUERY BUILDER = " + queryBuilder.buildQuery(null, null, null, null, null, null));
                 break;
             default:
@@ -156,7 +182,10 @@ public class HymnsProvider extends ContentProvider {
 
 //        get the database and run the query
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor cursor = queryBuilder.query(db, projection, selection, selectionArgs, null, null, orderBy);
+        Log.d(TAG, "QUERY BUILDER@ = " + queryBuilder.buildQuery(projection, selection,
+                groupBy,  having, sortOrder, null));
+        Cursor cursor = queryBuilder.query(db, projection, selection, selectionArgs,
+                groupBy, having, orderBy);
 
 //        Tell the cursor what URI to watch,
 //        so it knows when its source data changes.
@@ -173,11 +202,17 @@ public class HymnsProvider extends ContentProvider {
 
         switch (URIMatcher.match(uri)) {
             case HYMNS:
+            case HYMNS_FTS:
                 count = db.update(HymnContract.HymnEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
-            case HYMNS_ID:
-                String rowId = uri.getPathSegments().get(1);
-                count = db.update(HymnContract.HymnEntry.TABLE_NAME, values, HymnContract.HymnEntry._ID + "=" + rowId
+//            case HYMNS_ID:
+//                String rowId = uri.getPathSegments().get(1);
+//                count = db.update(HymnContract.HymnEntry.TABLE_NAME, values, HymnContract.HymnEntry._ID + "=" + rowId
+//                        + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), selectionArgs);
+//                break;
+            case HYMNS_FTS_ID:
+                String hymnNumber = uri.getPathSegments().get(1);
+                count = db.update(HymnContract.HymnEntry.TABLE_NAME, values, HymnContract.HymnEntry.COLUMN_NAME_HYMN_NUMBER + "=" + hymnNumber
                 + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), selectionArgs);
                 break;
             default:

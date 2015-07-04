@@ -1,6 +1,5 @@
 package com.bitrient.mcchymns.fragment;
 
-import android.app.Activity;
 import android.content.ContentProviderOperation;
 import android.content.ContentValues;
 import android.content.Context;
@@ -62,61 +61,6 @@ public class FavoritesActivityFragment extends Fragment implements
     private CharSequence currentFilter;
     private boolean isSearchViewOpen;
 
-    /**
-     * Called to do initial creation of a fragment.  This is called after
-     * {@link #onAttach(Activity)} and before
-     * {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
-     * <p/>
-     * <p>Note that this can be called while the fragment's activity is
-     * still in the process of being created.  As such, you can not rely
-     * on things like the activity's content view hierarchy being initialized
-     * at this point.  If you want to do work once the activity itself is
-     * created, see {@link #onActivityCreated(Bundle)}.
-     *
-     * @param savedInstanceState If the fragment is being re-created from
-     *                           a previous saved state, this is the state.
-     */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-//        ContentValues values = new ContentValues();
-////        values.put(HymnContract.HymnEntry._ID, "");
-//        values.put(HymnContract.HymnEntry.COLUMN_NAME_HYMN_NUMBER, "9");
-//        values.put(HymnContract.HymnEntry.COLUMN_NAME_FIRST_LINE, "Thank you Jesus 9");
-//        values.put(HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE, "True");
-//
-//        getActivity().getContentResolver().insert(HymnContract.HymnEntry.CONTENT_URI, values);
-//
-//        values.clear();
-////        values.put(HymnContract.HymnEntry._ID, "");
-//        values.put(HymnContract.HymnEntry.COLUMN_NAME_HYMN_NUMBER, "10");
-//        values.put(HymnContract.HymnEntry.COLUMN_NAME_FIRST_LINE, "Thank you Jesus 10");
-//        values.put(HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE, "True");
-//
-//        getActivity().getContentResolver().insert(HymnContract.HymnEntry.CONTENT_URI, values);
-//
-//        values.clear();
-////        values.put(HymnContract.HymnEntry._ID, "");
-//        values.put(HymnContract.HymnEntry.COLUMN_NAME_HYMN_NUMBER, "11");
-//        values.put(HymnContract.HymnEntry.COLUMN_NAME_FIRST_LINE, "Thank you Jesus 11");
-//        values.put(HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE, "True");
-//        getActivity().getContentResolver().insert(HymnContract.HymnEntry.CONTENT_URI, values);
-//
-//        values.clear();
-////        values.put(HymnContract.HymnEntry._ID, "");
-//        values.put(HymnContract.HymnEntry.COLUMN_NAME_HYMN_NUMBER, "12");
-//        values.put(HymnContract.HymnEntry.COLUMN_NAME_FIRST_LINE, "Thank you Jesus 12 ");
-//        values.put(HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE, "True");
-//        getActivity().getContentResolver().insert(HymnContract.HymnEntry.CONTENT_URI, values);
-
-//        add all to favorites
-//        ContentValues values = new ContentValues();
-//        values.put(HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE, "True");
-//        getActivity().getContentResolver().update(HymnContract.HymnEntry.CONTENT_URI,
-//                values, null, null);
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -137,19 +81,6 @@ public class FavoritesActivityFragment extends Fragment implements
         return rootView;
     }
 
-    /**
-     * Called when the fragment's activity has been created and this
-     * fragment's view hierarchy instantiated.  It can be used to do final
-     * initialization once these pieces are in place, such as retrieving
-     * views or restoring state.  It is also useful for fragments that use
-     * {@link #setRetainInstance(boolean)} to retain their instance,
-     * as this callback tells the fragment when it is fully associated with
-     * the new activity instance.  This is called after {@link #onCreateView}
-     * and before {@link #onViewStateRestored(Bundle)}.
-     *
-     * @param savedInstanceState If the fragment is being re-created from
-     *                           a previous saved state, this is the state.
-     */
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -174,19 +105,6 @@ public class FavoritesActivityFragment extends Fragment implements
         recyclerView.scrollToPosition(scrollPosition);
     }
 
-    /**
-     * Initialize the contents of the Activity's standard options menu.  You
-     * should place your menu items in to <var>menu</var>.  For this method
-     * to be called, you must have first called {@link #setHasOptionsMenu}.  See
-     * {@link Activity#onCreateOptionsMenu(Menu) Activity.onCreateOptionsMenu}
-     * for more information.
-     *
-     * @param menu     The options menu in which you place your items.
-     * @param inflater inflater
-     * @see #setHasOptionsMenu
-     * @see #onPrepareOptionsMenu
-     * @see #onOptionsItemSelected
-     */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_goto_hymn, menu);
@@ -233,22 +151,6 @@ public class FavoritesActivityFragment extends Fragment implements
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    /**
-     * This hook is called whenever an item in your options menu is selected.
-     * The default implementation simply returns false to have the normal
-     * processing happen (calling the item's Runnable or sending a message to
-     * its Handler as appropriate).  You can use this method for any items
-     * for which you would like to do processing without those other
-     * facilities.
-     * <p/>
-     * <p>Derived classes should call through to the base class for it to
-     * perform the default menu handling.
-     *
-     * @param item The menu item that was selected.
-     * @return boolean Return false to allow normal menu processing to
-     * proceed, true to consume it here.
-     * @see #onCreateOptionsMenu
-     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -269,17 +171,6 @@ public class FavoritesActivityFragment extends Fragment implements
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Called when all saved state has been restored into the view hierarchy
-     * of the fragment.  This can be used to do initialization based on saved
-     * state that you are letting the view hierarchy track itself, such as
-     * whether check box widgets are currently checked.  This is called
-     * after {@link #onActivityCreated(Bundle)} and before
-     * {@link #onStart()}.
-     *
-     * @param savedInstanceState If the fragment is being re-created from
-     *                           a previous saved state, this is the state.
-     */
     @Override
     public void onViewStateRestored(Bundle savedInstanceState) {
         if (savedInstanceState != null && savedInstanceState.containsKey(QUERY_STRING)) {
@@ -296,25 +187,6 @@ public class FavoritesActivityFragment extends Fragment implements
         super.onViewStateRestored(savedInstanceState);
     }
 
-    /**
-     * Called to ask the fragment to save its current dynamic state, so it
-     * can later be reconstructed in a new instance of its process is
-     * restarted.  If a new instance of the fragment later needs to be
-     * created, the data you place in the Bundle here will be available
-     * in the Bundle given to {@link #onCreate(Bundle)},
-     * {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}, and
-     * {@link #onActivityCreated(Bundle)}.
-     * <p>
-     * <p>This corresponds to {@link Activity#onSaveInstanceState(Bundle)
-     * Activity.onSaveInstanceState(Bundle)} and most of the discussion there
-     * applies here as well.  Note however: <em>this method may be called
-     * at any time before {@link #onDestroy()}</em>.  There are many situations
-     * where a fragment may be mostly torn down (such as when placed on the
-     * back stack with no UI showing), but its state will not be saved until
-     * its owning activity actually needs to save its state.
-     *
-     * @param outState Bundle in which to place your saved state.
-     */
     @Override
     public void onSaveInstanceState(Bundle outState) {
         if (searchView != null && !searchView.isIconified()) {
@@ -328,7 +200,6 @@ public class FavoritesActivityFragment extends Fragment implements
 
         super.onSaveInstanceState(outState);
     }
-
 
     @Override
     public void onItemClicked(int position) {
@@ -445,32 +316,27 @@ public class FavoritesActivityFragment extends Fragment implements
         }
     }
 
-    /**
-     * Instantiate and return a new Loader for the given ID.
-     *
-     * @param id   The ID whose loader is to be created.
-     * @param args Any arguments supplied by the caller.
-     * @return Return a new Loader instance that is ready to start loading.
-     */
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Uri baseUri;
 
         // Pick the base URI to use depending on whether we are currently filtering.
         if (currentFilter != null) {
-            baseUri = Uri.withAppendedPath(HymnContract.HymnEntry.CONTENT_FILTER_URI, Uri.encode(currentFilter.toString()));
+            baseUri = Uri.withAppendedPath(HymnContract.HymnEntry.CONTENT_FILTER_FTS_URI, Uri.encode(currentFilter.toString()));
         } else {
-            baseUri = HymnContract.HymnEntry.CONTENT_URI;
+            baseUri = HymnContract.HymnEntry.CONTENT_FTS_URI;
         }
 
         String[] projection = new String[] {
-                HymnContract.HymnEntry._ID,
-                HymnContract.HymnEntry.COLUMN_NAME_FIRST_LINE,
-                HymnContract.HymnEntry.COLUMN_NAME_HYMN_NUMBER
+                HymnContract.StanzaEntry.COLUMN_NAME_HYMN_NUMBER,
+                HymnContract.StanzaEntry.COLUMN_NAME_STANZA,
+                HymnContract.StanzaEntry.COLUMN_NAME_STANZA_NUMBER,
+                HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE,
+                HymnContract.StanzaEntry._ID
         };
         String selection = HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE + " IS NOT NULL";
 
-        return new CursorLoader(getActivity(), baseUri, projection, selection, null, null);
+        return new CursorLoader(getActivity(), baseUri, projection, selection, null, HymnContract.StanzaEntry.DEFAULT_SORT_ORDER);
     }
 
     /**
@@ -537,11 +403,11 @@ public class FavoritesActivityFragment extends Fragment implements
         ContentValues values = new ContentValues();
         values.putNull(HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE);
 
-        String selection = HymnContract.HymnEntry._ID + " = ?";
+        String selection = HymnContract.HymnEntry.COLUMN_NAME_HYMN_NUMBER + " = ?";
         String[] selectionArgs = new String[] {
-                Long.toString(hymnAdapter.getItemId(position))
+                Long.toString(hymnAdapter.getItemNumber(position))
         };
-        getActivity().getContentResolver().update(HymnContract.HymnEntry.CONTENT_URI, values, selection, selectionArgs);
+        getActivity().getContentResolver().update(HymnContract.HymnEntry.CONTENT_FTS_URI, values, selection, selectionArgs);
     }
 
     /**
@@ -563,8 +429,8 @@ public class FavoritesActivityFragment extends Fragment implements
 
         ContentValues values = new ContentValues();
         for (int position: positions) {
-            Uri baseUri = Uri.withAppendedPath(HymnContract.HymnEntry.CONTENT_URI,
-                    Uri.encode(Long.toString(hymnAdapter.getItemId(position))));
+            Uri baseUri = Uri.withAppendedPath(HymnContract.HymnEntry.CONTENT_FTS_URI,
+                    Uri.encode(Long.toString(hymnAdapter.getItemNumber(position))));
 
             values.clear();
             values.putNull(HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE);
@@ -578,6 +444,7 @@ public class FavoritesActivityFragment extends Fragment implements
             getActivity().getContentResolver().applyBatch(HymnContract.AUTHORITY, operations);
         } catch (RemoteException | OperationApplicationException e) {
             // If any error is thrown, the operation is implicitly aborted.
+            throw new RuntimeException(e);
         }
     }
 }

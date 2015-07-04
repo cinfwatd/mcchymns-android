@@ -29,7 +29,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bitrient.mcchymns.HymnViewActivity;
 import com.bitrient.mcchymns.R;
@@ -68,7 +67,7 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new AddFavoriteTask().execute(getHymnNumber(), SET_FAVORITE_INITIALIZE);
+        new ToggleFavoritesTask().execute(getHymnNumber(), SET_FAVORITE_INITIALIZE);
     }
 
     @Override
@@ -120,7 +119,7 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
 
             case R.id.action_add_to_favorite:
 //                Toast.makeText(getActivity(), "Add " + getHymnNumber() + " to favorites", Toast.LENGTH_SHORT).show();
-                new AddFavoriteTask().execute(getHymnNumber(), SET_FAVORITE_CLICKED);
+                new ToggleFavoritesTask().execute(getHymnNumber(), SET_FAVORITE_CLICKED);
                 return true;
         }
 
@@ -132,10 +131,10 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
         MenuItem favoriteMenuItem = menu.findItem(R.id.action_add_to_favorite);
 
         switch (mFavoritesIconType) {
-            case AddFavoriteTask.SHOW_ON:
+            case ToggleFavoritesTask.SHOW_ON:
                 favoriteMenuItem.setIcon(R.mipmap.ic_action_favorite_on);
                 break;
-            case AddFavoriteTask.SHOW_OFF:
+            case ToggleFavoritesTask.SHOW_OFF:
                 favoriteMenuItem.setIcon(R.mipmap.ic_action_favorite_off);
                 break;
         }
@@ -159,7 +158,10 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
 
         int end = TextUtils.indexOf(cursor.getString(1), "\\n");
         String title = TextUtils.substring(cursor.getString(1), 0, end);
-        mActionBar.setTitle(String.valueOf(title));
+        String number = cursor.getString(3);
+
+        mActionBar.setTitle(number + " - " + title);
+
         final Typeface typeface = FontCache.get("lilac_malaria.ttf", getActivity());
 
         do {
@@ -205,7 +207,7 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
 
     }
 
-    private class AddFavoriteTask extends AsyncTask <Integer, Void, Integer> {
+    private class ToggleFavoritesTask extends AsyncTask <Integer, Void, Integer> {
         static final int SHOW_ON = 1;
         static final int SHOW_OFF = 2;
 

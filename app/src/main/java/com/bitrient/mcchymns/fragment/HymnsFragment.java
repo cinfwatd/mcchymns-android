@@ -64,7 +64,7 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        mHymnAdapter = new HymnAdapter(null, R.mipmap.ic_hymn, this);
+        mHymnAdapter = new HymnAdapter(null, this);
         mRecyclerView.setAdapter(mHymnAdapter);
 
         setRecyclerViewLayoutManager(mRecyclerView);
@@ -190,20 +190,22 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Uri baseUri;
 
+        String[] projection;
         // Pick the base URI to use depending on whether we are currently filtering.
         if (mCurrentFilter != null) {
-            baseUri = Uri.withAppendedPath(HymnContract.HymnEntry.CONTENT_FILTER_URI, Uri.encode(mCurrentFilter.toString()));
+            baseUri = Uri.withAppendedPath(HymnContract.HymnEntry.CONTENT_FILTER_FTS_URI, Uri.encode(mCurrentFilter.toString()));
         } else {
-            baseUri = HymnContract.HymnEntry.CONTENT_URI;
+            baseUri = HymnContract.HymnEntry.CONTENT_FTS_URI;
         }
 
-        String[] projection = new String[] {
-                HymnContract.HymnEntry._ID,
-                HymnContract.HymnEntry.COLUMN_NAME_FIRST_LINE,
-                HymnContract.HymnEntry.COLUMN_NAME_HYMN_NUMBER
+        projection = new String[] {
+                HymnContract.StanzaEntry.COLUMN_NAME_HYMN_NUMBER,
+                HymnContract.StanzaEntry.COLUMN_NAME_STANZA,
+                HymnContract.StanzaEntry.COLUMN_NAME_STANZA_NUMBER,
+                HymnContract.StanzaEntry._ID
         };
 
-        return new CursorLoader(getActivity(), baseUri, projection, null, null, null);
+        return new CursorLoader(getActivity(), baseUri, projection, null, null, HymnContract.StanzaEntry.DEFAULT_SORT_ORDER);
     }
 
     @Override

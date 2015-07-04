@@ -17,9 +17,19 @@ public final class HymnContract {
     public static final String SEPARATOR = ", ";
     public static final String BASE_URL = "http://mcchymns.bitrient.com/api/v1/";
 
+    public static final String HYMNS_VIEW = "hymns_view";
+    public static final String SQL_CREATE_HYMNS_VIEW = "CREATE VIEW " + HYMNS_VIEW +
+            " AS SELECT s." + StanzaEntry._ID + ", s." + StanzaEntry.COLUMN_NAME_HYMN_NUMBER +
+            ", s." + StanzaEntry.COLUMN_NAME_STANZA_NUMBER + ", s." + StanzaEntry.COLUMN_NAME_STANZA +
+            ", h." + HymnEntry.COLUMN_NAME_FAVOURITE + ", h." + HymnEntry.COLUMN_NAME_TOPIC_ID +
+            " FROM " + StanzaEntry.TABLE_NAME + " AS s LEFT OUTER JOIN " + HymnEntry.TABLE_NAME + " AS h " +
+            "ON s." + StanzaEntry.COLUMN_NAME_HYMN_NUMBER + " = h." + HymnEntry.COLUMN_NAME_HYMN_NUMBER;
+    public static final String SQL_DELETE_HYMNS_VIEW = "DROP VIEW " + HYMNS_VIEW;
+
     public static abstract class HymnEntry implements BaseColumns {
         public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/hymns");
-        public static final Uri CONTENT_FILTER_URI = Uri.parse("content://" + AUTHORITY + "/hymns/filter");
+        public static final Uri CONTENT_FTS_URI = Uri.parse("content://" + AUTHORITY + "/hymns_fts");
+        public static final Uri CONTENT_FILTER_FTS_URI = Uri.parse("content://" + AUTHORITY + "/hymns/filter_fts");
         public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.bitrient.hymn";
         public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.bitrient.hymn";
 
@@ -50,10 +60,11 @@ public final class HymnContract {
 
     public static abstract class StanzaEntry implements BaseColumns {
         public static final String TABLE_NAME = "stanza";
-        public static final String COLUMN_NAME_STANZA_NUMBER = "number";
+        public static final String COLUMN_NAME_STANZA_NUMBER = "stanza_number";
         public static final String COLUMN_NAME_HYMN_NUMBER = "hymn_number";
         public static final String COLUMN_NAME_STANZA = "stanza_";
         public static final String COLUMN_NAME_IS_CHORUS = "is_chorus";
+        public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_HYMN_NUMBER + " COLLATE LOCALIZED ASC";
 
         public static final String SQL_CREATE_ENTRIES =
                 "CREATE VIRTUAL TABLE " + TABLE_NAME + " USING fts3 (" +

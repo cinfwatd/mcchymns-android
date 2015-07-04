@@ -52,6 +52,7 @@ public class HymnDbHelper extends SQLiteOpenHelper{
         db.execSQL(HymnContract.TopicEntry.SQL_CREATE_ENTRIES);
         db.execSQL(HymnContract.HymnEntry.SQL_CREATE_ENTRIES);
         db.execSQL(HymnContract.StanzaEntry.SQL_CREATE_ENTRIES);
+        db.execSQL(HymnContract.SQL_CREATE_HYMNS_VIEW);
 
         //TODO: pre-populate the db here.
         db.beginTransaction();
@@ -88,6 +89,7 @@ public class HymnDbHelper extends SQLiteOpenHelper{
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL(HymnContract.SQL_DELETE_HYMNS_VIEW);
         db.execSQL(HymnContract.StanzaEntry.SQL_DELETE_ENTRIES);
         db.execSQL(HymnContract.HymnEntry.SQL_DELETE_ENTRIES);
         db.execSQL(HymnContract.TopicEntry.SQL_DELETE_ENTRIES);

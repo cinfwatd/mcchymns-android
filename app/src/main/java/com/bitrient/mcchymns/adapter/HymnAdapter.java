@@ -2,10 +2,10 @@ package com.bitrient.mcchymns.adapter;
 
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bitrient.mcchymns.R;
@@ -17,19 +17,17 @@ import com.bitrient.mcchymns.database.HymnContract;
  */
 public class HymnAdapter extends SelectableAdapter<HymnAdapter.ViewHolder>  {
 
-    private int mIcon;
     private Cursor mCursor;
     private int mRowIdColumn;
     private int mRowNumberColumn;
 
     private ViewHolder.ClickListener clickListener;
 
-    public HymnAdapter(Cursor cursor, int icon, ViewHolder.ClickListener clickListener) {
-        mIcon = icon;
+    public HymnAdapter(Cursor cursor, ViewHolder.ClickListener clickListener) {
         mCursor = cursor;
 
-        mRowIdColumn = cursor != null ? cursor.getColumnIndex(HymnContract.HymnEntry._ID) : -1;
-        mRowNumberColumn = cursor != null ? cursor.getColumnIndex(HymnContract.HymnEntry.COLUMN_NAME_HYMN_NUMBER) : -1;
+        mRowIdColumn = cursor != null ? cursor.getColumnIndex(HymnContract.StanzaEntry._ID) : -1;
+        mRowNumberColumn = cursor != null ? cursor.getColumnIndex(HymnContract.StanzaEntry.COLUMN_NAME_HYMN_NUMBER) : -1;
 
         this.clickListener = clickListener;
     }
@@ -46,12 +44,13 @@ public class HymnAdapter extends SelectableAdapter<HymnAdapter.ViewHolder>  {
         if (mCursor == null) throw new IllegalStateException("This should only be called when the cursor is valid.");
         if (!mCursor.moveToPosition(position)) throw new IllegalStateException("Couldn't move the cursor to the position " + position);
 
-        String firstLine = mCursor.getString(1);
-        String hymnNumber = mCursor.getString(2);
+        int end = TextUtils.indexOf(mCursor.getString(1), "\\n");
 
-        viewHolder.hymnIcon.setImageResource(mIcon);
+        String firstLine = TextUtils.substring(mCursor.getString(1), 0, end);
+        String hymnNumber = mCursor.getString(0);
+
         viewHolder.firstLineTextView.setText(firstLine);
-        viewHolder.hymnNumberTextView.setText("#" + hymnNumber);
+        viewHolder.hymnNumberTextView.setText(hymnNumber);
 
 //            highlight the item if it's selected
         viewHolder.selectedOverlay.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
@@ -94,8 +93,8 @@ public class HymnAdapter extends SelectableAdapter<HymnAdapter.ViewHolder>  {
 
         mCursor = cursor;
         if (mCursor != null) {
-            mRowIdColumn = cursor.getColumnIndexOrThrow(HymnContract.HymnEntry._ID);
-            mRowNumberColumn = cursor.getColumnIndexOrThrow(HymnContract.HymnEntry.COLUMN_NAME_HYMN_NUMBER);
+            mRowIdColumn = cursor.getColumnIndexOrThrow(HymnContract.StanzaEntry._ID);
+            mRowNumberColumn = cursor.getColumnIndexOrThrow(HymnContract.StanzaEntry.COLUMN_NAME_HYMN_NUMBER);
         } else {
             mRowIdColumn = -1;
             mRowNumberColumn = -1;
@@ -111,7 +110,6 @@ public class HymnAdapter extends SelectableAdapter<HymnAdapter.ViewHolder>  {
 
         private TextView firstLineTextView;
         private TextView hymnNumberTextView;
-        private ImageView hymnIcon;
 
         private View selectedOverlay;
 
@@ -122,7 +120,6 @@ public class HymnAdapter extends SelectableAdapter<HymnAdapter.ViewHolder>  {
 
             firstLineTextView = (TextView) itemView.findViewById(R.id.hymn_row_title);
             hymnNumberTextView = (TextView) itemView.findViewById(R.id.hymn_row_number);
-            hymnIcon = (ImageView) itemView.findViewById(R.id.hymn_row_icon);
             selectedOverlay = itemView.findViewById(R.id.selected_overlay);
 
             this.listener = listener;
