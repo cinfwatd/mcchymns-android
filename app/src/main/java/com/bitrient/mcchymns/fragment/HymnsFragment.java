@@ -175,6 +175,12 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
 
     @Override
     public void onItemClicked(int position) {
+
+        if (!mSearchView.isIconified() && TextUtils.isEmpty(mSearchView.getQuery())) {
+            mSearchView.setIconified(true);
+            return;
+        }
+
         final long itemNumber = mHymnAdapter.getItemNumber(position);
         Intent hymnIntent = new Intent(getActivity(), HymnViewActivity.class);
         hymnIntent.putExtra(HymnViewActivity.SELECTED_HYMN, (int) itemNumber);

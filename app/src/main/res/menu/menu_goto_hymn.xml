@@ -2,6 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/action_goto" android:title="@string/goto_hymn"
-        android:orderInCategory="200" app:showAsAction="never"
+        android:orderInCategory="200" app:showAsAction="ifRoom"
         android:icon="@mipmap/ic_action_goto_hymn"/>
 </menu>
