@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -29,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bitrient.mcchymns.HymnViewActivity;
 import com.bitrient.mcchymns.R;
@@ -132,14 +135,30 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
 
         switch (mFavoritesIconType) {
             case ToggleFavoritesTask.SHOW_ON:
-                favoriteMenuItem.setIcon(R.mipmap.ic_action_favorite_on);
+                setMenuIcon(favoriteMenuItem, R.mipmap.ic_action_favorite_on);
                 break;
             case ToggleFavoritesTask.SHOW_OFF:
-                favoriteMenuItem.setIcon(R.mipmap.ic_action_favorite_off);
+                setMenuIcon(favoriteMenuItem, R.mipmap.ic_action_favorite_off);
+                break;
+
+            case ToggleFavoritesTask.SHOW_ON_WITH_TOAST:
+                setMenuIcon(favoriteMenuItem, R.mipmap.ic_action_favorite_on, R.string.added_to_favorites);
+                break;
+            case ToggleFavoritesTask.SHOW_OFF_WITH_TOAST:
+                setMenuIcon(favoriteMenuItem,R.mipmap.ic_action_favorite_off, R.string.removed_from_favorites);
                 break;
         }
 
         super.onPrepareOptionsMenu(menu);
+    }
+
+    private void setMenuIcon(MenuItem menuItem, @DrawableRes int iconResId, @StringRes int resId) {
+        menuItem.setIcon(iconResId);
+        Toast.makeText(getActivity(), resId, Toast.LENGTH_SHORT).show();
+    }
+
+    private void setMenuIcon(MenuItem menuItem, @DrawableRes int iconResId) {
+        menuItem.setIcon(iconResId);
     }
 
     private int getHymnNumber() {
@@ -209,7 +228,9 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
 
     private class ToggleFavoritesTask extends AsyncTask <Integer, Void, Integer> {
         static final int SHOW_ON = 1;
+        static final int SHOW_ON_WITH_TOAST = 10;
         static final int SHOW_OFF = 2;
+        static final int SHOW_OFF_WITH_TOAST = 20;
 
         @Override
         protected Integer doInBackground(Integer... params) {
@@ -233,10 +254,10 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
             int result;
             if (isNotFavorite) {
                 values.put(HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE, "True");
-                result = SHOW_ON;
+                result = SHOW_ON_WITH_TOAST;
             } else {
                 values.putNull(HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE);
-                result = SHOW_OFF;
+                result = SHOW_OFF_WITH_TOAST;
             }
 
             contentResolver.update(HymnContract.HymnEntry.CONTENT_URI, values, selection, selectionArgs);
