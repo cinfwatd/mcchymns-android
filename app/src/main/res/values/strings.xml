@@ -94,5 +94,9 @@
 
     <string name="added_to_favorites">Added to favorites</string>
     <string name="removed_from_favorites">Removed from favorites</string>
+    <string-array name="sort_type">
+        <item>Hymn number</item>
+        <item>First lines</item>
+    </string-array>
 
 </resources>

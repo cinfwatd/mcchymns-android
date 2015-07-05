@@ -65,6 +65,7 @@ public final class HymnContract {
         public static final String COLUMN_NAME_STANZA = "stanza_";
         public static final String COLUMN_NAME_IS_CHORUS = "is_chorus";
         public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_HYMN_NUMBER + " COLLATE LOCALIZED ASC";
+        public static final String FIRST_LINES_SORT_ORDER = COLUMN_NAME_STANZA + " COLLATE LOCALIZED ASC";
 
         public static final String SQL_CREATE_ENTRIES =
                 "CREATE VIRTUAL TABLE " + TABLE_NAME + " USING fts3 (" +

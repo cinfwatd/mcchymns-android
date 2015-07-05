@@ -27,7 +27,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.CursorAdapter;
 
 import com.bitrient.mcchymns.HymnViewActivity;
 import com.bitrient.mcchymns.R;
@@ -35,6 +34,7 @@ import com.bitrient.mcchymns.adapter.HymnAdapter;
 import com.bitrient.mcchymns.database.HymnContract;
 import com.bitrient.mcchymns.fragment.dialog.ConfirmDialogFragment;
 import com.bitrient.mcchymns.fragment.dialog.GotoHymnDialogFragment;
+import com.bitrient.mcchymns.fragment.dialog.SortDialog;
 import com.bitrient.mcchymns.view.EmptiableRecyclerView;
 
 import java.util.ArrayList;
@@ -44,22 +44,27 @@ import java.util.List;
  * A placeholder fragment containing a simple view.
  */
 public class FavoritesActivityFragment extends Fragment implements
-        HymnAdapter.ViewHolder.ClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+        HymnAdapter.ViewHolder.ClickListener, LoaderManager.LoaderCallbacks<Cursor>,
+        SortDialog.SortDialogListener {
 
     @SuppressWarnings("unused")
     private static final String TAG = FavoritesActivityFragment.class.getSimpleName();
+    private final static String QUERY_STRING = "queryString";
+    private final static String SELECTED_ITEMS = "selectedItems";
+    private static final int LOADER_ID = 0;
 
     private EmptiableRecyclerView recyclerView;
+    private SearchView mSearchView;
 
-    private HymnAdapter hymnAdapter;
-    private ActionModeCallback actionModeCallback = new ActionModeCallback();
-    private ActionMode actionMode;
+    private HymnAdapter mHymnAdapter;
+    private ActionModeCallback mActionModeCallback = new ActionModeCallback();
+    private ActionMode mActionMode;
 
-    private SearchView searchView;
-    private final String QUERY_STRING = "queryString";
-    private final String SELECTED_ITEMS = "selectedItems";
-    private CharSequence currentFilter;
-    private boolean isSearchViewOpen;
+
+
+    private CharSequence mCurrentFilter;
+    private boolean mIsSearchViewOpen;
+    private int mSortType = -1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,10 +76,8 @@ public class FavoritesActivityFragment extends Fragment implements
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-//        String[] titles = getResources().getStringArray(R.array.fruits_array);
-
-        hymnAdapter = new HymnAdapter(null, this);
-        recyclerView.setAdapter(hymnAdapter);
+        mHymnAdapter = new HymnAdapter(null, this);
+        recyclerView.setAdapter(mHymnAdapter);
 
         setRecyclerViewLayoutManager(recyclerView);
 
@@ -87,7 +90,7 @@ public class FavoritesActivityFragment extends Fragment implements
 
         setHasOptionsMenu(true);
 
-        getLoaderManager().initLoader(0, null, this);
+        getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     private void setRecyclerViewLayoutManager(RecyclerView recyclerView) {
@@ -109,17 +112,16 @@ public class FavoritesActivityFragment extends Fragment implements
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_goto_hymn, menu);
 
-        searchView = (SearchView) menu.findItem(R.id.favorites_action_search).getActionView();
+        mSearchView = (SearchView) menu.findItem(R.id.favorites_action_search).getActionView();
 
-        searchView.setQueryHint(getActivity().getResources().getString(R.string.search_hint));
+        mSearchView.setQueryHint(getActivity().getResources().getString(R.string.search_hint));
 
-        View searchPlate = searchView.findViewById(android.support.v7.appcompat.R.id.search_plate);
+        View searchPlate = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_plate);
         searchPlate.setBackgroundResource(R.drawable.textfield_search_selected_dashed);
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-//                searchView.onActionViewCollapsed();
 
                 InputMethodManager inputMethodManager =
                         (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -134,8 +136,8 @@ public class FavoritesActivityFragment extends Fragment implements
                 // it can respond with the appropriate background.
                 recyclerView.setSearch(!TextUtils.isEmpty(newText));
 
-                currentFilter = !TextUtils.isEmpty(newText) ? newText : null;
-                getLoaderManager().restartLoader(0, null, FavoritesActivityFragment.this);
+                mCurrentFilter = !TextUtils.isEmpty(newText) ? newText : null;
+                getLoaderManager().restartLoader(LOADER_ID, null, FavoritesActivityFragment.this);
 
                 return false;
             }
@@ -143,9 +145,9 @@ public class FavoritesActivityFragment extends Fragment implements
 
         });
 
-        if (isSearchViewOpen) {
-            searchView.setIconified(false);
-            searchView.setQuery(currentFilter, false);
+        if (mIsSearchViewOpen) {
+            mSearchView.setIconified(false);
+            mSearchView.setQuery(mCurrentFilter, false);
         }
 
         super.onCreateOptionsMenu(menu, inflater);
@@ -155,7 +157,7 @@ public class FavoritesActivityFragment extends Fragment implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.favorites_action_remove_all:
-                if (hymnAdapter.getItemCount() == 0) return true;
+                if (mHymnAdapter.getItemCount() == 0) return true;
 
                 final ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance();
                 dialogFragment.show(getFragmentManager(), "confirmDialog");
@@ -166,6 +168,12 @@ public class FavoritesActivityFragment extends Fragment implements
                         = GotoHymnDialogFragment.newInstance();
                 hymnDialogFragment.show(getFragmentManager(), "HymnDialogFragment");
                 return true;
+
+            case R.id.action_sort:
+                final SortDialog sortDialog = new SortDialog();
+                sortDialog.setTargetFragment(this, 2);
+                sortDialog.show(getFragmentManager(), "sortDialog");
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -174,12 +182,12 @@ public class FavoritesActivityFragment extends Fragment implements
     @Override
     public void onViewStateRestored(Bundle savedInstanceState) {
         if (savedInstanceState != null && savedInstanceState.containsKey(QUERY_STRING)) {
-            currentFilter = savedInstanceState.getCharSequence(QUERY_STRING);
-            isSearchViewOpen = true;
+            mCurrentFilter = savedInstanceState.getCharSequence(QUERY_STRING);
+            mIsSearchViewOpen = true;
         }
 
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_ITEMS)) {
-            hymnAdapter.setSelectedItems(savedInstanceState.getIntegerArrayList(SELECTED_ITEMS));
+            mHymnAdapter.setSelectedItems(savedInstanceState.getIntegerArrayList(SELECTED_ITEMS));
             initializeActionMode();
             invalidateActionMode();
         }
@@ -189,12 +197,12 @@ public class FavoritesActivityFragment extends Fragment implements
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        if (searchView != null && !searchView.isIconified()) {
-            outState.putCharSequence(QUERY_STRING, searchView.getQuery());
+        if (mSearchView != null && !mSearchView.isIconified()) {
+            outState.putCharSequence(QUERY_STRING, mSearchView.getQuery());
         }
 
-        if (actionMode != null) {
-            outState.putIntegerArrayList(SELECTED_ITEMS, new ArrayList<>(hymnAdapter.getSelectedItems()));
+        if (mActionMode != null) {
+            outState.putIntegerArrayList(SELECTED_ITEMS, new ArrayList<>(mHymnAdapter.getSelectedItems()));
         }
 
 
@@ -203,10 +211,10 @@ public class FavoritesActivityFragment extends Fragment implements
 
     @Override
     public void onItemClicked(int position) {
-        if (actionMode != null) {
+        if (mActionMode != null) {
             toggleSelection(position);
         } else {
-            final long itemNumber = hymnAdapter.getItemNumber(position);
+            final long itemNumber = mHymnAdapter.getItemNumber(position);
             Intent hymnIntent = new Intent(getActivity(), HymnViewActivity.class);
             hymnIntent.putExtra(HymnViewActivity.SELECTED_HYMN, (int) itemNumber);
             startActivity(hymnIntent);
@@ -223,8 +231,8 @@ public class FavoritesActivityFragment extends Fragment implements
     }
 
     private void initializeActionMode() {
-        if (actionMode == null) {
-            actionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(actionModeCallback);
+        if (mActionMode == null) {
+            mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(mActionModeCallback);
         }
     }
 
@@ -232,23 +240,23 @@ public class FavoritesActivityFragment extends Fragment implements
      * Toggle the selection state of an item
      *
      * If the item was the last one in the selection and is unselected, the selection is stopped.
-     * Note that the selection must already be started (actionMode must not be null).
+     * Note that the selection must already be started (mActionMode must not be null).
      *
      * @param position Position of the item to toggle the selection state
      */
     private void toggleSelection(int position) {
-        hymnAdapter.toggleSelection(position);
+        mHymnAdapter.toggleSelection(position);
         invalidateActionMode();
     }
 
     private void invalidateActionMode() {
-        int count = hymnAdapter.getSelectedItemCount();
+        int count = mHymnAdapter.getSelectedItemCount();
 
         if (count == 0) {
-            actionMode.finish();
+            mActionMode.finish();
         } else {
-            actionMode.setTitle(String.format("%d selected", count));
-            actionMode.invalidate();
+            mActionMode.setTitle(String.format("%d selected", count));
+            mActionMode.invalidate();
         }
     }
 
@@ -295,8 +303,8 @@ public class FavoritesActivityFragment extends Fragment implements
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.favorites_selected_action_remove:
-                    removeItems(hymnAdapter.getSelectedItems());
-//                    hymnAdapter.removeItems(hymnAdapter.getSelectedItems());
+                    removeItems(mHymnAdapter.getSelectedItems());
+//                    mHymnAdapter.removeItems(mHymnAdapter.getSelectedItems());
                     mode.finish();
                     return true;
                 default:
@@ -311,8 +319,8 @@ public class FavoritesActivityFragment extends Fragment implements
          */
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            hymnAdapter.clearSelection();
-            actionMode = null;
+            mHymnAdapter.clearSelection();
+            mActionMode = null;
         }
     }
 
@@ -321,8 +329,8 @@ public class FavoritesActivityFragment extends Fragment implements
         Uri baseUri;
 
         // Pick the base URI to use depending on whether we are currently filtering.
-        if (currentFilter != null) {
-            baseUri = Uri.withAppendedPath(HymnContract.HymnEntry.CONTENT_FILTER_FTS_URI, Uri.encode(currentFilter.toString()));
+        if (mCurrentFilter != null) {
+            baseUri = Uri.withAppendedPath(HymnContract.HymnEntry.CONTENT_FILTER_FTS_URI, Uri.encode(mCurrentFilter.toString()));
         } else {
             baseUri = HymnContract.HymnEntry.CONTENT_FTS_URI;
         }
@@ -336,50 +344,19 @@ public class FavoritesActivityFragment extends Fragment implements
         };
         String selection = HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE + " IS NOT NULL";
 
-        return new CursorLoader(getActivity(), baseUri, projection, selection, null, HymnContract.StanzaEntry.DEFAULT_SORT_ORDER);
+        String sortOrder;
+        if (mSortType == SortDialog.SORT_BY_FIRST_LINES) {
+            sortOrder = HymnContract.StanzaEntry.FIRST_LINES_SORT_ORDER;
+        } else {
+            sortOrder = HymnContract.StanzaEntry.DEFAULT_SORT_ORDER;
+        }
+
+        return new CursorLoader(getActivity(), baseUri, projection, selection, null, sortOrder);
     }
 
-    /**
-     * Called when a previously created loader has finished its load.  Note
-     * that normally an application is <em>not</em> allowed to commit fragment
-     * transactions while in this call, since it can happen after an
-     * activity's state is saved.
-     * <p>
-     * <p>This function is guaranteed to be called prior to the release of
-     * the last data that was supplied for this Loader.  At this point
-     * you should remove all use of the old data (since it will be released
-     * soon), but should not do your own release of the data since its Loader
-     * owns it and will take care of that.  The Loader will take care of
-     * management of its data so you don't have to.  In particular:
-     * <p>
-     * <ul>
-     * <li> <p>The Loader will monitor for changes to the data, and report
-     * them to you through new calls here.  You should not monitor the
-     * data yourself.  For example, if the data is a {@link Cursor}
-     * and you place it in a {@link CursorAdapter}, use
-     * the {@link CursorAdapter#CursorAdapter(Context,
-     * Cursor, int)} constructor <em>without</em> passing
-     * in either {@link CursorAdapter#FLAG_AUTO_REQUERY}
-     * or {@link CursorAdapter#FLAG_REGISTER_CONTENT_OBSERVER}
-     * (that is, use 0 for the flags argument).  This prevents the CursorAdapter
-     * from doing its own observing of the Cursor, which is not needed since
-     * when a change happens you will get a new Cursor throw another call
-     * here.
-     * <li> The Loader will release the data once it knows the application
-     * is no longer using it.  For example, if the data is
-     * a {@link Cursor} from a {@link CursorLoader},
-     * you should not call close() on it yourself.  If the Cursor is being placed in a
-     * {@link CursorAdapter}, you should use the
-     * {@link CursorAdapter#swapCursor(Cursor)}
-     * method so that the old Cursor is not closed.
-     * </ul>
-     *
-     * @param loader The Loader that has finished.
-     * @param data   The data generated by the Loader.
-     */
     @Override
     public void onLoadFinished(Loader loader, Cursor data) {
-        hymnAdapter.swapCursor(data);
+        mHymnAdapter.swapCursor(data);
     }
 
     /**
@@ -391,7 +368,7 @@ public class FavoritesActivityFragment extends Fragment implements
      */
     @Override
     public void onLoaderReset(Loader loader) {
-        hymnAdapter.swapCursor(null);
+        mHymnAdapter.swapCursor(null);
     }
 
     /**
@@ -405,7 +382,7 @@ public class FavoritesActivityFragment extends Fragment implements
 
         String selection = HymnContract.HymnEntry.COLUMN_NAME_HYMN_NUMBER + " = ?";
         String[] selectionArgs = new String[] {
-                Long.toString(hymnAdapter.getItemNumber(position))
+                Long.toString(mHymnAdapter.getItemNumber(position))
         };
         getActivity().getContentResolver().update(HymnContract.HymnEntry.CONTENT_FTS_URI, values, selection, selectionArgs);
     }
@@ -430,7 +407,7 @@ public class FavoritesActivityFragment extends Fragment implements
         ContentValues values = new ContentValues();
         for (int position: positions) {
             Uri baseUri = Uri.withAppendedPath(HymnContract.HymnEntry.CONTENT_FTS_URI,
-                    Uri.encode(Long.toString(hymnAdapter.getItemNumber(position))));
+                    Uri.encode(Long.toString(mHymnAdapter.getItemNumber(position))));
 
             values.clear();
             values.putNull(HymnContract.HymnEntry.COLUMN_NAME_FAVOURITE);
@@ -446,5 +423,11 @@ public class FavoritesActivityFragment extends Fragment implements
             // If any error is thrown, the operation is implicitly aborted.
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void onSortTypeSelected(int which) {
+        mSortType = which;
+        getLoaderManager().restartLoader(LOADER_ID, null, FavoritesActivityFragment.this);
     }
 }

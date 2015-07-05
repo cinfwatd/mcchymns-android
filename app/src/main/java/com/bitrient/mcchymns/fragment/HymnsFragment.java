@@ -27,10 +27,11 @@ import com.bitrient.mcchymns.R;
 import com.bitrient.mcchymns.adapter.HymnAdapter;
 import com.bitrient.mcchymns.database.HymnContract;
 import com.bitrient.mcchymns.fragment.dialog.GotoHymnDialogFragment;
+import com.bitrient.mcchymns.fragment.dialog.SortDialog;
 import com.bitrient.mcchymns.view.EmptiableRecyclerView;
 
 public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.ClickListener,
-        LoaderManager.LoaderCallbacks<Cursor> {
+        LoaderManager.LoaderCallbacks<Cursor>, SortDialog.SortDialogListener {
     @SuppressWarnings("unused")
     private static final String TAG = FavoritesActivityFragment.class.getSimpleName();
     private static final int LOADER_ID = 5;
@@ -43,6 +44,7 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
 
     private CharSequence mCurrentFilter;
     private boolean mIsSearchViewOpen;
+    private int mSortType = -1;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -129,6 +131,12 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
                 hymnDialogFragment.show(getFragmentManager(), "HymnDialogFragment");
                 return true;
 
+            case R.id.action_sort:
+                final SortDialog sortDialog = new SortDialog();
+                sortDialog.setTargetFragment(this, 1);
+                sortDialog.show(getFragmentManager(), "sortDialog");
+                return true;
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -211,7 +219,14 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
                 HymnContract.StanzaEntry._ID
         };
 
-        return new CursorLoader(getActivity(), baseUri, projection, null, null, HymnContract.StanzaEntry.DEFAULT_SORT_ORDER);
+        String sortType;
+        if (mSortType == SortDialog.SORT_BY_FIRST_LINES) {
+            sortType = HymnContract.StanzaEntry.FIRST_LINES_SORT_ORDER;
+        } else {
+            sortType = HymnContract.StanzaEntry.DEFAULT_SORT_ORDER;
+        }
+
+        return new CursorLoader(getActivity(), baseUri, projection, null, null, sortType);
     }
 
     @Override
@@ -222,5 +237,11 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mHymnAdapter.swapCursor(null);
+    }
+
+    @Override
+    public void onSortTypeSelected(int which) {
+        mSortType = which;
+        getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 }
