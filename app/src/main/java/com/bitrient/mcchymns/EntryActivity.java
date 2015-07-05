@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.TaskStackBuilder;
 
 import com.bitrient.mcchymns.database.HymnDbHelper;
+import com.bitrient.mcchymns.fragment.SettingsActivityFragment;
 
 import java.io.File;
 
@@ -29,7 +30,7 @@ public class EntryActivity extends Activity {
                     PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
             if (preferences
-                    .getBoolean(SettingsActivity.KEY_PREF_SHOW_FAVORITES, false)) {
+                    .getBoolean(SettingsActivityFragment.KEY_PREF_SHOW_FAVORITES, false)) {
 
                 Intent favoritesIntent = new Intent(getApplicationContext(), FavoritesActivity.class);
 

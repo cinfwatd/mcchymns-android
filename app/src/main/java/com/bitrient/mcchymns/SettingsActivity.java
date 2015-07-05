@@ -11,7 +11,6 @@ import com.bitrient.mcchymns.fragment.SettingsActivityFragment;
  * @since 6/27/15
  */
 public class SettingsActivity extends AppCompatActivity {
-    public static final String KEY_PREF_SHOW_FAVORITES = "pref_show_favorites";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

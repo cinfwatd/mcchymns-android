@@ -3,11 +3,13 @@ package com.bitrient.mcchymns.fragment;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
@@ -182,7 +184,11 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
 
         mActionBar.setTitle(number + " - " + title);
 
-        final Typeface typeface = FontCache.get("lilac_malaria.ttf", getActivity());
+        final SharedPreferences preferences =
+                PreferenceManager.getDefaultSharedPreferences(getActivity());
+        final String fontName = preferences.getString(SettingsActivityFragment.KEY_PREF_FONTS, "lilac_malaria.ttf");
+
+        final Typeface typeface = FontCache.get(fontName, getActivity());
 
         do {
             RelativeLayout stanza = (RelativeLayout) inflater.inflate(R.layout.stanza, null);

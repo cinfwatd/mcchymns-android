@@ -70,12 +70,9 @@
     <string name="pref_font">Fonts</string>
     <string name="pref_font_size">Font size</string>
     <string name="pref_font_color">Font color</string>
-    <string name="pref_category_font_settings">Font settings</string>
-    <string name="pref_category_color_settings">Color settings</string>
-    <string name="pref_title_chorus_font">Chorus font</string>
-    <string name="pref_title_stanza_font">Stanza font</string>
-    <string name="pref_title_chorus_size">Chorus font size</string>
-    <string name="pref_title_stanza_size">Stanza font size</string>
+    <string name="pref_font_dialog_title">Font settings</string>
+    <string name="pref_color_dialog_settings">Color settings</string>
+    <string name="pref_size_dialog_settings">Size settings</string>
 
     <string-array name="pref_font_size_entries">
         <item>Small</item>
@@ -94,6 +91,7 @@
 
     <string name="added_to_favorites">Added to favorites</string>
     <string name="removed_from_favorites">Removed from favorites</string>
+    <string name="hymns">Hymns</string>
     <string-array name="sort_type">
         <item>Hymn number</item>
         <item>First lines</item>

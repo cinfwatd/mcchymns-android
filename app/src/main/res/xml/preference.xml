@@ -8,48 +8,19 @@
         android:defaultValue="false" />
 
     <PreferenceCategory
-        android:title="@string/chorus">
+        android:title="@string/hymns">
 
-        <ListPreference
-            android:key="pref_chorus_font"
+        <com.bitrient.mcchymns.FontPreference
+            android:key="pref_hymn_fonts"
             android:title="@string/pref_font"
-            android:dialogTitle="@string/pref_title_chorus_size"
-            android:entries="@array/pref_font_size_entries"
-            android:entryValues="@array/pref_font_size_values"
-            android:defaultValue="@string/pref_default_font_size" />
-
-        <ListPreference
-            android:key="pref_chorus_font_size"
-            android:title="@string/pref_font_size"
-            android:dialogTitle="@string/pref_title_chorus_size"
-            android:entries="@array/pref_font_size_entries"
-            android:entryValues="@array/pref_font_size_values"
-            android:defaultValue="@string/pref_default_font_size" />
-
-        <ListPreference
-            android:key="pref_chorus_font_color"
-            android:title="@string/pref_font_color"
-            android:dialogTitle="@string/pref_title_chorus_size"
-            android:entries="@array/pref_font_size_entries"
-            android:entryValues="@array/pref_font_size_values"
-            android:defaultValue="@string/pref_default_font_size" />
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="@string/stanza">
-
-        <ListPreference
-            android:key="pref_stanza_font"
-            android:title="@string/pref_font"
-            android:dialogTitle="@string/pref_title_chorus_size"
-            android:entries="@array/pref_font_size_entries"
-            android:entryValues="@array/pref_font_size_values"
-            android:defaultValue="@string/pref_default_font_size" />
+            android:dialogTitle="@string/pref_font_dialog_title"
+            android:summary="Select hymn fonts" />
 
         <ListPreference
             android:key="pref_stanza_font_size"
             android:title="@string/pref_font_size"
-            android:dialogTitle="@string/pref_title_chorus_size"
+            android:summary="18sp"
+            android:dialogTitle="@string/pref_size_dialog_settings"
             android:entries="@array/pref_font_size_entries"
             android:entryValues="@array/pref_font_size_values"
             android:defaultValue="@string/pref_default_font_size" />
@@ -57,10 +28,12 @@
         <ListPreference
             android:key="pref_stanza_font_color"
             android:title="@string/pref_font_color"
-            android:dialogTitle="@string/pref_title_chorus_size"
+            android:summary="Grunge Brown"
+            android:dialogTitle="@string/pref_color_dialog_settings"
             android:entries="@array/pref_font_size_entries"
             android:entryValues="@array/pref_font_size_values"
             android:defaultValue="@string/pref_default_font_size" />
+
     </PreferenceCategory>
 
 
