@@ -149,6 +149,7 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
                 break;
         }
 
+        mFavoritesIconType = 0;
         super.onPrepareOptionsMenu(menu);
     }
 
