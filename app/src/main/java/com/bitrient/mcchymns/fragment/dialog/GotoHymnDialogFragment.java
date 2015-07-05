@@ -42,7 +42,6 @@ public class GotoHymnDialogFragment extends DialogFragment implements View.OnCli
     @SuppressWarnings("unused")
     private static final String TAG = GotoHymnDialogFragment.class.getSimpleName();
 
-    View mDialogHeader;
     LinearLayout mDialogView;
     EditText mSelectedHymnTextView;
 
@@ -51,17 +50,6 @@ public class GotoHymnDialogFragment extends DialogFragment implements View.OnCli
         super.onCreate(savedInstanceState);
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-
-
-        mDialogHeader = inflater.inflate(R.layout.dialog_header, null);
-        ImageView dialogIcon = (ImageView) mDialogHeader.findViewById(R.id.dialog_icon);
-        dialogIcon.setImageResource(R.mipmap.ic_action_goto_hymn);
-
-        int padding = getResources().getDimensionPixelOffset(R.dimen.tiny);
-
-        dialogIcon.setPadding(padding, padding, padding, padding);
-        TextView dialogTitle = (TextView) mDialogHeader.findViewById(R.id.dialog_title);
-        dialogTitle.setText(R.string.select_hymn_number);
 
         mDialogView = (LinearLayout) inflater.inflate(R.layout.dialog_keypad, null);
         mSelectedHymnTextView = (EditText) mDialogView.findViewById(R.id.selected_hymn);
@@ -156,10 +144,13 @@ public class GotoHymnDialogFragment extends DialogFragment implements View.OnCli
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//        builder.setTitle(getActivity().getResources().getString(R.string.select_hymn_number));
-        builder.setCustomTitle(mDialogHeader);
+        builder.setTitle(getActivity().getResources().getString(R.string.select_hymn_number));
+
         builder.setView(mDialogView);
-        return builder.create();
+        final AlertDialog gotoDialog = builder.create();
+        gotoDialog.getWindow().setBackgroundDrawableResource(android.R.color.white);
+
+        return gotoDialog;
     }
 
     @Override
