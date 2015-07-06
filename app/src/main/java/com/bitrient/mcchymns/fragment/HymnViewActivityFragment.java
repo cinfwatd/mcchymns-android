@@ -65,6 +65,9 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
 
     private static final int HYMN_LOADER_ID = 3;
 
+    private static final String CHORUS_VISIBILITY = "chorus_visibility";
+    private boolean mHideChorus = false;
+
     public static HymnViewActivityFragment newInstance(Bundle args) {
         HymnViewActivityFragment hymnView = new HymnViewActivityFragment();
         hymnView.setArguments(args);
@@ -76,6 +79,21 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         new ToggleFavoritesTask().execute(getHymnNumber(), SET_FAVORITE_INITIALIZE);
+    }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            mHideChorus = savedInstanceState.getBoolean(CHORUS_VISIBILITY, false);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(CHORUS_VISIBILITY, mHideChorus);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -92,22 +110,7 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
         mActionBar.setHomeAsUpIndicator(R.mipmap.ic_queue_music_white_24dp);
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_hymn_view, container, false);
 
-        mGestureDetector = new GestureDetector(getActivity(), new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onDoubleTapEvent(MotionEvent e) {
-                Log.d(TAG, "YES _ Double tap");
-                return super.onDoubleTapEvent(e);
-            }
-        });
-        rootView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Log.d("TAG", "YES");
 
-                mGestureDetector.onTouchEvent(event);
-                return true;
-            }
-        });
         return rootView;
     }
 
@@ -185,6 +188,36 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
         final LinearLayout hymnContainer = (LinearLayout) rootView.findViewById(R.id.hymnContainer);
         final ScrollView scrollView = (ScrollView) rootView.findViewById(R.id.scrollView);
 
+        mGestureDetector = new GestureDetector(getActivity(), new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {
+                if (chorusContainer.getVisibility() == View.VISIBLE) {
+                    chorusContainer.setVisibility(View.GONE);
+                    mHideChorus = true;
+                } else {
+                    final TextView chorus = (TextView) chorusContainer.findViewById(R.id.chorus);
+
+                    if (!TextUtils.isEmpty(chorus.getText())) {
+                        chorusContainer.setVisibility(View.VISIBLE);
+                        mHideChorus = false;
+                    }
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onDown(MotionEvent e) {
+                return false;
+            }
+        });
+        scrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                mGestureDetector.onTouchEvent(event);
+                return false;
+            }
+        });
+
         final SharedPreferences preferences =
                 PreferenceManager.getDefaultSharedPreferences(getActivity());
 
@@ -229,7 +262,7 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
                 chorus.setTextColor(fontColor);
                 chorus.setTextSize(fontSize);
 
-                chorusContainer.setVisibility(View.VISIBLE);
+                if (!mHideChorus) chorusContainer.setVisibility(View.VISIBLE);
                 continue;
             }
             stanzaNumber.setText(cursorStanzaNumber);
@@ -307,7 +340,7 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
         @Override
         protected void onPostExecute(Integer result) {
             mFavoritesIconType = result;
-            getActivity().invalidateOptionsMenu();
+            if (getActivity() != null) getActivity().invalidateOptionsMenu();
 
 //            Log.d(TAG, "Finished");
             super.onPostExecute(result);
