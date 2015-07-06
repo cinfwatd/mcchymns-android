@@ -17,12 +17,14 @@ package com.bitrient.mcchymns.view;
         import android.graphics.Typeface;
         import android.preference.DialogPreference;
         import android.util.AttributeSet;
+        import android.util.Log;
         import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
         import android.widget.BaseAdapter;
         import android.widget.CheckedTextView;
 
+        import com.bitrient.mcchymns.R;
         import com.bitrient.mcchymns.util.FontCache;
         import com.bitrient.mcchymns.util.FontManager;
 
@@ -109,12 +111,13 @@ public class FontPreference extends DialogPreference implements DialogInterface.
         m_fontNames = new ArrayList< String >();
 
         // Get the current value to find the checked item
-        String selectedFontPath = getSharedPreferences().getString( getKey(), "");
+        String selectedFontPath = getSharedPreferences().getString( getKey(), getContext().getString(R.string.pref_default_font));
+        Log.d("TAG", "YES - fonts path - " + selectedFontPath);
         int idx = 0, checked_item = 0;
 
         for ( String path : fonts.keySet() )
         {
-            if ( path.equals( selectedFontPath ) )
+            if ( path.equals( selectedFontPath  ) )
                 checked_item = idx;
 
             m_fontPaths.add( path );

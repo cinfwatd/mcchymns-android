@@ -6,6 +6,7 @@ import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +35,14 @@ public class SettingsActivityFragment extends PreferenceFragment implements
         addPreferencesFromResource(R.xml.preference);
 
         Preference fontsPreference = findPreference(KEY_PREF_FONTS);
-        fontsPreference.setSummary(removeExtension(getPreferenceScreen().getSharedPreferences().getString(KEY_PREF_FONTS, "")));
+
+        String selectedFont = removeExtension(getPreferenceScreen().getSharedPreferences().getString(KEY_PREF_FONTS, ""));
+        if (TextUtils.isEmpty(selectedFont)) {
+            String defaultFont = removeExtension(getActivity().getString(R.string.pref_default_font));
+            fontsPreference.setSummary(defaultFont);
+        } else {
+            fontsPreference.setSummary(selectedFont);
+        }
 
         Bundle args = getArguments();
         if (args != null && args.getBoolean(SHOW_HYMNS_CAT_ONLY, false)) {

@@ -74,8 +74,8 @@
     <string name="pref_color_dialog_settings">Font Color</string>
     <string name="pref_size_dialog_settings">Font Size</string>
 
-    <string name="pref_default_font"></string>
-    <string name="pref_default_font_size">18sp</string>
+    <string name="pref_default_font">lilac_malaria.ttf</string>
+    <string name="pref_default_font_size">18</string>
     <string name="sort_by">Sort by</string>
 
     <string name="added_to_favorites">Added to favorites</string>
