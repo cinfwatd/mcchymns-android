@@ -185,6 +185,21 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
         final LinearLayout hymnContainer = (LinearLayout) rootView.findViewById(R.id.hymnContainer);
         final ScrollView scrollView = (ScrollView) rootView.findViewById(R.id.scrollView);
 
+        final SharedPreferences preferences =
+                PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        final String fontName = preferences.getString(SettingsActivityFragment.KEY_PREF_FONTS, "lilac_malaria.ttf");
+        final Typeface typeface = FontCache.get(fontName, getActivity());
+
+        final int fontSize = Integer.parseInt(preferences.getString(SettingsActivityFragment.KEY_PREF_FONT_SIZE, ""));
+        final int fontColor = preferences.getInt(SettingsActivityFragment.KEY_PREF_FONT_COLOR, Color.BLACK);
+
+        final String bGPath = preferences.getString(SettingsActivityFragment.KEY_PREF_HYMN_BACKGROUND, "");
+        final String bGName = bGPath.substring(bGPath.lastIndexOf('/') + 1, bGPath.lastIndexOf('.'));
+
+        final int backgroundId = getActivity().getResources().getIdentifier(bGName, "drawable", getActivity().getPackageName());
+        rootView.setBackgroundResource(backgroundId);
+
         cursor.moveToFirst();
 
         int end = TextUtils.indexOf(cursor.getString(1), "\\n");
@@ -192,16 +207,6 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
         String number = cursor.getString(3);
 
         mActionBar.setTitle(number + " - " + title);
-
-        final SharedPreferences preferences =
-                PreferenceManager.getDefaultSharedPreferences(getActivity());
-        final String fontName = preferences.getString(SettingsActivityFragment.KEY_PREF_FONTS, "lilac_malaria.ttf");
-        final Typeface typeface = FontCache.get(fontName, getActivity());
-
-        final int fontSize = Integer.parseInt(preferences.getString(SettingsActivityFragment.KEY_PREF_FONT_SIZE, ""));
-        final int fontColor = preferences.getInt(SettingsActivityFragment.KEY_PREF_FONT_COLOR, Color.BLACK);
-
-
 
         do {
             RelativeLayout stanza = (RelativeLayout) inflater.inflate(R.layout.stanza, null);

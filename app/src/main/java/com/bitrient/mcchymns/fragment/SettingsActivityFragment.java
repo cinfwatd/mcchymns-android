@@ -25,6 +25,7 @@ public class SettingsActivityFragment extends PreferenceFragment implements
     public static final String KEY_PREF_FONT_COLOR = "pref_hymn_font_color";
     public static final String KEY_PREF_SHOW_FAVORITES = "pref_show_favorites";
     public static final String KEY_PREF_HYMNS_CATEGORY = "pref_hymns_category";
+    public static final String KEY_PREF_HYMN_BACKGROUND = "pref_hymn_background";
 
     public static final String SHOW_HYMNS_CAT_ONLY = "show_hymns_category_only";
 

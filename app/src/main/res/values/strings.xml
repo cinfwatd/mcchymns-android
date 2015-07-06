@@ -73,9 +73,11 @@
     <string name="pref_font_dialog_title">Fonts</string>
     <string name="pref_color_dialog_settings">Font Color</string>
     <string name="pref_size_dialog_settings">Font Size</string>
+    <string name="pref_hymn_background">Background</string>
 
     <string name="pref_default_font">lilac_malaria.ttf</string>
     <string name="pref_default_font_size">18</string>
+    <string name="pref_default_hymn_background">res/drawable/hymn_background_gold.xml</string>
     <string name="sort_by">Sort by</string>
 
     <string name="added_to_favorites">Added to favorites</string>

@@ -20,4 +20,17 @@
         <item>26</item>
         <item>30</item>
     </string-array>
+
+    <string-array name="hymn_background_entries">
+        <item>"White"</item>
+        <item>"Gold"</item>
+    </string-array>
+    <string-array name="hymn_background_values">
+        <item>@drawable/hymn_background_white</item>
+        <item>@drawable/hymn_background_gold</item>
+    </string-array>
+    <array name="hymn_background_images">
+        <item>@mipmap/ic_hymn_background_white</item>
+        <item>@mipmap/ic_hymn_background_gold</item>
+    </array>
 </resources>
