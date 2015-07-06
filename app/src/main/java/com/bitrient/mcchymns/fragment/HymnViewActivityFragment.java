@@ -198,7 +198,7 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
         final String fontName = preferences.getString(SettingsActivityFragment.KEY_PREF_FONTS, "lilac_malaria.ttf");
         final Typeface typeface = FontCache.get(fontName, getActivity());
 
-        final int fontSize = preferences.getInt(SettingsActivityFragment.KEY_PREF_FONT_SIZE, 15);
+        final int fontSize = Integer.parseInt(preferences.getString(SettingsActivityFragment.KEY_PREF_FONT_SIZE, ""));
         final int fontColor = preferences.getInt(SettingsActivityFragment.KEY_PREF_FONT_COLOR, Color.BLACK);
 
 

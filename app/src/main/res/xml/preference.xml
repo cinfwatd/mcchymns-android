@@ -16,21 +16,21 @@
             android:key="pref_hymn_fonts"
             android:title="@string/pref_font"
             android:dialogTitle="@string/pref_font_dialog_title"
-            android:summary="Select hymn fonts" />
+            android:summary="%s" />
 
-        <com.bitrient.mcchymns.view.NumberPickerPreference
+        <ListPreference
             android:key="pref_hymn_font_size"
             android:title="@string/pref_font_size"
             android:dialogTitle="@string/pref_size_dialog_settings"
-            android:defaultValue="22"
-            app:maxValue="36"
-            app:minValue="14"
-            app:setWrapSelectorWheel="false" />
+            android:defaultValue="18"
+            android:summary="%s"
+            android:entries="@array/pref_font_size_entries"
+            android:entryValues="@array/pref_font_size_values" />
 
         <yuku.ambilwarna.widget.AmbilWarnaPreference
             android:key="pref_hymn_font_color"
             android:title="@string/pref_font_color"
-            android:defaultValue="0xff6699cc" />
+            android:defaultValue="0xff000000" />
 
     </PreferenceCategory>
 

@@ -6,6 +6,7 @@ import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,7 +81,12 @@ public class SettingsActivityFragment extends PreferenceFragment implements
     }
 
     private String removeExtension(String fileName) {
-        String noExt = fileName.substring(0, fileName.lastIndexOf('.'));
+        String noExt;
+        try {
+            noExt = fileName.substring(0, fileName.lastIndexOf('.'));
+        } catch (IndexOutOfBoundsException e) {
+            noExt = "";
+        }
 
         return removeUnderscore(noExt);
     }

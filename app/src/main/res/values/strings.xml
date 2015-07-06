@@ -74,17 +74,6 @@
     <string name="pref_color_dialog_settings">Font Color</string>
     <string name="pref_size_dialog_settings">Font Size</string>
 
-    <string-array name="pref_font_size_entries">
-        <item>Small</item>
-        <item>Medium</item>
-        <item>Large</item>
-    </string-array>
-
-    <string-array name="pref_font_size_values">
-        <item>14sp</item>
-        <item>18sp</item>
-        <item>22sp</item>
-    </string-array>
     <string name="pref_default_font"></string>
     <string name="pref_default_font_size">18sp</string>
     <string name="sort_by">Sort by</string>
@@ -92,9 +81,5 @@
     <string name="added_to_favorites">Added to favorites</string>
     <string name="removed_from_favorites">Removed from favorites</string>
     <string name="hymns">Hymns</string>
-    <string-array name="sort_type">
-        <item>Hymn number</item>
-        <item>First lines</item>
-    </string-array>
 
 </resources>
