@@ -17,6 +17,8 @@ import com.bitrient.mcchymns.R;
 public class SettingsActivityFragment extends PreferenceFragment implements
         SharedPreferences.OnSharedPreferenceChangeListener {
     public static final String KEY_PREF_FONTS = "pref_hymn_fonts";
+    public static final String KEY_PREF_FONT_SIZE = "pref_hymn_font_size";
+    public static final String KEY_PREF_FONT_COLOR = "pref_hymn_font_color";
     public static final String KEY_PREF_SHOW_FAVORITES = "pref_show_favorites";
 
     @Override

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -86,6 +87,7 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         mActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        mActionBar.setHomeAsUpIndicator(R.mipmap.ic_queue_music_white_24dp);
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_hymn_view, container, false);
 
         mGestureDetector = new GestureDetector(getActivity(), new GestureDetector.SimpleOnGestureListener() {
@@ -187,8 +189,12 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
         final SharedPreferences preferences =
                 PreferenceManager.getDefaultSharedPreferences(getActivity());
         final String fontName = preferences.getString(SettingsActivityFragment.KEY_PREF_FONTS, "lilac_malaria.ttf");
-
         final Typeface typeface = FontCache.get(fontName, getActivity());
+
+        final int fontSize = preferences.getInt(SettingsActivityFragment.KEY_PREF_FONT_SIZE, 15);
+        final int fontColor = preferences.getInt(SettingsActivityFragment.KEY_PREF_FONT_COLOR, Color.BLACK);
+
+
 
         do {
             RelativeLayout stanza = (RelativeLayout) inflater.inflate(R.layout.stanza, null);
@@ -199,18 +205,31 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
             String cursorStanzaNumber = cursor.getString(0);
 
             if (cursorStanzaNumber.equals("0")) {
-//                TextView chorusTitle = (TextView) rootView.findViewById(R.id.chorus_title);
+                TextView chorusTitle = (TextView) rootView.findViewById(R.id.chorus_title);
                 TextView chorus = (TextView) rootView.findViewById(R.id.chorus);
                 chorus.setText(cursorStanzaBody);
+
+                chorusTitle.setTypeface(typeface);
+                chorusTitle.setTextColor(fontColor);
+                chorusTitle.setTextSize(fontSize + 1f);
+
                 chorus.setTypeface(typeface);
+                chorus.setTextColor(fontColor);
+                chorus.setTextSize(fontSize);
+
                 chorusContainer.setVisibility(View.VISIBLE);
                 continue;
             }
             stanzaNumber.setText(cursorStanzaNumber);
             stanzaBody.setText(cursorStanzaBody);
+
             stanzaNumber.setTypeface(typeface);
+            stanzaNumber.setTextColor(fontColor);
+            stanzaNumber.setTextSize(fontSize);
+
             stanzaBody.setTypeface(typeface);
-            stanzaBody.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
+            stanzaBody.setTextColor(fontColor);
+            stanzaBody.setTextSize(fontSize);
 
             hymnContainer.addView(stanza);
         }  while (cursor.moveToNext());

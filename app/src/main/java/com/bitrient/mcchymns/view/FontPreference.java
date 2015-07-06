@@ -1,4 +1,4 @@
-package com.bitrient.mcchymns;
+package com.bitrient.mcchymns.view;
 /*
  * Copyright (C) 2011-2012 George Yunaev
  *
