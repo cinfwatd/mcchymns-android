@@ -9,7 +9,8 @@
         android:defaultValue="false" />
 
     <PreferenceCategory
-        android:title="@string/hymns">
+        android:title="@string/hymns"
+        android:key="pref_hymns_category">
 
         <com.bitrient.mcchymns.view.FontPreference
             android:key="pref_hymn_fonts"

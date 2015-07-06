@@ -3,7 +3,9 @@ package com.bitrient.mcchymns.fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceScreen;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,9 @@ public class SettingsActivityFragment extends PreferenceFragment implements
     public static final String KEY_PREF_FONT_SIZE = "pref_hymn_font_size";
     public static final String KEY_PREF_FONT_COLOR = "pref_hymn_font_color";
     public static final String KEY_PREF_SHOW_FAVORITES = "pref_show_favorites";
+    public static final String KEY_PREF_HYMNS_CATEGORY = "pref_hymns_category";
+
+    public static final String SHOW_HYMNS_CAT_ONLY = "show_hymns_category_only";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,6 +34,17 @@ public class SettingsActivityFragment extends PreferenceFragment implements
 
         Preference fontsPreference = findPreference(KEY_PREF_FONTS);
         fontsPreference.setSummary(removeExtension(getPreferenceScreen().getSharedPreferences().getString(KEY_PREF_FONTS, "")));
+
+        Bundle args = getArguments();
+        if (args != null && args.getBoolean(SHOW_HYMNS_CAT_ONLY, false)) {
+
+            PreferenceCategory hymnsCategory = (PreferenceCategory) findPreference(KEY_PREF_HYMNS_CATEGORY);
+            hymnsCategory.setTitle(null);
+
+            PreferenceScreen preferenceScreen = getPreferenceScreen();
+            Preference favoritesPreference = findPreference(KEY_PREF_SHOW_FAVORITES);
+            preferenceScreen.removePreference(favoritesPreference);
+        }
     }
 
     @Override

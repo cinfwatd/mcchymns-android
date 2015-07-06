@@ -3,6 +3,7 @@ package com.bitrient.mcchymns.fragment;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -38,6 +39,7 @@ import android.widget.Toast;
 
 import com.bitrient.mcchymns.HymnViewActivity;
 import com.bitrient.mcchymns.R;
+import com.bitrient.mcchymns.SettingsActivity;
 import com.bitrient.mcchymns.database.HymnContract;
 import com.bitrient.mcchymns.database.HymnDbHelper;
 import com.bitrient.mcchymns.fragment.dialog.GotoHymnDialogFragment;
@@ -127,6 +129,11 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
             case R.id.action_add_to_favorite:
 //                Toast.makeText(getActivity(), "Add " + getHymnNumber() + " to favorites", Toast.LENGTH_SHORT).show();
                 new ToggleFavoritesTask().execute(getHymnNumber(), SET_FAVORITE_CLICKED);
+                return true;
+            case R.id.action_settings:
+                Intent settingsIntent = new Intent(getActivity(), SettingsActivity.class);
+                settingsIntent.putExtra(SettingsActivityFragment.SHOW_HYMNS_CAT_ONLY, true);
+                startActivity(settingsIntent);
                 return true;
         }
 

@@ -21,7 +21,10 @@ public class SettingsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        final SettingsActivityFragment settingsFragment = new SettingsActivityFragment();
+        settingsFragment.setArguments(getIntent().getExtras());
+
         getFragmentManager().beginTransaction()
-                .replace(R.id.settings_content_frame, new SettingsActivityFragment()).commit();
+                .replace(R.id.settings_content_frame, settingsFragment).commit();
     }
 }
