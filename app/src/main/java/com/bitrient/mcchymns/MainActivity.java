@@ -120,7 +120,9 @@ public class MainActivity extends AppCompatActivity implements
                 Intent settingsIntent = new Intent(this, SettingsActivity.class);
                 startActivity(settingsIntent);
                 break;
-            case 3: // About
+            case 3: // Help
+                Intent helpIntent = new Intent(this, HelpActivity.class);
+                startActivity(helpIntent);
                 break;
         }
 

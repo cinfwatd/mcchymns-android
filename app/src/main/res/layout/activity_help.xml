@@ -1,0 +1,15 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_height="match_parent" android:layout_width="match_parent">
+
+    <include android:id="@+id/help_toolbar"
+        layout="@layout/toolbar" />
+
+    <fragment
+        android:id="@+id/fragment_help"
+        android:name="com.bitrient.mcchymns.HelpActivityFragment" tools:layout="@layout/fragment_help"
+        android:layout_width="match_parent" android:layout_height="match_parent" />
+</LinearLayout>
+
+
