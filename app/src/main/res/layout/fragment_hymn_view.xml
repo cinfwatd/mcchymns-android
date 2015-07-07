@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="14dp"
+    android:padding="2dp"
     tools:context="com.bitrient.mcchymns.fragment.HymnFragment">
     <ScrollView
         android:layout_width="match_parent"
@@ -24,10 +24,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:layout_alignParentBottom="true"
         android:visibility="gone">
 
-        <View style="@style/Divider" />
+        <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="2dp"-->
+            <!--android:background="@android:drawable/dialog_frame" />-->
+        <View android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="?android:attr/listDivider" />
         <TextView
             android:id="@+id/chorus_title"
             android:layout_width="match_parent"

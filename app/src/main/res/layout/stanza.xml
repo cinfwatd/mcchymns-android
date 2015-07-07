@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/stanzaContainer"
-    android:paddingBottom="-30dp">
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
 
     <View style="@style/Divider"
         android:id="@+id/divider1"
