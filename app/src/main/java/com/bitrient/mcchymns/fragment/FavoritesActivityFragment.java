@@ -111,8 +111,9 @@ public class FavoritesActivityFragment extends Fragment implements
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_goto_hymn, menu);
+        inflater.inflate(R.menu.menu_favorites, menu);
 
-        mSearchView = (SearchView) menu.findItem(R.id.favorites_action_search).getActionView();
+        mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
 
         mSearchView.setQueryHint(getActivity().getResources().getString(R.string.search_hint));
 
@@ -156,7 +157,7 @@ public class FavoritesActivityFragment extends Fragment implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.favorites_action_remove_all:
+            case R.id.action_remove_all:
                 if (mHymnAdapter.getItemCount() == 0) return true;
 
                 final ConfirmDialogFragment dialogFragment = ConfirmDialogFragment.newInstance();
@@ -170,6 +171,8 @@ public class FavoritesActivityFragment extends Fragment implements
                 return true;
 
             case R.id.action_sort:
+                if (mHymnAdapter.getItemCount() == 0) return true;
+
                 final SortDialog sortDialog = new SortDialog();
                 sortDialog.setTargetFragment(this, 2);
                 sortDialog.show(getFragmentManager(), "sortDialog");
@@ -216,7 +219,7 @@ public class FavoritesActivityFragment extends Fragment implements
         } else {
             final long itemNumber = mHymnAdapter.getItemNumber(position);
             Intent hymnIntent = new Intent(getActivity(), HymnViewActivity.class);
-            hymnIntent.putExtra(HymnViewActivity.SELECTED_HYMN, (int) itemNumber);
+            hymnIntent.putExtra(HymnViewActivityFragment.SELECTED_HYMN, (int) itemNumber);
             startActivity(hymnIntent);
         }
     }

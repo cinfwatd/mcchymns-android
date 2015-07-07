@@ -191,7 +191,7 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
 
         final long itemNumber = mHymnAdapter.getItemNumber(position);
         Intent hymnIntent = new Intent(getActivity(), HymnViewActivity.class);
-        hymnIntent.putExtra(HymnViewActivity.SELECTED_HYMN, (int) itemNumber);
+        hymnIntent.putExtra(HymnViewActivityFragment.SELECTED_HYMN, (int) itemNumber);
         startActivity(hymnIntent);
     }
 

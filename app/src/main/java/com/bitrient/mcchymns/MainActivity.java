@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,8 +14,11 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.View;
 
 import com.bitrient.mcchymns.adapter.NavigationDrawerAdapter;
+import com.bitrient.mcchymns.fragment.FavoritesActivityFragment;
+import com.bitrient.mcchymns.fragment.HymnsFragment;
 
 
 public class MainActivity extends AppCompatActivity implements
@@ -28,6 +32,11 @@ public class MainActivity extends AppCompatActivity implements
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
+    private RecyclerView mDrawerRecycleView;
+
+    private CharSequence mTitle;
+    private CharSequence mDrawerTitle;
+    private String mMenuTitles[];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,34 +48,74 @@ public class MainActivity extends AppCompatActivity implements
         mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(mToolbar);
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.navigation_recycler_view);
-        recyclerView.setHasFixedSize(true);
+        mDrawerRecycleView = (RecyclerView) findViewById(R.id.navigation_recycler_view);
+        mDrawerRecycleView.setHasFixedSize(true);
 
-        final String TITLES[] = {
+        mMenuTitles = new String[]{
                 getResources().getString(R.string.favorites),
                 getResources().getString(R.string.search),
                 getResources().getString(R.string.settings),
                 getResources().getString(R.string.help)
         };
 
-        final int ICONS[] = {
+        final int menuIcons[] = {
                 R.mipmap.ic_action_badge,
                 R.mipmap.ic_action_magnifier,
                 R.mipmap.ic_action_sliders,
                 R.mipmap.ic_action_bulb
         };
-        RecyclerView.Adapter adapter = new NavigationDrawerAdapter(TITLES, ICONS, this);
+        RecyclerView.Adapter adapter = new NavigationDrawerAdapter(mMenuTitles, menuIcons, this);
 
-        recyclerView.setAdapter(adapter);
+        mDrawerRecycleView.setAdapter(adapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
 
-        recyclerView.setLayoutManager(layoutManager);
+        mDrawerRecycleView.setLayoutManager(layoutManager);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.navigation_drawer);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar,
-                R.string.open_navigation_drawer_description, R.string.close_navigation_drawer_desc);
+                R.string.open_navigation_drawer_description, R.string.close_navigation_drawer_desc) {
+            /**
+             * Called when a drawer has settled in a completely closed state
+             * @param view
+             */
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+
+                getSupportActionBar().setTitle(mTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+
+                getSupportActionBar().setTitle(mDrawerTitle);
+                invalidateOptionsMenu(); //creates call to onPrepareOptionsMenu()
+            }
+        };
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        mDrawerTitle = getString(R.string.navigation_drawer_title);
+        if (savedInstanceState == null) {
+            mTitle = getString(R.string.app_name);
+            HymnsFragment hymnsFragment = new HymnsFragment();
+            replaceFragment(hymnsFragment);
+        }
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
+    }
+
+    /**
+     * Replaces the current fragment with the passed-in fragment and also sets the title based on the position given
+     * @see #replaceFragment(Fragment)
+     * @param fragment The fragment to replace with
+     * @param position The position of the menu Item. Used to get the title
+     */
+    private void replaceFragment(Fragment fragment, int position) {
+        mTitle = mMenuTitles[position];
+        replaceFragment(fragment);
     }
 
     @Override
@@ -109,8 +158,10 @@ public class MainActivity extends AppCompatActivity implements
     public void onItemClicked(int position) {
         switch (position) {
             case 0: // Favorites
-                Intent favorites = new Intent(this, FavoritesActivity.class);
-                startActivity(favorites);
+                FavoritesActivityFragment favoritesFragment
+                        = new FavoritesActivityFragment();
+                replaceFragment(favoritesFragment, position);
+
                 break;
             case 1: // Advance Search
                 Intent searchIntent = new Intent(this, SearchActivity.class);
@@ -127,5 +178,28 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         mDrawerLayout.closeDrawers();
+    }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        mTitle = title;
+        getSupportActionBar().setTitle(mTitle);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerRecycleView);
+
+        if (mTitle.equals(getText(R.string.favorites)) ||
+                mTitle.equals(getText(R.string.app_name))) {
+            menu.findItem(R.id.action_search).setVisible(!drawerOpen);
+            menu.findItem(R.id.action_sort).setVisible(!drawerOpen);
+        }
+
+        if (mTitle.equals(getText(R.string.favorites))) {
+            menu.findItem(R.id.action_remove_all).setVisible(!drawerOpen);
+        }
+
+        return super.onPrepareOptionsMenu(menu);
     }
 }
