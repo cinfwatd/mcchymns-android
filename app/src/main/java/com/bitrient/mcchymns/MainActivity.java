@@ -115,14 +115,17 @@ public class MainActivity extends AppCompatActivity implements
 
             final boolean startFavorites = getIntent().getBooleanExtra(EntryActivity.START_FAVORITES, false);
 
+            HymnsFragment hymnsFragment = new HymnsFragment();
             if (startFavorites) {
                 mTitle = getText(R.string.favorites);
                 FavoritesActivityFragment favoritesActivityFragment =
                         new FavoritesActivityFragment();
+
+                // Adding the hymns fragment for backstack presence
+                replaceFragment(hymnsFragment);
                 replaceFragment(favoritesActivityFragment);
             } else {
                 mTitle = getText(R.string.app_name);
-                HymnsFragment hymnsFragment = new HymnsFragment();
                 replaceFragment(hymnsFragment);
             }
         } else {
