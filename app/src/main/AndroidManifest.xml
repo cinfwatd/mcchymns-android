@@ -44,14 +44,6 @@
         </provider>
 
         <activity
-            android:name=".FavoritesActivity"
-            android:label="@string/title_activity_favorites"
-            android:parentActivityName=".MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
-        <activity
             android:name=".SearchActivity"
             android:label="@string/title_activity_search"
             android:launchMode="singleTop"
@@ -64,14 +56,6 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".HymnViewActivity"
-            android:label="@string/title_activity_hymn_view"
-            android:parentActivityName=".MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bitrient.mcchymns.MainActivity" />
-        </activity>
-        <activity
             android:name=".SettingsActivity"
             android:label="@string/settings"
             android:parentActivityName=".MainActivity" >
@@ -82,14 +66,6 @@
         <activity
             android:name=".SplashScreenActivity"
             android:label="@string/title_activity_splash_screen" >
-        </activity>
-        <activity
-            android:name=".HelpActivity"
-            android:label="@string/title_activity_help"
-            android:parentActivityName=".MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bitrient.mcchymns.MainActivity" />
         </activity>
     </application>
 

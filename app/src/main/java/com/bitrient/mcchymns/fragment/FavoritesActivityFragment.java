@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.ContentProviderOperation;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.net.Uri;
@@ -29,7 +28,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
-import com.bitrient.mcchymns.HymnViewActivity;
 import com.bitrient.mcchymns.R;
 import com.bitrient.mcchymns.adapter.HymnAdapter;
 import com.bitrient.mcchymns.database.HymnContract;
