@@ -26,12 +26,15 @@ import com.bitrient.mcchymns.fragment.HymnsFragment;
 import com.bitrient.mcchymns.fragment.SearchFragment;
 import com.bitrient.mcchymns.fragment.dialog.GotoHymnDialogFragment;
 
+import java.util.ArrayList;
+
 
 public class MainActivity extends AppCompatActivity implements
         NavigationDrawerAdapter.ViewHolder.ClickListener, GotoHymnDialogFragment.HymnSelectionListener {
 
     @SuppressWarnings("unused")
     private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String SELECTED_MENU_ITEM = "selected_menu_item";
 
     Toolbar mToolbar;
     SearchView mSearchView;
@@ -44,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements
     private CharSequence mTitle;
     private CharSequence mDrawerTitle;
     private String mMenuTitles[];
+    private NavigationDrawerAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +77,9 @@ public class MainActivity extends AppCompatActivity implements
                 R.mipmap.ic_action_sliders,
                 R.mipmap.ic_action_bulb
         };
-        RecyclerView.Adapter adapter = new NavigationDrawerAdapter(mMenuTitles, menuIcons, this);
+        mAdapter = new NavigationDrawerAdapter(mMenuTitles, menuIcons, this);
 
-        mDrawerRecycleView.setAdapter(adapter);
+        mDrawerRecycleView.setAdapter(mAdapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
 
         mDrawerRecycleView.setLayoutManager(layoutManager);
@@ -121,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements
 
         mDrawerTitle = getString(R.string.navigation_drawer_title);
         if (savedInstanceState == null) {
+            mAdapter.toggleSelection(0); // mark the first menu item as selected.
 
             final boolean startFavorites = getIntent().getBooleanExtra(EntryActivity.START_FAVORITES, false);
 
@@ -259,12 +264,25 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putCharSequence(KEY_TITLE, mTitle);
+        outState.putIntegerArrayList(SELECTED_MENU_ITEM, new ArrayList<>(mAdapter.getSelectedItems()));
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+
+        if (savedInstanceState != null) {
+            mAdapter.setSelectedItems(savedInstanceState.getIntegerArrayList(SELECTED_MENU_ITEM));
+        }
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
     public void onItemClicked(int position) {
         mDrawerLayout.closeDrawers();
+
+        mAdapter.clearSelection();
+        mAdapter.toggleSelection(position);
 
         switch (position) {
             case 0: // Favorites

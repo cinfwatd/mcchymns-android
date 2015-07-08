@@ -14,7 +14,7 @@ import com.bitrient.mcchymns.R;
  * @author Cinfwat Probity <czprobity@bitrient.com>
  * @since 6/18/15
  */
-public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDrawerAdapter.ViewHolder> {
+public class NavigationDrawerAdapter extends SelectableAdapter<NavigationDrawerAdapter.ViewHolder> {
 
     private String[] mNavigationTitles;
     private int[] mNavigationIcons;
@@ -76,8 +76,11 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     @Override
     public void onBindViewHolder(NavigationDrawerAdapter.ViewHolder holder, int position) {
 
-        holder.mtitle.setText(mNavigationTitles[position]);
-        holder.mIcon.setImageResource(mNavigationIcons[position]);
+        holder.title.setText(mNavigationTitles[position]);
+        holder.icon.setImageResource(mNavigationIcons[position]);
+
+//        highlight the item if it's selected
+        holder.selectedOverlay.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
     }
 
     /**
@@ -108,16 +111,18 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private ImageView mIcon;
-        private TextView mtitle;
+        private ImageView icon;
+        private TextView title;
+        private View selectedOverlay;
 
         private ClickListener mListener;
 
         public ViewHolder (View itemView, ClickListener clickListener) {
             super(itemView);
 
-            mIcon = (ImageView) itemView.findViewById(R.id.navigation_drawer_row_icon);
-            mtitle = (TextView) itemView.findViewById(R.id.navigation_drawer_row_title);
+            icon = (ImageView) itemView.findViewById(R.id.navigation_drawer_row_icon);
+            title = (TextView) itemView.findViewById(R.id.navigation_drawer_row_title);
+            selectedOverlay = itemView.findViewById(R.id.selected_overlay);
 
             itemView.setClickable(true);
             itemView.setOnClickListener(this);
