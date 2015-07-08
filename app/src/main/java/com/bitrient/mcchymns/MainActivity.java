@@ -5,6 +5,8 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -98,6 +100,16 @@ public class MainActivity extends AppCompatActivity implements
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
+        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+                if (fragment != null) {
+                    updateTitle(fragment);
+                }
+            }
+        });
+
         mDrawerTitle = getString(R.string.navigation_drawer_title);
         if (savedInstanceState == null) {
             mTitle = getText(R.string.app_name);
@@ -108,8 +120,39 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    private void updateTitle(Fragment fragment) {
+        final String fragmentClassName = fragment.getClass().getName();
+//        Log.d("TAG", "YES _ class name = " + fragmentClassName);
+
+        if (fragmentClassName.equals(FavoritesActivityFragment.class.getName())) {
+            setTitle(getText(R.string.favorites));
+        } else if (fragmentClassName.equals(HelpActivityFragment.class.getName())) {
+            setTitle(getText(R.string.help));
+        } else if (fragmentClassName.equals(HymnsFragment.class.getName())) {
+            setTitle(getText(R.string.app_name));
+        } else if (fragmentClassName.equals(HymnViewActivityFragment.class.getName())) {
+            setTitle(getText(R.string.hymn));
+        }
+    }
+
     private void replaceFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
+//        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+//        if (currentFragment != null && currentFragment.getClass().equals(fragment.getClass())) return;
+        final String backStateName = fragment.getClass().getName();
+        final String fragmentTag = backStateName;
+
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+
+        // Ensure only one instance is added to the backstack
+        final boolean fragmentPopped = fragmentManager.popBackStackImmediate(backStateName, 0);
+
+        if (!fragmentPopped && fragmentManager.findFragmentByTag(fragmentTag) == null) {
+            final FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            transaction.replace(R.id.content_frame, fragment, fragmentTag);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
     }
 
     /**
@@ -168,7 +211,9 @@ public class MainActivity extends AppCompatActivity implements
             return;
         }
 
-        super.onBackPressed();
+        if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
+            finish();
+        } else super.onBackPressed();
     }
 
     @Override
@@ -181,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements
     public void onItemClicked(int position) {
         switch (position) {
             case 0: // Favorites
-                FavoritesActivityFragment favoritesFragment
+                final FavoritesActivityFragment favoritesFragment
                         = new FavoritesActivityFragment();
                 replaceFragment(favoritesFragment, position);
 
@@ -195,8 +240,8 @@ public class MainActivity extends AppCompatActivity implements
                 startActivity(settingsIntent);
                 break;
             case 3: // Help
-                Intent helpIntent = new Intent(this, HelpActivity.class);
-                startActivity(helpIntent);
+                final HelpActivityFragment helpFragment = new HelpActivityFragment();
+                replaceFragment(helpFragment, position);
                 break;
         }
 

@@ -29,7 +29,7 @@ public class FavoritesActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_favorites, menu);
 
-        searchView = (SearchView) menu.findItem(R.id.favorites_action_search).getActionView();
+        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         return true;
     }
 
@@ -37,7 +37,7 @@ public class FavoritesActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.favorites_action_search:
+            case R.id.action_search:
                 return true;
         }
 

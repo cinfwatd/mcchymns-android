@@ -1,7 +1,7 @@
 package com.bitrient.mcchymns.fragment;
 
+import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,7 +22,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
-import com.bitrient.mcchymns.HymnViewActivity;
 import com.bitrient.mcchymns.R;
 import com.bitrient.mcchymns.adapter.HymnAdapter;
 import com.bitrient.mcchymns.database.HymnContract;
@@ -45,6 +44,8 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
     private CharSequence mCurrentFilter;
     private boolean mIsSearchViewOpen;
     private int mSortType = -1;
+
+    private GotoHymnDialogFragment.HymnSelectionListener mSelectionListener;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -147,10 +148,10 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
         if (mSearchView != null && !mSearchView.isIconified()) {
             outState.putCharSequence(QUERY_STRING, mSearchView.getQuery());
 
-            Log.d(TAG, "YES - Is iconified. - " + mSearchView.getQuery());
+//            Log.d(TAG, "YES - Is iconified. - " + mSearchView.getQuery());
         }
 
-        Log.d(TAG, "YES - saved instance state called. ");
+//        Log.d(TAG, "YES - saved instance state called. ");
         super.onSaveInstanceState(outState);
     }
 
@@ -164,7 +165,23 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
         super.onViewStateRestored(savedInstanceState);
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
 
+        try {
+            mSelectionListener = (GotoHymnDialogFragment.HymnSelectionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() +
+                " must implement the HymnSelectionListener interface.");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mSelectionListener = null;
+    }
 
     private void setRecyclerViewLayoutManager(EmptiableRecyclerView recyclerView) {
         int scrollPosition = 0;
@@ -190,9 +207,7 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
         }
 
         final long itemNumber = mHymnAdapter.getItemNumber(position);
-        Intent hymnIntent = new Intent(getActivity(), HymnViewActivity.class);
-        hymnIntent.putExtra(HymnViewActivityFragment.SELECTED_HYMN, (int) itemNumber);
-        startActivity(hymnIntent);
+        mSelectionListener.hymnSelected((int) itemNumber);
     }
 
     @Override

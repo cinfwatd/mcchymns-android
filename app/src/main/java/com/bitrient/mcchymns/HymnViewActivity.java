@@ -12,8 +12,6 @@ import com.bitrient.mcchymns.fragment.HymnViewActivityFragment;
 
 public class HymnViewActivity extends AppCompatActivity {
 
-    public static final String SELECTED_HYMN = "selected";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

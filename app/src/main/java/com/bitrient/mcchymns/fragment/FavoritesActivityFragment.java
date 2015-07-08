@@ -1,5 +1,6 @@
 package com.bitrient.mcchymns.fragment;
 
+import android.app.Activity;
 import android.content.ContentProviderOperation;
 import android.content.ContentValues;
 import android.content.Context;
@@ -60,7 +61,7 @@ public class FavoritesActivityFragment extends Fragment implements
     private ActionModeCallback mActionModeCallback = new ActionModeCallback();
     private ActionMode mActionMode;
 
-
+    private GotoHymnDialogFragment.HymnSelectionListener mSelectionListener;
 
     private CharSequence mCurrentFilter;
     private boolean mIsSearchViewOpen;
@@ -213,14 +214,31 @@ public class FavoritesActivityFragment extends Fragment implements
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        try {
+            mSelectionListener = (GotoHymnDialogFragment.HymnSelectionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() +
+                " must implement the HymnSelectionListener interface.");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        mSelectionListener = null;
+    }
+
+    @Override
     public void onItemClicked(int position) {
         if (mActionMode != null) {
             toggleSelection(position);
         } else {
             final long itemNumber = mHymnAdapter.getItemNumber(position);
-            Intent hymnIntent = new Intent(getActivity(), HymnViewActivity.class);
-            hymnIntent.putExtra(HymnViewActivityFragment.SELECTED_HYMN, (int) itemNumber);
-            startActivity(hymnIntent);
+            mSelectionListener.hymnSelected((int) itemNumber);
         }
     }
 
