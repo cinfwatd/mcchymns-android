@@ -147,8 +147,6 @@ public class MainActivity extends AppCompatActivity implements
             setTitle(getText(R.string.help));
         } else if (fragmentClassName.equals(HymnsFragment.class.getName())) {
             setTitle(getText(R.string.app_name));
-        } else if (fragmentClassName.equals(HymnViewActivityFragment.class.getName())) {
-            setTitle(getText(R.string.hymn));
         }
     }
 
@@ -163,7 +161,8 @@ public class MainActivity extends AppCompatActivity implements
         // Ensure only one instance is added to the backstack
         final boolean fragmentPopped = fragmentManager.popBackStackImmediate(backStateName, 0);
 
-        if (!fragmentPopped && fragmentManager.findFragmentByTag(fragmentTag) == null) {
+        if ((!fragmentPopped && fragmentManager.findFragmentByTag(fragmentTag) == null) ||
+                backStateName.equals(HymnViewActivityFragment.class.getName())) {
             final FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             transaction.replace(R.id.content_frame, fragment, fragmentTag);

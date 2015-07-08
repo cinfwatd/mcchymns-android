@@ -147,7 +147,7 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        Log.d(TAG, "TEST - fragement on prepareOptionsMenu called - Icon_type = " + mFavoritesIconType);
+//        Log.d(TAG, "TEST - fragement on prepareOptionsMenu called - Icon_type = " + mFavoritesIconType);
         MenuItem favoriteMenuItem = menu.findItem(R.id.action_add_to_favorite);
 
         switch (mFavoritesIconType) {
@@ -160,9 +160,11 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
 
             case ToggleFavoritesTask.SHOW_ON_WITH_TOAST:
                 setMenuIcon(favoriteMenuItem, R.mipmap.ic_action_favorite_on, R.string.added_to_favorites);
+                mFavoritesIconType = ToggleFavoritesTask.SHOW_ON; //so as not to show toast on remake
                 break;
             case ToggleFavoritesTask.SHOW_OFF_WITH_TOAST:
                 setMenuIcon(favoriteMenuItem,R.mipmap.ic_action_favorite_off, R.string.removed_from_favorites);
+                mFavoritesIconType = ToggleFavoritesTask.SHOW_OFF;
                 break;
         }
 
