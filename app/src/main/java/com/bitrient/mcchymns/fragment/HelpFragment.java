@@ -14,9 +14,9 @@ import com.bitrient.mcchymns.R;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class HelpActivityFragment extends Fragment {
+public class HelpFragment extends Fragment {
 
-    public HelpActivityFragment() {
+    public HelpFragment() {
     }
 
     @Override

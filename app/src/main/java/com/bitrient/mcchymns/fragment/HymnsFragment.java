@@ -13,7 +13,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,7 +31,7 @@ import com.bitrient.mcchymns.view.EmptiableRecyclerView;
 public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.ClickListener,
         LoaderManager.LoaderCallbacks<Cursor>, SortDialog.SortDialogListener {
     @SuppressWarnings("unused")
-    private static final String TAG = FavoritesActivityFragment.class.getSimpleName();
+    private static final String TAG = FavoritesFragment.class.getSimpleName();
     private static final int LOADER_ID = 5;
     private final String QUERY_STRING = "queryString4";
 

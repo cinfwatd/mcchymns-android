@@ -16,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bitrient.mcchymns.R;
-import com.bitrient.mcchymns.fragment.HymnViewActivityFragment;
+import com.bitrient.mcchymns.fragment.HymnsViewFragment;
 
 /**
  * @author Cinfwat Probity <czprobity@bitrient.com>
@@ -82,7 +82,7 @@ public class GotoHymnDialogFragment extends DialogFragment implements View.OnCli
         Button clearBtn = (Button) mDialogView.findViewById(R.id.btn_clear);
 
         if (savedInstanceState != null) {
-            mSelectedHymnTextView.setText(savedInstanceState.getString(HymnViewActivityFragment.SELECTED_HYMN));
+            mSelectedHymnTextView.setText(savedInstanceState.getString(HymnsViewFragment.SELECTED_HYMN));
         }
 
         declineBtn.setOnClickListener(new View.OnClickListener() {
@@ -154,7 +154,7 @@ public class GotoHymnDialogFragment extends DialogFragment implements View.OnCli
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putString(HymnViewActivityFragment.SELECTED_HYMN,  mSelectedHymnTextView.getText().toString());
+        outState.putString(HymnsViewFragment.SELECTED_HYMN,  mSelectedHymnTextView.getText().toString());
         super.onSaveInstanceState(outState);
     }
 

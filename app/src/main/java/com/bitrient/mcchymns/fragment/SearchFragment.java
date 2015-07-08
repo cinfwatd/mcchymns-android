@@ -30,10 +30,10 @@ import com.bitrient.mcchymns.fragment.dialog.TopicDialogFragment;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class SearchActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
+public class SearchFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
         CategoryAdapter.ViewHolder.ClickListener, TopicDialogFragment.TopicDialogListener {
     @SuppressWarnings("unused")
-    private static final String TAG = SearchActivityFragment.class.getSimpleName();
+    private static final String TAG = SearchFragment.class.getSimpleName();
 
     private SearchView mSearchView;
 
@@ -89,7 +89,7 @@ public class SearchActivityFragment extends Fragment implements LoaderManager.Lo
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.search_action_search:
+            case R.id.action_search:
                 return true;
         }
 

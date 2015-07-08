@@ -19,11 +19,11 @@ import android.view.Menu;
 import android.view.View;
 
 import com.bitrient.mcchymns.adapter.NavigationDrawerAdapter;
-import com.bitrient.mcchymns.fragment.FavoritesActivityFragment;
-import com.bitrient.mcchymns.fragment.HelpActivityFragment;
-import com.bitrient.mcchymns.fragment.HymnViewActivityFragment;
+import com.bitrient.mcchymns.fragment.FavoritesFragment;
+import com.bitrient.mcchymns.fragment.HelpFragment;
+import com.bitrient.mcchymns.fragment.HymnsViewFragment;
 import com.bitrient.mcchymns.fragment.HymnsFragment;
-import com.bitrient.mcchymns.fragment.SearchActivityFragment;
+import com.bitrient.mcchymns.fragment.SearchFragment;
 import com.bitrient.mcchymns.fragment.dialog.GotoHymnDialogFragment;
 
 
@@ -97,6 +97,11 @@ public class MainActivity extends AppCompatActivity implements
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
 
+                if (!mSearchView.isIconified()) {
+                    mSearchView.setQuery(null, false);
+                    mSearchView.setIconified(true);
+                }
+
                 getSupportActionBar().setTitle(mDrawerTitle);
                 invalidateOptionsMenu(); //creates call to onPrepareOptionsMenu()
             }
@@ -122,12 +127,12 @@ public class MainActivity extends AppCompatActivity implements
             HymnsFragment hymnsFragment = new HymnsFragment();
             if (startFavorites) {
                 mTitle = getText(R.string.favorites);
-                FavoritesActivityFragment favoritesActivityFragment =
-                        new FavoritesActivityFragment();
+                FavoritesFragment favoritesFragment =
+                        new FavoritesFragment();
 
                 // Adding the hymns fragment for backstack presence
                 replaceFragment(hymnsFragment);
-                replaceFragment(favoritesActivityFragment);
+                replaceFragment(favoritesFragment);
             } else {
                 mTitle = getText(R.string.app_name);
                 replaceFragment(hymnsFragment);
@@ -145,13 +150,13 @@ public class MainActivity extends AppCompatActivity implements
         final String fragmentClassName = fragment.getClass().getName();
 //        Log.d("TAG", "YES _ class name = " + fragmentClassName);
 
-        if (fragmentClassName.equals(FavoritesActivityFragment.class.getName())) {
+        if (fragmentClassName.equals(FavoritesFragment.class.getName())) {
             setTitle(getText(R.string.favorites));
-        } else if (fragmentClassName.equals(HelpActivityFragment.class.getName())) {
+        } else if (fragmentClassName.equals(HelpFragment.class.getName())) {
             setTitle(getText(R.string.help));
         } else if (fragmentClassName.equals(HymnsFragment.class.getName())) {
             setTitle(getText(R.string.app_name));
-        } else if (fragmentClassName.equals(SearchActivityFragment.class.getName())) {
+        } else if (fragmentClassName.equals(SearchFragment.class.getName())) {
             setTitle(R.string.search);
         }
     }
@@ -168,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements
 
         //
         if ((!fragmentPopped && fragmentManager.findFragmentByTag(fragmentTag) == null) ||
-                backStateName.equals(HymnViewActivityFragment.class.getName())) {
+                backStateName.equals(HymnsViewFragment.class.getName())) {
 
             final FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
@@ -268,14 +273,14 @@ public class MainActivity extends AppCompatActivity implements
                 break;
 
             case 1: // Favorites
-                final FavoritesActivityFragment favoritesFragment
-                        = new FavoritesActivityFragment();
+                final FavoritesFragment favoritesFragment
+                        = new FavoritesFragment();
                 replaceFragment(favoritesFragment, position);
 
                 break;
             case 2: // Advance Search
-                final SearchActivityFragment searchFragment
-                        = new SearchActivityFragment();
+                final SearchFragment searchFragment
+                        = new SearchFragment();
                 replaceFragment(searchFragment, position);
 
                 break;
@@ -284,7 +289,7 @@ public class MainActivity extends AppCompatActivity implements
                 startActivity(settingsIntent);
                 break;
             case 4: // Help
-                final HelpActivityFragment helpFragment = new HelpActivityFragment();
+                final HelpFragment helpFragment = new HelpFragment();
                 replaceFragment(helpFragment, position);
                 break;
         }
@@ -317,7 +322,7 @@ public class MainActivity extends AppCompatActivity implements
          */
         final Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (currentFragment != null && currentFragment.getClass().getName()
-                .equals(HymnViewActivityFragment.class.getName())) {
+                .equals(HymnsViewFragment.class.getName())) {
             menu.findItem(R.id.action_add_to_favorite).setVisible(!drawerOpen);
             menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
         }
@@ -328,9 +333,9 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void hymnSelected(int hymnNumber) {
         Bundle args = new Bundle();
-        args.putInt(HymnViewActivityFragment.SELECTED_HYMN, hymnNumber);
-        HymnViewActivityFragment hymnView =
-                HymnViewActivityFragment.newInstance(args);
+        args.putInt(HymnsViewFragment.SELECTED_HYMN, hymnNumber);
+        HymnsViewFragment hymnView =
+                HymnsViewFragment.newInstance(args);
         replaceFragment(hymnView, getText(R.string.hymn));
     }
 }

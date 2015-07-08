@@ -47,10 +47,10 @@ import com.bitrient.mcchymns.util.FontCache;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class HymnViewActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class HymnsViewFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final String SELECTED_HYMN = "selected";
     @SuppressWarnings("unused")
-    private static final String TAG = HymnViewActivityFragment.class.getSimpleName();
+    private static final String TAG = HymnsViewFragment.class.getSimpleName();
 
     /**
      * Used to figure out if to initialize the favorite icon or set it based on the clicked event
@@ -67,8 +67,8 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
     private static final String CHORUS_VISIBILITY = "chorus_visibility";
     private boolean mHideChorus = false;
 
-    public static HymnViewActivityFragment newInstance(Bundle args) {
-        HymnViewActivityFragment hymnView = new HymnViewActivityFragment();
+    public static HymnsViewFragment newInstance(Bundle args) {
+        HymnsViewFragment hymnView = new HymnsViewFragment();
         hymnView.setArguments(args);
 
         return hymnView;

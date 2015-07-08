@@ -42,12 +42,12 @@ import java.util.List;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class FavoritesActivityFragment extends Fragment implements
+public class FavoritesFragment extends Fragment implements
         HymnAdapter.ViewHolder.ClickListener, LoaderManager.LoaderCallbacks<Cursor>,
         SortDialog.SortDialogListener {
 
     @SuppressWarnings("unused")
-    private static final String TAG = FavoritesActivityFragment.class.getSimpleName();
+    private static final String TAG = FavoritesFragment.class.getSimpleName();
     private final static String QUERY_STRING = "queryString";
     private final static String SELECTED_ITEMS = "selectedItems";
     private static final int LOADER_ID = 0;
@@ -137,7 +137,7 @@ public class FavoritesActivityFragment extends Fragment implements
                 recyclerView.setSearch(!TextUtils.isEmpty(newText));
 
                 mCurrentFilter = !TextUtils.isEmpty(newText) ? newText : null;
-                getLoaderManager().restartLoader(LOADER_ID, null, FavoritesActivityFragment.this);
+                getLoaderManager().restartLoader(LOADER_ID, null, FavoritesFragment.this);
 
                 return false;
             }
@@ -447,6 +447,6 @@ public class FavoritesActivityFragment extends Fragment implements
     @Override
     public void onSortTypeSelected(int which) {
         mSortType = which;
-        getLoaderManager().restartLoader(LOADER_ID, null, FavoritesActivityFragment.this);
+        getLoaderManager().restartLoader(LOADER_ID, null, FavoritesFragment.this);
     }
 }
