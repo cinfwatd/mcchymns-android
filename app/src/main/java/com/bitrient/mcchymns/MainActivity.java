@@ -264,6 +264,8 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onItemClicked(int position) {
+        mDrawerLayout.closeDrawers();
+
         switch (position) {
             case 0: // Favorites
                 final HymnsFragment hymnsFragment
@@ -293,8 +295,6 @@ public class MainActivity extends AppCompatActivity implements
                 replaceFragment(helpFragment, position);
                 break;
         }
-
-        mDrawerLayout.closeDrawers();
     }
 
     @Override
