@@ -68,10 +68,12 @@ public class SearchActivityFragment extends Fragment implements LoaderManager.Lo
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.findItem(R.id.action_sort).setVisible(false);
+
         SearchManager searchManager =
                 (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
 
-        mSearchView = (SearchView) menu.findItem(R.id.search_action_search).getActionView();
+        mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
 
         View searchPlate = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_plate);

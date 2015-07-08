@@ -23,6 +23,7 @@ import com.bitrient.mcchymns.fragment.FavoritesActivityFragment;
 import com.bitrient.mcchymns.fragment.HelpActivityFragment;
 import com.bitrient.mcchymns.fragment.HymnViewActivityFragment;
 import com.bitrient.mcchymns.fragment.HymnsFragment;
+import com.bitrient.mcchymns.fragment.SearchActivityFragment;
 import com.bitrient.mcchymns.fragment.dialog.GotoHymnDialogFragment;
 
 
@@ -150,6 +151,8 @@ public class MainActivity extends AppCompatActivity implements
             setTitle(getText(R.string.help));
         } else if (fragmentClassName.equals(HymnsFragment.class.getName())) {
             setTitle(getText(R.string.app_name));
+        } else if (fragmentClassName.equals(SearchActivityFragment.class.getName())) {
+            setTitle(R.string.search);
         }
     }
 
@@ -271,8 +274,10 @@ public class MainActivity extends AppCompatActivity implements
 
                 break;
             case 2: // Advance Search
-                Intent searchIntent = new Intent(this, SearchActivity.class);
-                startActivity(searchIntent);
+                final SearchActivityFragment searchFragment
+                        = new SearchActivityFragment();
+                replaceFragment(searchFragment, position);
+
                 break;
             case 3: // Settings
                 Intent settingsIntent = new Intent(this, SettingsActivity.class);
