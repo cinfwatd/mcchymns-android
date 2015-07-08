@@ -133,6 +133,10 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * Updates the toolbar/drawerlayout title to the backstack fragment (The fragment returned to)
+     * @param fragment The fragment returned to.
+     */
     private void updateTitle(Fragment fragment) {
         final String fragmentClassName = fragment.getClass().getName();
 //        Log.d("TAG", "YES _ class name = " + fragmentClassName);
@@ -281,7 +285,12 @@ public class MainActivity extends AppCompatActivity implements
             menu.findItem(R.id.action_remove_all).setVisible(!drawerOpen);
         }
 
-        if (mTitle.equals(getText(R.string.hymn))) {
+        /**
+         * Can't use the title (mTittle) as it changes.
+         */
+        final Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        if (currentFragment != null && currentFragment.getClass().getName()
+                .equals(HymnViewActivityFragment.class.getName())) {
             menu.findItem(R.id.action_add_to_favorite).setVisible(!drawerOpen);
             menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
         }

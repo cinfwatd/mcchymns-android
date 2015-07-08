@@ -147,6 +147,7 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
+        Log.d(TAG, "TEST - fragement on prepareOptionsMenu called - Icon_type = " + mFavoritesIconType);
         MenuItem favoriteMenuItem = menu.findItem(R.id.action_add_to_favorite);
 
         switch (mFavoritesIconType) {
@@ -165,7 +166,6 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
                 break;
         }
 
-        mFavoritesIconType = 0;
         super.onPrepareOptionsMenu(menu);
     }
 
@@ -241,7 +241,8 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
         String title = TextUtils.substring(cursor.getString(1), 0, end);
         String number = cursor.getString(3);
 
-        mActionBar.setTitle(number + " - " + title);
+//        mActionBar.setTitle(number + " - " + title);
+        if (getActivity() != null) getActivity().setTitle(number + " - " + title);
 
         do {
             RelativeLayout stanza = (RelativeLayout) inflater.inflate(R.layout.stanza, null);
