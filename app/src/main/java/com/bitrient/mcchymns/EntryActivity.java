@@ -18,6 +18,7 @@ import java.io.File;
  * @since 6/30/15
  */
 public class EntryActivity extends Activity {
+    public static final String START_FAVORITES = "start_favorites";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,17 +30,17 @@ public class EntryActivity extends Activity {
             final SharedPreferences preferences =
                     PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
+            Bundle args = new Bundle();
             if (preferences
                     .getBoolean(SettingsActivityFragment.KEY_PREF_SHOW_FAVORITES, false)) {
 
-                Intent favoritesIntent = new Intent(getApplicationContext(), FavoritesActivity.class);
-
-                TaskStackBuilder.create(getApplicationContext())
-                        .addNextIntentWithParentStack(favoritesIntent).startActivities();
-            } else {
-                Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(mainIntent);
+                args.putBoolean(START_FAVORITES, true);
             }
+
+            Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
+            mainIntent.putExtras(args);
+            startActivity(mainIntent);
+
 
         } else {
             Intent splashIntent = new Intent(getApplicationContext(), SplashScreenActivity.class);

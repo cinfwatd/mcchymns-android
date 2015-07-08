@@ -112,9 +112,19 @@ public class MainActivity extends AppCompatActivity implements
 
         mDrawerTitle = getString(R.string.navigation_drawer_title);
         if (savedInstanceState == null) {
-            mTitle = getText(R.string.app_name);
-            HymnsFragment hymnsFragment = new HymnsFragment();
-            replaceFragment(hymnsFragment);
+
+            final boolean startFavorites = getIntent().getBooleanExtra(EntryActivity.START_FAVORITES, false);
+
+            if (startFavorites) {
+                mTitle = getText(R.string.favorites);
+                FavoritesActivityFragment favoritesActivityFragment =
+                        new FavoritesActivityFragment();
+                replaceFragment(favoritesActivityFragment);
+            } else {
+                mTitle = getText(R.string.app_name);
+                HymnsFragment hymnsFragment = new HymnsFragment();
+                replaceFragment(hymnsFragment);
+            }
         } else {
             mTitle = savedInstanceState.getCharSequence(KEY_TITLE, getText(R.string.app_name));
         }
