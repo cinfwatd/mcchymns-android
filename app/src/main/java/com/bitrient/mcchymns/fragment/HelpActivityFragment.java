@@ -1,4 +1,4 @@
-package com.bitrient.mcchymns;
+package com.bitrient.mcchymns.fragment;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.bitrient.mcchymns.R;
 
 
 /**

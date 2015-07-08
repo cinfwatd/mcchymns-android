@@ -20,6 +20,7 @@ import android.view.View;
 
 import com.bitrient.mcchymns.adapter.NavigationDrawerAdapter;
 import com.bitrient.mcchymns.fragment.FavoritesActivityFragment;
+import com.bitrient.mcchymns.fragment.HelpActivityFragment;
 import com.bitrient.mcchymns.fragment.HymnViewActivityFragment;
 import com.bitrient.mcchymns.fragment.HymnsFragment;
 import com.bitrient.mcchymns.fragment.dialog.GotoHymnDialogFragment;
@@ -57,13 +58,15 @@ public class MainActivity extends AppCompatActivity implements
         mDrawerRecycleView.setHasFixedSize(true);
 
         mMenuTitles = new String[]{
-                getResources().getString(R.string.favorites),
-                getResources().getString(R.string.search),
-                getResources().getString(R.string.settings),
-                getResources().getString(R.string.help)
+                getString(R.string.app_name),
+                getString(R.string.favorites),
+                getString(R.string.search),
+                getString(R.string.settings),
+                getString(R.string.help)
         };
 
         final int menuIcons[] = {
+                R.mipmap.ic_action_queue_music,
                 R.mipmap.ic_action_badge,
                 R.mipmap.ic_action_magnifier,
                 R.mipmap.ic_action_sliders,
@@ -151,8 +154,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void replaceFragment(Fragment fragment) {
-//        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
-//        if (currentFragment != null && currentFragment.getClass().equals(fragment.getClass())) return;
+        final Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         final String backStateName = fragment.getClass().getName();
         final String fragmentTag = backStateName;
 
@@ -161,8 +163,22 @@ public class MainActivity extends AppCompatActivity implements
         // Ensure only one instance is added to the backstack
         final boolean fragmentPopped = fragmentManager.popBackStackImmediate(backStateName, 0);
 
+        //
         if ((!fragmentPopped && fragmentManager.findFragmentByTag(fragmentTag) == null) ||
                 backStateName.equals(HymnViewActivityFragment.class.getName())) {
+
+            final FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            transaction.replace(R.id.content_frame, fragment, fragmentTag);
+            transaction.addToBackStack(null);
+            transaction.commit();
+
+        }
+        //if Main hymns fragment and not equal to current fragment, remove all from backstack and add it.
+        else if (backStateName.equals(HymnsFragment.class.getName()) &&
+                !backStateName.equals(currentFragment.getClass().getName())) {
+
+            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             final FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             transaction.replace(R.id.content_frame, fragment, fragmentTag);
@@ -242,20 +258,27 @@ public class MainActivity extends AppCompatActivity implements
     public void onItemClicked(int position) {
         switch (position) {
             case 0: // Favorites
+                final HymnsFragment hymnsFragment
+                        = new HymnsFragment();
+                replaceFragment(hymnsFragment, position);
+
+                break;
+
+            case 1: // Favorites
                 final FavoritesActivityFragment favoritesFragment
                         = new FavoritesActivityFragment();
                 replaceFragment(favoritesFragment, position);
 
                 break;
-            case 1: // Advance Search
+            case 2: // Advance Search
                 Intent searchIntent = new Intent(this, SearchActivity.class);
                 startActivity(searchIntent);
                 break;
-            case 2: // Settings
+            case 3: // Settings
                 Intent settingsIntent = new Intent(this, SettingsActivity.class);
                 startActivity(settingsIntent);
                 break;
-            case 3: // Help
+            case 4: // Help
                 final HelpActivityFragment helpFragment = new HelpActivityFragment();
                 replaceFragment(helpFragment, position);
                 break;
