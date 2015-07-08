@@ -22,7 +22,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -37,7 +36,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bitrient.mcchymns.HymnViewActivity;
 import com.bitrient.mcchymns.R;
 import com.bitrient.mcchymns.SettingsActivity;
 import com.bitrient.mcchymns.database.HymnContract;
@@ -50,6 +48,7 @@ import com.bitrient.mcchymns.util.FontCache;
  * A placeholder fragment containing a simple view.
  */
 public class HymnViewActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+    public static final String SELECTED_HYMN = "selected";
     @SuppressWarnings("unused")
     private static final String TAG = HymnViewActivityFragment.class.getSimpleName();
 
@@ -116,8 +115,11 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_goto_hymn, menu);
         super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.menu_goto_hymn, menu);
+        inflater.inflate(R.menu.menu_hymn_view, menu);
+
     }
 
     @Override
@@ -177,7 +179,7 @@ public class HymnViewActivityFragment extends Fragment implements LoaderManager.
     }
 
     private int getHymnNumber() {
-        return getArguments().getInt(HymnViewActivity.SELECTED_HYMN, 40);
+        return getArguments().getInt(SELECTED_HYMN, 40);
     }
 
     private void loadHymn(Cursor cursor) {

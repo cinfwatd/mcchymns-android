@@ -80,6 +80,7 @@
 
     <string name="added_to_favorites">Added to favorites</string>
     <string name="removed_from_favorites">Removed from favorites</string>
+    <string name="hymn">Hymn</string>
     <string name="hymns">Hymns</string>
     <string name="title_activity_help">Help</string>
     <string name="navigation_drawer_title">Menu</string>

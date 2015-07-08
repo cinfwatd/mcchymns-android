@@ -1,5 +1,6 @@
 package com.bitrient.mcchymns.fragment.dialog;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import com.bitrient.mcchymns.HymnViewActivity;
 import com.bitrient.mcchymns.R;
+import com.bitrient.mcchymns.fragment.HymnViewActivityFragment;
 
 /**
  * @author Cinfwat Probity <czprobity@bitrient.com>
@@ -43,6 +45,8 @@ public class GotoHymnDialogFragment extends DialogFragment implements View.OnCli
 
     LinearLayout mDialogView;
     EditText mSelectedHymnTextView;
+
+    HymnSelectionListener mSelectionListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,7 +84,7 @@ public class GotoHymnDialogFragment extends DialogFragment implements View.OnCli
         Button clearBtn = (Button) mDialogView.findViewById(R.id.btn_clear);
 
         if (savedInstanceState != null) {
-            mSelectedHymnTextView.setText(savedInstanceState.getString(HymnViewActivity.SELECTED_HYMN));
+            mSelectedHymnTextView.setText(savedInstanceState.getString(HymnViewActivityFragment.SELECTED_HYMN));
         }
 
         declineBtn.setOnClickListener(new View.OnClickListener() {
@@ -107,9 +111,7 @@ public class GotoHymnDialogFragment extends DialogFragment implements View.OnCli
                     }
 
 
-                    Intent hymnIntent = new Intent(getActivity(), HymnViewActivity.class);
-                    hymnIntent.putExtra(HymnViewActivity.SELECTED_HYMN, selectedHymn);
-                    startActivity(hymnIntent);
+                    mSelectionListener.hymnSelected(selectedHymn);
                     dismiss();
                 } else {
                     Toast.makeText(getActivity(),
@@ -154,7 +156,7 @@ public class GotoHymnDialogFragment extends DialogFragment implements View.OnCli
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putString(HymnViewActivity.SELECTED_HYMN,  mSelectedHymnTextView.getText().toString());
+        outState.putString(HymnViewActivityFragment.SELECTED_HYMN,  mSelectedHymnTextView.getText().toString());
         super.onSaveInstanceState(outState);
     }
 
@@ -167,5 +169,27 @@ public class GotoHymnDialogFragment extends DialogFragment implements View.OnCli
         int newValue = Integer.parseInt(String.format("%s%s", curValue, value));
 
         if (newValue > 0 && newValue <= 1200) mSelectedHymnTextView.setText(Integer.toString(newValue));
+    }
+
+    public interface HymnSelectionListener {
+        void hymnSelected(int hymnNumber);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        try {
+            mSelectionListener = (HymnSelectionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() +
+                " must implement the HymnSelectionListener.");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mSelectionListener = null;
     }
 }

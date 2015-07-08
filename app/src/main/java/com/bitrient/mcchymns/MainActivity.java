@@ -18,11 +18,13 @@ import android.view.View;
 
 import com.bitrient.mcchymns.adapter.NavigationDrawerAdapter;
 import com.bitrient.mcchymns.fragment.FavoritesActivityFragment;
+import com.bitrient.mcchymns.fragment.HymnViewActivityFragment;
 import com.bitrient.mcchymns.fragment.HymnsFragment;
+import com.bitrient.mcchymns.fragment.dialog.GotoHymnDialogFragment;
 
 
 public class MainActivity extends AppCompatActivity implements
-        NavigationDrawerAdapter.ViewHolder.ClickListener {
+        NavigationDrawerAdapter.ViewHolder.ClickListener, GotoHymnDialogFragment.HymnSelectionListener {
 
     @SuppressWarnings("unused")
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements
     private ActionBarDrawerToggle mDrawerToggle;
     private RecyclerView mDrawerRecycleView;
 
+    private static final String KEY_TITLE = "mTitle";
     private CharSequence mTitle;
     private CharSequence mDrawerTitle;
     private String mMenuTitles[];
@@ -97,9 +100,11 @@ public class MainActivity extends AppCompatActivity implements
 
         mDrawerTitle = getString(R.string.navigation_drawer_title);
         if (savedInstanceState == null) {
-            mTitle = getString(R.string.app_name);
+            mTitle = getText(R.string.app_name);
             HymnsFragment hymnsFragment = new HymnsFragment();
             replaceFragment(hymnsFragment);
+        } else {
+            mTitle = savedInstanceState.getCharSequence(KEY_TITLE, getText(R.string.app_name));
         }
     }
 
@@ -115,6 +120,18 @@ public class MainActivity extends AppCompatActivity implements
      */
     private void replaceFragment(Fragment fragment, int position) {
         mTitle = mMenuTitles[position];
+        replaceFragment(fragment);
+    }
+
+    /**
+     * Replaces the current fragment with the passed-in fragment and also set the title
+     * @see #replaceFragment(Fragment)
+     * @param fragment The fragment to replace with
+     * @param title The title to set
+     */
+    private void replaceFragment(Fragment fragment, CharSequence title) {
+        mTitle = title;
+        setTitle(mTitle);
         replaceFragment(fragment);
     }
 
@@ -152,6 +169,12 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         super.onBackPressed();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putCharSequence(KEY_TITLE, mTitle);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -200,6 +223,20 @@ public class MainActivity extends AppCompatActivity implements
             menu.findItem(R.id.action_remove_all).setVisible(!drawerOpen);
         }
 
+        if (mTitle.equals(getText(R.string.hymn))) {
+            menu.findItem(R.id.action_add_to_favorite).setVisible(!drawerOpen);
+            menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
+        }
+
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public void hymnSelected(int hymnNumber) {
+        Bundle args = new Bundle();
+        args.putInt(HymnViewActivityFragment.SELECTED_HYMN, hymnNumber);
+        HymnViewActivityFragment hymnView =
+                HymnViewActivityFragment.newInstance(args);
+        replaceFragment(hymnView, getText(R.string.hymn));
     }
 }
