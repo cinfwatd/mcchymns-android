@@ -27,6 +27,11 @@ import com.bitrient.mcchymns.fragment.SearchFragment;
 import com.bitrient.mcchymns.fragment.dialog.GotoHymnDialogFragment;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity implements
@@ -46,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements
     private static final String KEY_TITLE = "mTitle";
     private CharSequence mTitle;
     private CharSequence mDrawerTitle;
-    private String mMenuTitles[];
+    private HashMap<Integer, String> mMenuTitles;
     private NavigationDrawerAdapter mAdapter;
 
     @Override
@@ -62,13 +67,12 @@ public class MainActivity extends AppCompatActivity implements
         mDrawerRecycleView = (RecyclerView) findViewById(R.id.navigation_recycler_view);
         mDrawerRecycleView.setHasFixedSize(true);
 
-        mMenuTitles = new String[]{
-                getString(R.string.app_name),
-                getString(R.string.favorites),
-                getString(R.string.search),
-                getString(R.string.settings),
-                getString(R.string.help)
-        };
+        mMenuTitles = new HashMap<>(5);
+        mMenuTitles.put(0, getString(R.string.app_name));
+        mMenuTitles.put(1, getString(R.string.favorites));
+        mMenuTitles.put(2, getString(R.string.search));
+        mMenuTitles.put(3, getString(R.string.settings));
+        mMenuTitles.put(4, getString(R.string.help));
 
         final int menuIcons[] = {
                 R.mipmap.ic_action_queue_music,
@@ -119,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements
                 Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
                 if (fragment != null) {
                     updateTitle(fragment);
+                    toggleSelection();
                 }
             }
         });
@@ -207,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements
      * @param position The position of the menu Item. Used to get the title
      */
     private void replaceFragment(Fragment fragment, int position) {
-        mTitle = mMenuTitles[position];
+        mTitle = mMenuTitles.get(position);
         replaceFragment(fragment);
     }
 
@@ -281,8 +286,7 @@ public class MainActivity extends AppCompatActivity implements
     public void onItemClicked(int position) {
         mDrawerLayout.closeDrawers();
 
-        mAdapter.clearSelection();
-        mAdapter.toggleSelection(position);
+        toggleSelection(position);
 
         switch (position) {
             case 0: // Favorites
@@ -313,6 +317,29 @@ public class MainActivity extends AppCompatActivity implements
                 replaceFragment(helpFragment, position);
                 break;
         }
+    }
+
+    /**
+     * toggles the selection state of the menus. clear Selection before adding to
+     * make the selection mutually exclusive.
+     * @param position The position to toggle.
+     */
+    private void toggleSelection(int position) {
+        mAdapter.clearSelection();
+        mAdapter.toggleSelection(position);
+    }
+
+    private void toggleSelection() {
+        toggleSelection(getKey(mTitle.toString()));
+    }
+
+    public int getKey(String value) {
+        for (Map.Entry<Integer, String> e : mMenuTitles.entrySet()) {
+            if (value.equals(e.getValue())) return e.getKey();
+        }
+
+        // put a non-existing position
+        return 5;
     }
 
     @Override

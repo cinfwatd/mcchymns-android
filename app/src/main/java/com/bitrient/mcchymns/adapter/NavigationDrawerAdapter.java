@@ -10,18 +10,20 @@ import android.widget.TextView;
 
 import com.bitrient.mcchymns.R;
 
+import java.util.HashMap;
+
 /**
  * @author Cinfwat Probity <czprobity@bitrient.com>
  * @since 6/18/15
  */
 public class NavigationDrawerAdapter extends SelectableAdapter<NavigationDrawerAdapter.ViewHolder> {
 
-    private String[] mNavigationTitles;
+    private HashMap<Integer, String> mNavigationTitles;
     private int[] mNavigationIcons;
 
     private ViewHolder.ClickListener mClickListener;
 
-    public NavigationDrawerAdapter(String[] navigationTitles, int[] navigationIcons,
+    public NavigationDrawerAdapter(HashMap<Integer, String> navigationTitles, int[] navigationIcons,
                                    ViewHolder.ClickListener clickListener) {
         mNavigationIcons = navigationIcons;
         mNavigationTitles = navigationTitles;
@@ -76,7 +78,7 @@ public class NavigationDrawerAdapter extends SelectableAdapter<NavigationDrawerA
     @Override
     public void onBindViewHolder(NavigationDrawerAdapter.ViewHolder holder, int position) {
 
-        holder.title.setText(mNavigationTitles[position]);
+        holder.title.setText(mNavigationTitles.get(position));
         holder.icon.setImageResource(mNavigationIcons[position]);
 
 //        highlight the item if it's selected
@@ -90,7 +92,7 @@ public class NavigationDrawerAdapter extends SelectableAdapter<NavigationDrawerA
      */
     @Override
     public int getItemCount() {
-        return mNavigationTitles.length;
+        return mNavigationTitles.size();
     }
 
     /**
