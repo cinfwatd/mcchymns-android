@@ -14,4 +14,22 @@
     <color name="slategray">#708090</color>
     <color name="darkslategray">#2F4F4F</color>
     <color name="selected_overlay">#4DEF9A9A</color>
+
+    <string-array name="default_color_choice_values" translatable="false">
+        <item>#33b5e5</item>
+        <item>#aa66cc</item>
+        <item>#99cc00</item>
+        <item>#ffbb33</item>
+        <item>#ff4444</item>
+        <item>#0099cc</item>
+        <item>#9933cc</item>
+        <item>#669900</item>
+        <item>#ff8800</item>
+        <item>#cc0000</item>
+        <item>#62371A</item>
+        <item>#eeeeee</item>
+        <item>#cccccc</item>
+        <item>#888888</item>
+        <item>#000000</item>
+    </string-array>
 </resources>

@@ -12,4 +12,9 @@
     <dimen name="medium">8dp</dimen>
     <dimen name="normal">16dp</dimen>
     <dimen name="dialog_title">20sp</dimen>
+
+    <dimen name="color_swatch_large">64dip</dimen>
+    <dimen name="color_swatch_small">48dip</dimen>
+    <dimen name="color_swatch_margins_large">8dip</dimen>
+    <dimen name="color_swatch_margins_small">4dip</dimen>
 </resources>

@@ -28,10 +28,18 @@
             android:entries="@array/pref_font_size_entries"
             android:entryValues="@array/pref_font_size_values" />
 
-        <yuku.ambilwarna.widget.AmbilWarnaPreference
+        <!--<yuku.ambilwarna.widget.AmbilWarnaPreference-->
+            <!--android:key="pref_hymn_font_color"-->
+            <!--android:title="@string/pref_font_color"-->
+            <!--android:defaultValue="0xff663333" />-->
+        <com.bitrient.mcchymns.view.colorPicker.ColorPickerPreference
             android:key="pref_hymn_font_color"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
             android:title="@string/pref_font_color"
-            android:defaultValue="0xff663333" />
+            android:defaultValue="@android:color/black"
+            app:cal_itemLayout="@layout/calendar_grid_item_color"
+            app:cal_numColumns="5"/>
 
         <com.bitrient.mcchymns.view.ImageListPreference
             android:key="pref_hymn_background"
