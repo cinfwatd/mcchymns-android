@@ -7,7 +7,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/scrollView"
+        android:id="@+id/stanza_scroll_view"
         android:layout_above="@+id/chorus_container"
         android:scrollbars="none">
 
@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:id="@+id/hymnContainer" >
+            android:id="@+id/stanzas_container" >
         </LinearLayout>
     </ScrollView>
 
@@ -46,14 +46,21 @@
 
         <View style="@style/Divider" android:id="@+id/chorus_divider_bottom" />
 
-        <TextView
-            android:id="@+id/chorus"
+        <ScrollView
+            android:id="@+id/chorus_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@color/chorusColor"
-            android:lineSpacingMultiplier="1.2"
-            android:gravity="center_horizontal" />
+            android:scrollbars="none">
+
+            <TextView
+                android:id="@+id/chorus"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="16sp"
+                android:textColor="@color/chorusColor"
+                android:lineSpacingMultiplier="1.2"
+                android:gravity="center_horizontal" />
+        </ScrollView>
     </LinearLayout>
 
 </RelativeLayout>

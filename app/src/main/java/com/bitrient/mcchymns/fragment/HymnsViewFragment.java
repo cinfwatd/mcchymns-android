@@ -189,8 +189,9 @@ public class HymnsViewFragment extends Fragment implements LoaderManager.LoaderC
         final View rootView = getView();
 
         final LinearLayout chorusContainer = (LinearLayout) rootView.findViewById(R.id.chorus_container);
-        final LinearLayout hymnContainer = (LinearLayout) rootView.findViewById(R.id.hymnContainer);
-        final ScrollView scrollView = (ScrollView) rootView.findViewById(R.id.scrollView);
+        final LinearLayout hymnContainer = (LinearLayout) rootView.findViewById(R.id.stanzas_container);
+        final ScrollView stanzaScrollView = (ScrollView) rootView.findViewById(R.id.stanza_scroll_view);
+        final ScrollView chorusScrollView = (ScrollView) rootView.findViewById(R.id.chorus_scroll_view);
 
         mGestureDetector = new GestureDetector(getActivity(), new GestureDetector.SimpleOnGestureListener() {
             @Override
@@ -214,7 +215,15 @@ public class HymnsViewFragment extends Fragment implements LoaderManager.LoaderC
                 return false;
             }
         });
-        scrollView.setOnTouchListener(new View.OnTouchListener() {
+        stanzaScrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                mGestureDetector.onTouchEvent(event);
+                return false;
+            }
+        });
+
+        chorusScrollView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 mGestureDetector.onTouchEvent(event);
