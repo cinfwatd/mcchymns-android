@@ -29,11 +29,9 @@
         android:layout_alignParentBottom="true"
         android:visibility="gone">
 
-        <!--<View-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="2dp"-->
-            <!--android:background="@android:drawable/dialog_frame" />-->
-        <View android:layout_width="match_parent"
+        <View
+            android:id="@+id/chorus_divider_top"
+            android:layout_width="match_parent"
             android:layout_height="5dp"
             android:layout_marginBottom="5dp"
             android:background="?android:attr/listDivider" />
@@ -46,7 +44,7 @@
             android:textSize="20sp"
             android:gravity="center_horizontal"/>
 
-        <View style="@style/Divider" />
+        <View style="@style/Divider" android:id="@+id/chorus_divider_bottom" />
 
         <TextView
             android:id="@+id/chorus"

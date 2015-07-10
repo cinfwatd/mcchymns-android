@@ -65,13 +65,14 @@
     <!-- preference-->
     <string name="pref_title_favorites">Favorites</string>
     <string name="pref_summary_favorites">Show favorites on start</string>
-    <string name="pref_font">Fonts</string>
+    <string name="pref_font">Font</string>
     <string name="pref_font_size">Font size</string>
     <string name="pref_font_color">Font color</string>
     <string name="pref_font_dialog_title">Fonts</string>
     <string name="pref_color_dialog_settings">Font Color</string>
     <string name="pref_size_dialog_settings">Font Size</string>
-    <string name="pref_hymn_background">Background</string>
+    <string name="pref_hymn_background">Background texture</string>
+    <string name="pref_hymn_background_color">Background color</string>
 
     <string name="pref_default_font">lilac_malaria.ttf</string>
     <string name="pref_default_font_size">18</string>
@@ -81,12 +82,10 @@
     <string name="added_to_favorites">Added to favorites</string>
     <string name="removed_from_favorites">Removed from favorites</string>
     <string name="hymn">Hymn</string>
-    <string name="hymns">Hymns</string>
+    <string name="hymn_settings">Hymn settings</string>
     <string name="title_activity_help">Help</string>
     <string name="navigation_drawer_title">Menu</string>
 
-    <!-- Default title for color picker dialog [CHAR LIMIT=30] -->
-    <string name="color_picker_default_title">Select Color</string>
     <!-- Content description for a color square. -->
     <string name="color_swatch_description">Color <xliff:g id="color_index" example="14">%1$d</xliff:g></string>
     <!-- Content description for a selected color square. -->

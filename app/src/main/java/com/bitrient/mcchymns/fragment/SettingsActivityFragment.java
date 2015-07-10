@@ -7,10 +7,7 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.bitrient.mcchymns.R;
 
@@ -25,7 +22,8 @@ public class SettingsActivityFragment extends PreferenceFragment implements
     public static final String KEY_PREF_FONT_COLOR = "pref_hymn_font_color";
     public static final String KEY_PREF_SHOW_FAVORITES = "pref_show_favorites";
     public static final String KEY_PREF_HYMNS_CATEGORY = "pref_hymns_category";
-    public static final String KEY_PREF_HYMN_BACKGROUND = "pref_hymn_background";
+
+    public static final String KEY_PREF_HYMN_BACKGROUND_COLOR = "pref_hymn_background_color";
 
     public static final String SHOW_HYMNS_CAT_ONLY = "show_hymns_category_only";
 
@@ -86,6 +84,8 @@ public class SettingsActivityFragment extends PreferenceFragment implements
         if(key.equals(KEY_PREF_FONTS)) {
             Preference fontsPreference = findPreference(key);
             fontsPreference.setSummary(removeExtension(sharedPreferences.getString(key, "")));
+        } else if (key.equals(KEY_PREF_FONT_COLOR) || key.equals(KEY_PREF_HYMN_BACKGROUND_COLOR)) {
+            checkBackgroundAndFontColor(sharedPreferences);
         }
     }
 
@@ -102,5 +102,13 @@ public class SettingsActivityFragment extends PreferenceFragment implements
 
     private String removeUnderscore(String fileName) {
         return fileName.replace('_', ' ');
+    }
+
+    private void checkBackgroundAndFontColor(SharedPreferences sharedPreferences) {
+        final boolean isSame = sharedPreferences.getInt(KEY_PREF_HYMN_BACKGROUND_COLOR, 0) ==
+                sharedPreferences.getInt(KEY_PREF_FONT_COLOR, 0);
+        if (isSame) {
+            Toast.makeText(getActivity(), "Font and Background color should not be the same.", Toast.LENGTH_LONG).show();
+        }
     }
 }

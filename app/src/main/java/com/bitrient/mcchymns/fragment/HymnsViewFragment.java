@@ -231,11 +231,20 @@ public class HymnsViewFragment extends Fragment implements LoaderManager.LoaderC
         final int fontSize = Integer.parseInt(preferences.getString(SettingsActivityFragment.KEY_PREF_FONT_SIZE, ""));
         final int fontColor = preferences.getInt(SettingsActivityFragment.KEY_PREF_FONT_COLOR, Color.BLACK);
 
-        final String bGPath = preferences.getString(SettingsActivityFragment.KEY_PREF_HYMN_BACKGROUND, "");
-        final String bGName = bGPath.substring(bGPath.lastIndexOf('/') + 1, bGPath.lastIndexOf('.'));
+        float[] hsv = new float[3];
+        Color.colorToHSV(fontColor, hsv);
+        hsv[2] = 0.2f + 0.8f * hsv[2]; // hsv[2] = 1.0f - 0.8f * (1.0f - hsv[2]);
 
-        final int backgroundId = getActivity().getResources().getIdentifier(bGName, "drawable", getActivity().getPackageName());
-        rootView.setBackgroundResource(backgroundId);
+        final int dividerColor = Color.HSVToColor(hsv);
+
+//        final String bGPath = preferences.getString(SettingsActivityFragment.KEY_PREF_HYMN_BACKGROUND, "");
+//        final String bGName = bGPath.substring(bGPath.lastIndexOf('/') + 1, bGPath.lastIndexOf('.'));
+//
+//        final int backgroundId = getActivity().getResources().getIdentifier(bGName, "drawable", getActivity().getPackageName());
+//        rootView.setBackgroundResource(backgroundId);
+
+        final int backgroundColor = preferences.getInt(SettingsActivityFragment.KEY_PREF_HYMN_BACKGROUND_COLOR, Color.WHITE);
+        rootView.setBackgroundColor(backgroundColor);
 
         cursor.moveToFirst();
 
@@ -251,12 +260,24 @@ public class HymnsViewFragment extends Fragment implements LoaderManager.LoaderC
             TextView stanzaBody = (TextView) stanza.findViewById(R.id.stanza_body);
             TextView stanzaNumber = (TextView) stanza.findViewById(R.id.stanza_number);
 
+            View leftDivider = stanza.findViewById(R.id.stanza_divider_left);
+            View rightDivider = stanza.findViewById(R.id.stanza_divider_right);
+
+            leftDivider.setBackgroundColor(dividerColor);
+            rightDivider.setBackgroundColor(dividerColor);
+
             String cursorStanzaBody = cursor.getString(1).replaceAll("\\\\n", "\\\n");
             String cursorStanzaNumber = cursor.getString(0);
 
             if (cursorStanzaNumber.equals("0")) {
                 TextView chorusTitle = (TextView) rootView.findViewById(R.id.chorus_title);
                 TextView chorus = (TextView) rootView.findViewById(R.id.chorus);
+                View chorusDividerTop = rootView.findViewById(R.id.chorus_divider_top);
+                View chorusDividerBottom = rootView.findViewById(R.id.chorus_divider_bottom);
+
+                chorusDividerTop.setBackgroundColor(dividerColor);
+                chorusDividerBottom.setBackgroundColor(dividerColor);
+
                 chorus.setText(cursorStanzaBody);
 
                 chorusTitle.setTypeface(typeface);

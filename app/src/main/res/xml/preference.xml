@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <CheckBoxPreference
-        android:icon="@mipmap/ic_action_badge"
+    <SwitchPreference
         android:key="pref_show_favorites"
         android:title="@string/pref_title_favorites"
         android:summary="@string/pref_summary_favorites"
         android:defaultValue="false" />
 
     <PreferenceCategory
-        android:title="@string/hymns"
+        android:title="@string/hymn_settings"
         android:key="pref_hymns_category">
 
         <com.bitrient.mcchymns.view.FontPreference
@@ -28,10 +27,6 @@
             android:entries="@array/pref_font_size_entries"
             android:entryValues="@array/pref_font_size_values" />
 
-        <!--<yuku.ambilwarna.widget.AmbilWarnaPreference-->
-            <!--android:key="pref_hymn_font_color"-->
-            <!--android:title="@string/pref_font_color"-->
-            <!--android:defaultValue="0xff663333" />-->
         <com.bitrient.mcchymns.view.colorPicker.ColorPickerPreference
             android:key="pref_hymn_font_color"
             android:negativeButtonText="@null"
@@ -41,14 +36,23 @@
             app:cal_itemLayout="@layout/calendar_grid_item_color"
             app:cal_numColumns="5"/>
 
-        <com.bitrient.mcchymns.view.ImageListPreference
-            android:key="pref_hymn_background"
-            android:title="@string/pref_hymn_background"
-            android:defaultValue="@string/pref_default_hymn_background"
-            android:summary="%s"
-            android:entries="@array/hymn_background_entries"
-            android:entryValues="@array/hymn_background_values"
-            app:entryImages="@array/hymn_background_images" />
+        <com.bitrient.mcchymns.view.colorPicker.ColorPickerPreference
+            android:key="pref_hymn_background_color"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/pref_hymn_background_color"
+            android:defaultValue="@color/default_hymn_background_color"
+            app:cal_itemLayout="@layout/calendar_grid_item_color"
+            app:cal_numColumns="5" />
+
+        <!--<com.bitrient.mcchymns.view.ImageListPreference -->
+            <!--android:key="pref_hymn_background"-->
+            <!--android:title="@string/pref_hymn_background"-->
+            <!--android:defaultValue="@string/pref_default_hymn_background"-->
+            <!--android:summary="%s"-->
+            <!--android:entries="@array/hymn_background_entries"-->
+            <!--android:entryValues="@array/hymn_background_values"-->
+            <!--app:entryImages="@array/hymn_background_images" />-->
 
     </PreferenceCategory>
 
