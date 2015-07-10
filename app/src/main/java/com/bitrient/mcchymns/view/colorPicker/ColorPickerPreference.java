@@ -37,13 +37,15 @@ import com.bitrient.mcchymns.R;
  * @author Gabriele Mariotti (gabri.mariotti@gmail.com)
  *
  */
-public class ColorPickerPreference extends Preference{
+public class ColorPickerPreference extends Preference {
 	
 	private int[] mColorChoices = {};
     private int mValue = 0;
     private int mItemLayoutId = R.layout.calendar_grid_item_color;
     private int mNumColumns = 5;
     private View mPreviewView;
+
+    private CharSequence mDialogTitle;
 
 	public ColorPickerPreference(Context context) {
 		super(context);
@@ -77,6 +79,13 @@ public class ColorPickerPreference extends Preference{
                 }
             }
 
+            mDialogTitle = a.getString(R.styleable.ColorPickerPreference_cal_dialogTitle);
+            if (mDialogTitle == null) {
+                // Fallback on the regular title of the preference
+                // (the one that is seen in the list)
+                mDialogTitle = getTitle();
+            }
+
         } finally {
             a.recycle();
         }
@@ -102,7 +111,7 @@ public class ColorPickerPreference extends Preference{
     protected void onClick() {
         super.onClick();
 
-        ColorPickerDialog colorcalendar = (ColorPickerDialog) ColorPickerDialog.newInstance(R.string.color_picker_default_title,
+        ColorPickerDialog colorcalendar = (ColorPickerDialog) ColorPickerDialog.newInstance(mDialogTitle,
 				mColorChoices, getValue(), mNumColumns, Utils.isTablet(getContext())? ColorPickerDialog.SIZE_LARGE : ColorPickerDialog.SIZE_SMALL);
         
         //colorcalendar.setPreference(this);
@@ -187,6 +196,29 @@ public class ColorPickerPreference extends Preference{
             ((TextView) view).setTextColor(color);
         }
     }
-    
-    
+
+    /**
+     * Sets the title of the dialog. This will be shown on subsequent dialogs.
+     *
+     * @param dialogTitle The title.
+     */
+    public void setDialogTitle(CharSequence dialogTitle) {
+        mDialogTitle = dialogTitle;
+    }
+
+    /**
+     * @see #setDialogTitle(CharSequence)
+     * @param dialogTitleResId The dialog title as a resource.
+     */
+    public void setDialogTitle(int dialogTitleResId) {
+        setDialogTitle(getContext().getString(dialogTitleResId));
+    }
+
+    /**
+     * Returns the title to be shown on subsequent dialogs.
+     * @return The title.
+     */
+    public CharSequence getDialogTitle() {
+        return mDialogTitle;
+    }
 }

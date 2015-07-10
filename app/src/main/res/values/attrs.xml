@@ -8,5 +8,6 @@
         <attr name="cal_itemLayout" format="reference" />
         <attr name="cal_choices" format="reference" />
         <attr name="cal_numColumns" format="integer" />
+        <attr name="cal_dialogTitle" format="string" />
     </declare-styleable>
 </resources>

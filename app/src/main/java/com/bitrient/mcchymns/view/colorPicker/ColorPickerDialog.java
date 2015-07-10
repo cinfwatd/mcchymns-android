@@ -42,13 +42,13 @@ public class ColorPickerDialog extends DialogFragment implements ColorPickerSwat
 
     protected AlertDialog mAlertDialog;
 
-    protected static final String KEY_TITLE_ID = "title_id";
+    protected static final String KEY_TITLE = "title";
     protected static final String KEY_COLORS = "colors";
     protected static final String KEY_SELECTED_COLOR = "selected_color";
     protected static final String KEY_COLUMNS = "columns";
     protected static final String KEY_SIZE = "size";
 
-    protected int mTitleResId = R.string.color_picker_default_title;
+    protected CharSequence mTitle;
     protected int[] mColors = null;
     protected int mSelectedColor;
     protected int mColumns;
@@ -63,21 +63,21 @@ public class ColorPickerDialog extends DialogFragment implements ColorPickerSwat
         // Empty constructor required for dialog fragments.
     }
 
-    public static ColorPickerDialog newInstance(int titleResId, int[] colors, int selectedColor,
+    public static ColorPickerDialog newInstance(CharSequence title, int[] colors, int selectedColor,
             int columns, int size) {
         ColorPickerDialog ret = new ColorPickerDialog();
-        ret.initialize(titleResId, colors, selectedColor, columns, size);
+        ret.initialize(title, colors, selectedColor, columns, size);
         return ret;
     }
 
-    public void initialize(int titleResId, int[] colors, int selectedColor, int columns, int size) {
-        setArguments(titleResId, columns, size);
+    public void initialize(CharSequence title, int[] colors, int selectedColor, int columns, int size) {
+        setArguments(title, columns, size);
         setColors(colors, selectedColor);
     }
 
-    public void setArguments(int titleResId, int columns, int size) {
+    public void setArguments(CharSequence title, int columns, int size) {
         Bundle bundle = new Bundle();
-        bundle.putInt(KEY_TITLE_ID, titleResId);
+        bundle.putCharSequence(KEY_TITLE, title);
         bundle.putInt(KEY_COLUMNS, columns);
         bundle.putInt(KEY_SIZE, size);
         setArguments(bundle);
@@ -92,7 +92,7 @@ public class ColorPickerDialog extends DialogFragment implements ColorPickerSwat
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            mTitleResId = getArguments().getInt(KEY_TITLE_ID);
+            mTitle = getArguments().getCharSequence(KEY_TITLE);
             mColumns = getArguments().getInt(KEY_COLUMNS);
             mSize = getArguments().getInt(KEY_SIZE);
         }
@@ -117,7 +117,7 @@ public class ColorPickerDialog extends DialogFragment implements ColorPickerSwat
         }
 
         mAlertDialog = new AlertDialog.Builder(activity)
-            .setTitle(mTitleResId)
+            .setTitle(mTitle)
             .setView(view)
             .create();
 
