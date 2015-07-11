@@ -325,6 +325,7 @@ public class MainActivity extends AppCompatActivity implements
      * @param position The position to toggle.
      */
     private void toggleSelection(int position) {
+        if (position == 3) return; //ignore settings.
         mAdapter.clearSelection();
         mAdapter.toggleSelection(position);
     }

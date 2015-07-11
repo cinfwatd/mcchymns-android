@@ -16,10 +16,14 @@ import com.bitrient.mcchymns.database.HymnContract;
  * @since 6/10/15
  */
 public class HymnAdapter extends SelectableAdapter<HymnAdapter.ViewHolder>  {
+    private static final int TYPE_HYMN_ROW = 1;
+    private static final int TYPE_SEARCH_HYMN_ROW = 2;
 
     private Cursor mCursor;
     private int mRowIdColumn;
     private int mRowNumberColumn;
+
+    private boolean mIsSearch;
 
     private ViewHolder.ClickListener clickListener;
 
@@ -30,13 +34,32 @@ public class HymnAdapter extends SelectableAdapter<HymnAdapter.ViewHolder>  {
         mRowNumberColumn = cursor != null ? cursor.getColumnIndex(HymnContract.StanzaEntry.COLUMN_NAME_HYMN_NUMBER) : -1;
 
         this.clickListener = clickListener;
+        mIsSearch = false;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.hymn_row, viewGroup, false);
+        if (viewType == TYPE_HYMN_ROW) {
+            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.hymn_row, viewGroup, false);
 
-        return new ViewHolder(view, clickListener);
+            return new ViewHolder(view, viewType, clickListener);
+        } else if (viewType == TYPE_SEARCH_HYMN_ROW) {
+            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.hymn_search_row, viewGroup, false);
+
+            return new ViewHolder(view, viewType, clickListener);
+//            return appropriate viewholder
+        }
+
+        return null;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (isSearch()) {
+            return TYPE_SEARCH_HYMN_ROW;
+        }
+
+        return TYPE_HYMN_ROW;
     }
 
     @Override
@@ -49,9 +72,14 @@ public class HymnAdapter extends SelectableAdapter<HymnAdapter.ViewHolder>  {
         String firstLine = TextUtils.substring(mCursor.getString(1), 0, end);
         String hymnNumber = mCursor.getString(0);
 
-        viewHolder.firstLineTextView.setText(firstLine);
-        viewHolder.hymnNumberTextView.setText(hymnNumber);
-
+        if (viewHolder.holderId == TYPE_HYMN_ROW) {
+            viewHolder.firstLineTextView.setText(firstLine);
+            viewHolder.hymnNumberTextView.setText(hymnNumber);
+        } else {
+            viewHolder.firstLineTextView.setText(firstLine);
+            viewHolder.hymnNumberTextView.setText(hymnNumber);
+            // prepare search view row
+        }
 //            highlight the item if it's selected
         viewHolder.selectedOverlay.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
 
@@ -115,17 +143,28 @@ public class HymnAdapter extends SelectableAdapter<HymnAdapter.ViewHolder>  {
 
         private ClickListener listener;
 
-        public ViewHolder(View view, ClickListener listener) {
+        private int holderId;
+
+        public ViewHolder(View view, int viewType, ClickListener listener) {
             super(view);
-
-            firstLineTextView = (TextView) itemView.findViewById(R.id.hymn_row_title);
-            hymnNumberTextView = (TextView) itemView.findViewById(R.id.hymn_row_number);
-            selectedOverlay = itemView.findViewById(R.id.selected_overlay);
-
-            this.listener = listener;
 
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
+            this.listener = listener;
+
+            if (viewType == TYPE_HYMN_ROW) {
+                firstLineTextView = (TextView) itemView.findViewById(R.id.hymn_row_title);
+                hymnNumberTextView = (TextView) itemView.findViewById(R.id.hymn_row_number);
+                holderId = TYPE_HYMN_ROW;
+            } else {
+
+                firstLineTextView = (TextView) itemView.findViewById(R.id.hymn_row_title);
+                hymnNumberTextView = (TextView) itemView.findViewById(R.id.hymn_row_number);
+//                set search view info here
+                holderId = TYPE_SEARCH_HYMN_ROW;
+            }
+
+            selectedOverlay = itemView.findViewById(R.id.selected_overlay);
         }
 
         /**
@@ -153,5 +192,13 @@ public class HymnAdapter extends SelectableAdapter<HymnAdapter.ViewHolder>  {
             void onItemClicked(int position);
             boolean onItemLongClicked(int position);
         }
+    }
+
+    private boolean isSearch() {
+        return mIsSearch;
+    }
+
+    public void setIsSearch(boolean isSearch) {
+        mIsSearch = isSearch;
     }
 }

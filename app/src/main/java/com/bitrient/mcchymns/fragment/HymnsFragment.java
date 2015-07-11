@@ -245,6 +245,9 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        final boolean isSearch = mCurrentFilter != null;
+
+        mHymnAdapter.setIsSearch(isSearch);
         mHymnAdapter.swapCursor(data);
     }
 

@@ -375,6 +375,8 @@ public class FavoritesFragment extends Fragment implements
 
     @Override
     public void onLoadFinished(Loader loader, Cursor data) {
+        final boolean isSearch = mCurrentFilter != null;
+        mHymnAdapter.setIsSearch(isSearch);
         mHymnAdapter.swapCursor(data);
     }
 
