@@ -81,7 +81,7 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
 
         mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
 
-        mSearchView.setQueryHint(getActivity().getResources().getString(R.string.search_hint));
+        if (getActivity() != null) mSearchView.setQueryHint(getActivity().getResources().getString(R.string.search_hint));
 
         View searchPlate = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_plate);
         searchPlate.setBackgroundResource(R.drawable.textfield_search_selected_dashed);
