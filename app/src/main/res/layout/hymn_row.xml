@@ -16,6 +16,9 @@
             android:id="@+id/hymn_row_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:width="30dp"
+            android:textAlignment="viewEnd"
+            android:gravity="end"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
@@ -26,14 +29,23 @@
             android:layout_marginStart="@dimen/small_margin"
             android:textAppearance="?android:attr/textAppearanceSmall"/>
 
+        <View android:id="@+id/hymn_line_divider"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/hymn_row_number"
+            android:layout_toEndOf="@+id/hymn_row_number"
+            android:background="@android:drawable/dialog_frame" />
+
         <TextView
             android:id="@+id/hymn_row_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/hymn_row_number"
-            android:layout_toEndOf="@+id/hymn_row_number"
+            android:layout_toRightOf="@+id/hymn_line_divider"
+            android:layout_toEndOf="@+id/hymn_line_divider"
             android:layout_centerVertical="true"
             android:maxLines="1"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
             android:ellipsize="end"
             android:textAppearance="?android:attr/textAppearanceSmallPopupMenu"/>
 
