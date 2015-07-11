@@ -26,6 +26,7 @@ public class SettingsActivityFragment extends PreferenceFragment implements
     public static final String KEY_PREF_HYMN_BACKGROUND_COLOR = "pref_hymn_background_color";
 
     public static final String SHOW_HYMNS_CAT_ONLY = "show_hymns_category_only";
+    public static final String KEY_PREF_USE_TEXTURE = "pref_use_texture_switch";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -8,8 +8,11 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.DrawableRes;
@@ -17,6 +20,7 @@ import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -253,7 +257,22 @@ public class HymnsViewFragment extends Fragment implements LoaderManager.LoaderC
 //        rootView.setBackgroundResource(backgroundId);
 
         final int backgroundColor = preferences.getInt(SettingsActivityFragment.KEY_PREF_HYMN_BACKGROUND_COLOR, Color.WHITE);
-        rootView.setBackgroundColor(backgroundColor);
+        final boolean useTexture = preferences.getBoolean(SettingsActivityFragment.KEY_PREF_USE_TEXTURE, false);
+
+        if (useTexture) {
+            Drawable backgroundDrawable;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                backgroundDrawable = getActivity().getDrawable(R.drawable.hymn_background_gold);
+                rootView.setBackground(backgroundDrawable);
+            } else {
+                backgroundDrawable = getActivity().getResources().getDrawable(R.drawable.hymn_background_gold);
+                rootView.setBackgroundDrawable(backgroundDrawable);
+            }
+
+            backgroundDrawable.setColorFilter(backgroundColor, PorterDuff.Mode.MULTIPLY);
+        } else {
+            rootView.setBackgroundColor(backgroundColor);
+        }
 
         cursor.moveToFirst();
 

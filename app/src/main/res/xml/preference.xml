@@ -32,7 +32,7 @@
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
             android:title="@string/pref_font_color"
-            android:defaultValue="@android:color/black"
+            android:defaultValue="@color/default_hymn_font_color"
             app:cal_itemLayout="@layout/calendar_grid_item_color"
             app:cal_numColumns="5"/>
 
@@ -45,14 +45,11 @@
             app:cal_itemLayout="@layout/calendar_grid_item_color"
             app:cal_numColumns="5" />
 
-        <!--<com.bitrient.mcchymns.view.ImageListPreference -->
-            <!--android:key="pref_hymn_background"-->
-            <!--android:title="@string/pref_hymn_background"-->
-            <!--android:defaultValue="@string/pref_default_hymn_background"-->
-            <!--android:summary="%s"-->
-            <!--android:entries="@array/hymn_background_entries"-->
-            <!--android:entryValues="@array/hymn_background_values"-->
-            <!--app:entryImages="@array/hymn_background_images" />-->
+        <SwitchPreference
+            android:key="pref_use_texture_switch"
+            android:title="@string/pref_hymn_background"
+            android:summary="Use textured background"
+            android:defaultValue="true" />
 
     </PreferenceCategory>
 

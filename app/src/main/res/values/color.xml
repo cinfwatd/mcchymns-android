@@ -14,7 +14,8 @@
     <color name="slategray">#708090</color>
     <color name="darkslategray">#2F4F4F</color>
     <color name="selected_overlay">#4DEF9A9A</color>
-    <color name="default_hymn_background_color">#eeeeee</color>
+    <color name="default_hymn_background_color">#fff0d8a9</color>
+    <color name="default_hymn_font_color">#62371A</color>
 
     <string-array name="default_color_choice_values" translatable="false">
         <item>#33b5e5</item>
