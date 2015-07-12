@@ -13,6 +13,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -77,6 +78,7 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 //        add goto hymn dialog button
+        Log.d(TAG, "YES - onCreateOptionsMenu");
         inflater.inflate(R.menu.menu_goto_hymn, menu);
 
         mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
@@ -159,8 +161,10 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
         if (savedInstanceState != null && savedInstanceState.containsKey(QUERY_STRING)) {
             mCurrentFilter = savedInstanceState.getCharSequence(QUERY_STRING);
             mIsSearchViewOpen = true;
+            Log.d(TAG, "YES - viewstaterestored - " + mCurrentFilter);
         }
 
+        Log.d(TAG, "YES - viewstaterestored");
         super.onViewStateRestored(savedInstanceState);
     }
 
@@ -174,6 +178,30 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
             throw new ClassCastException(activity.toString() +
                 " must implement the HymnSelectionListener interface.");
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        /**
+         * Returning from backstack scenario
+         */
+        if (mCurrentFilter != null && mIsSearchViewOpen == false) {
+            mIsSearchViewOpen = true;
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        /**
+         * Hide softkey if open.
+         * Like when a user searches for a hymn and selects one.
+         */
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm.isAcceptingText()) imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
     }
 
     @Override

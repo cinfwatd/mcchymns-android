@@ -231,6 +231,30 @@ public class FavoritesFragment extends Fragment implements
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+
+        /**
+         * Hide softkey if open.
+         * Like when a user searches for a hymn and selects one.
+         */
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm.isAcceptingText()) imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        /**
+         * Returning from backstack scenario
+         */
+        if (mCurrentFilter != null && mIsSearchViewOpen == false) {
+            mIsSearchViewOpen = true;
+        }
+    }
+
+    @Override
     public void onItemClicked(int position) {
         if (mActionMode != null) {
             toggleSelection(position);
