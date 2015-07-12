@@ -16,7 +16,7 @@
             android:id="@+id/hymn_row_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:width="30dp"
+            android:width="35dp"
             android:gravity="end"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"

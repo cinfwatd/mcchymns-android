@@ -20,10 +20,7 @@ import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -63,7 +60,6 @@ public class HymnsViewFragment extends Fragment implements LoaderManager.LoaderC
     private static final int SET_FAVORITE_CLICKED = 1;
 
     private int mFavoritesIconType = 0;
-    private ActionBar mActionBar;
     private GestureDetector mGestureDetector;
 
     private static final int HYMN_LOADER_ID = 3;
@@ -109,12 +105,7 @@ public class HymnsViewFragment extends Fragment implements LoaderManager.LoaderC
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        mActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        mActionBar.setHomeAsUpIndicator(R.mipmap.ic_queue_music_white_24dp);
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_hymn_view, container, false);
-
-
-        return rootView;
+        return inflater.inflate(R.layout.fragment_hymn_view, container, false);
     }
 
     @Override
@@ -191,6 +182,7 @@ public class HymnsViewFragment extends Fragment implements LoaderManager.LoaderC
     private void loadHymn(Cursor cursor) {
         final LayoutInflater inflater = getActivity().getLayoutInflater();
         final View rootView = getView();
+        if (rootView == null) return;
 
         final LinearLayout chorusContainer = (LinearLayout) rootView.findViewById(R.id.chorus_container);
         final LinearLayout hymnContainer = (LinearLayout) rootView.findViewById(R.id.stanzas_container);
@@ -283,6 +275,7 @@ public class HymnsViewFragment extends Fragment implements LoaderManager.LoaderC
 //        mActionBar.setTitle(number + " - " + title);
         if (getActivity() != null) getActivity().setTitle(number + " - " + title);
 
+        hymnContainer.removeAllViews();
         do {
             RelativeLayout stanza = (RelativeLayout) inflater.inflate(R.layout.stanza, null);
             TextView stanzaBody = (TextView) stanza.findViewById(R.id.stanza_body);

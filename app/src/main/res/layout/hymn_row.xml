@@ -4,19 +4,19 @@
 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/cv"
-    android:padding="@dimen/medium_padding" >
+    android:layout_marginBottom="3dp"
+    android:id="@+id/cv">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp">
+        android:padding="0dp">
 
         <TextView
             android:id="@+id/hymn_row_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:width="30dp"
+            android:width="35dp"
             android:textAlignment="viewEnd"
             android:gravity="end"
             android:layout_centerVertical="true"
