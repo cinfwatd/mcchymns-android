@@ -8,11 +8,11 @@
     android:gravity="center_vertical">
 
     <LinearLayout
-        android:id="@+id/credit_block"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_above="@+id/credit_block">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -68,4 +68,48 @@
         android:indeterminate="true"
         android:layout_alignParentTop="true"
         android:background="@color/selected_overlay"/>
+
+    <LinearLayout
+        android:id="@+id/credit_block"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:layout_marginTop="8dp"
+        android:padding="8dp"
+        android:layout_alignParentBottom="true">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center_horizontal">
+            <TextView
+                android:id="@+id/developers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bitrient"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"/>
+
+            <TextView
+                android:id="@+id/year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/year"
+                android:layout_toEndOf="@+id/developers"
+                android:layout_toRightOf="@+id/developers"
+                android:textAppearance="?android:attr/textAppearanceSmallPopupMenu"
+                android:layout_marginRight="8dp"
+                android:layout_marginEnd="8dp"/>
+
+            <TextView
+                android:id="@+id/all_rights_reserved"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/all_rights_reserved"
+                android:layout_toEndOf="@+id/year"
+                android:layout_toRightOf="@+id/year"
+                android:textAppearance="?android:attr/textAppearanceSmallPopupMenu" />
+        </RelativeLayout>
+    </LinearLayout>
 </RelativeLayout>
