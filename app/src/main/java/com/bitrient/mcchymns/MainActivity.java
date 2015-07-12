@@ -16,22 +16,20 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.bitrient.mcchymns.adapter.NavigationDrawerAdapter;
 import com.bitrient.mcchymns.fragment.FavoritesFragment;
 import com.bitrient.mcchymns.fragment.HelpFragment;
-import com.bitrient.mcchymns.fragment.HymnsViewFragment;
 import com.bitrient.mcchymns.fragment.HymnsFragment;
+import com.bitrient.mcchymns.fragment.HymnsViewFragment;
 import com.bitrient.mcchymns.fragment.SearchFragment;
 import com.bitrient.mcchymns.fragment.dialog.GotoHymnDialogFragment;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity implements
@@ -178,30 +176,23 @@ public class MainActivity extends AppCompatActivity implements
 
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
-        // Ensure only one instance is added to the backstack
-        final boolean fragmentPopped = fragmentManager.popBackStackImmediate(backStateName, 0);
-
-        //
-        if ((!fragmentPopped && fragmentManager.findFragmentByTag(fragmentTag) == null) ||
-                backStateName.equals(HymnsViewFragment.class.getName())) {
-
-            final FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-            transaction.replace(R.id.content_frame, fragment, fragmentTag);
-            transaction.addToBackStack(null);
-            transaction.commit();
-
-        }
         //if Main hymns fragment and not equal to current fragment, remove all from backstack and add it.
-        else if (backStateName.equals(HymnsFragment.class.getName()) &&
-                !backStateName.equals(currentFragment.getClass().getName())) {
-
+        if (backStateName.equals(HymnsFragment.class.getName())) {
             fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
             final FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             transaction.replace(R.id.content_frame, fragment, fragmentTag);
             transaction.addToBackStack(null);
             transaction.commit();
+        } else {
+
+            final FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            transaction.replace(R.id.content_frame, fragment, fragmentTag);
+            transaction.addToBackStack(null);
+            transaction.commit();
+
         }
     }
 
@@ -355,12 +346,17 @@ public class MainActivity extends AppCompatActivity implements
 
         if (mTitle.equals(getText(R.string.favorites)) ||
                 mTitle.equals(getText(R.string.app_name))) {
-            menu.findItem(R.id.action_search).setVisible(!drawerOpen);
-            menu.findItem(R.id.action_sort).setVisible(!drawerOpen);
+
+            MenuItem menuSearch = menu.findItem(R.id.action_search);
+            MenuItem menuSort = menu.findItem(R.id.action_sort);
+
+            menuSearch.setVisible(!drawerOpen);
+            menuSort.setVisible(!drawerOpen);
         }
 
         if (mTitle.equals(getText(R.string.favorites))) {
-            menu.findItem(R.id.action_remove_all).setVisible(!drawerOpen);
+            MenuItem menuFav = menu.findItem(R.id.action_remove_all);
+            menuFav.setVisible(!drawerOpen);
         }
 
         /**
@@ -378,6 +374,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void hymnSelected(int hymnNumber) {
+
         Bundle args = new Bundle();
         args.putInt(HymnsViewFragment.SELECTED_HYMN, hymnNumber);
         HymnsViewFragment hymnView =
