@@ -34,7 +34,7 @@
             android:title="@string/pref_font_color"
             android:defaultValue="@color/default_hymn_font_color"
             app:cal_itemLayout="@layout/calendar_grid_item_color"
-            app:cal_numColumns="5"/>
+            app:cal_numColumns="4"/>
 
         <com.bitrient.mcchymns.view.colorPicker.ColorPickerPreference
             android:key="pref_hymn_background_color"
@@ -43,7 +43,7 @@
             android:title="@string/pref_hymn_background_color"
             android:defaultValue="@color/default_hymn_background_color"
             app:cal_itemLayout="@layout/calendar_grid_item_color"
-            app:cal_numColumns="5" />
+            app:cal_numColumns="4" />
 
         <SwitchPreference
             android:key="pref_use_texture_switch"

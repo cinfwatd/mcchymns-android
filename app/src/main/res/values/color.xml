@@ -18,9 +18,9 @@
     <color name="default_hymn_font_color">#62371A</color>
 
     <string-array name="default_color_choice_values" translatable="false">
-        <item>#33b5e5</item>
-        <item>#aa66cc</item>
-        <item>#99cc00</item>
+        <!--<item>#33b5e5</item>-->
+        <!--<item>#aa66cc</item>-->
+        <!--<item>#99cc00</item>-->
         <item>#ffbb33</item>
         <item>#ff4444</item>
         <item>#0099cc</item>
