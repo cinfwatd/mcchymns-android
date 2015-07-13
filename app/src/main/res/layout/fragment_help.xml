@@ -4,14 +4,21 @@
     android:padding="8dp"
     tools:context="com.bitrient.mcchymns.fragment.HelpFragment">
 
-    <TextView android:text="Stay put, help is on the way. LOl" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <android.support.v4.view.ViewPager
+        android:id="@+id/help_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/dev_block">
+
+    </android.support.v4.view.ViewPager>
 
     <RelativeLayout
+        android:id="@+id/dev_block"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:paddingTop="8dp">
         <TextView
             android:id="@+id/developers"
             android:layout_width="wrap_content"

@@ -5,6 +5,10 @@ import android.graphics.Point;
 import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,11 +20,15 @@ import android.view.ViewGroup;
 import com.bitrient.mcchymns.R;
 import com.bitrient.mcchymns.fragment.dialog.AboutDialogFragment;
 
-
 /**
  * A placeholder fragment containing a simple view.
  */
 public class HelpFragment extends Fragment {
+
+    private static final int NUM_PAGES = 5;
+
+    private ViewPager mPager;
+    private PagerAdapter mPagerAdapter;
 
     public HelpFragment() {
     }
@@ -42,7 +50,13 @@ public class HelpFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_help, container, false);
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_help, container, false);
+
+        mPager = (ViewPager) rootView.findViewById(R.id.help_pager);
+        mPagerAdapter = new HelpSlidePagerAdapter(getChildFragmentManager());
+        mPager.setAdapter(mPagerAdapter);
+
+        return rootView;
     }
 
     @Override
@@ -71,15 +85,16 @@ public class HelpFragment extends Fragment {
 
                 textBuilder.append(divider).append(separator);
                 textBuilder.append(divider);
-                textBuilder.append("VERSION --- " + Build.VERSION.SDK_INT);
+                textBuilder.append("VERSION --- ").append(Build.VERSION.SDK_INT);
                 textBuilder.append(divider);
-                textBuilder.append("MANUFACTURER --- " + Build.MANUFACTURER);
+                textBuilder.append("MANUFACTURER --- ").append(Build.MANUFACTURER);
                 textBuilder.append(divider);
-                textBuilder.append("MODEL --- " + Build.MODEL);
+                textBuilder.append("MODEL --- ").append(Build.MODEL);
                 textBuilder.append(divider);
-                textBuilder.append("DISPLAY --- " + Build.DISPLAY);
+                textBuilder.append("DISPLAY --- ").append(Build.DISPLAY);
                 textBuilder.append(divider);
-                textBuilder.append("DISPLAY SIZE --- " + size.x + " X " + size.y).append(divider);
+                textBuilder.append("DISPLAY SIZE --- ").append(size.x).append(" X ").append(size.y);
+                textBuilder.append(divider);
                 textBuilder.append(separator).append(divider).append("Put feedback here ...");
 
                 emailIntent.putExtra(Intent.EXTRA_TEXT, textBuilder.toString());
@@ -88,5 +103,22 @@ public class HelpFragment extends Fragment {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private class HelpSlidePagerAdapter extends FragmentStatePagerAdapter {
+
+        public HelpSlidePagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return HelpPageFragment.newInstance("Cinfwat", "Probity");
+        }
+
+        @Override
+        public int getCount() {
+            return NUM_PAGES;
+        }
     }
 }
