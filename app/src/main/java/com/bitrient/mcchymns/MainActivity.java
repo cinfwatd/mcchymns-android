@@ -14,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -148,6 +149,8 @@ public class MainActivity extends AppCompatActivity implements
         } else {
             mTitle = savedInstanceState.getCharSequence(KEY_TITLE, getText(R.string.app_name));
         }
+
+        setTitle(mTitle);
     }
 
     /**
@@ -259,6 +262,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        Log.d("TAG", "YES - title - " + mTitle);
         outState.putCharSequence(KEY_TITLE, mTitle);
         outState.putIntegerArrayList(SELECTED_MENU_ITEM, new ArrayList<>(mAdapter.getSelectedItems()));
         super.onSaveInstanceState(outState);
