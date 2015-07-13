@@ -3,6 +3,7 @@ package com.bitrient.mcchymns.adapter;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,7 +70,14 @@ public class HymnAdapter extends SelectableAdapter<HymnAdapter.ViewHolder>  {
 
         int end = TextUtils.indexOf(mCursor.getString(1), "\\n");
 
-        String firstLine = TextUtils.substring(mCursor.getString(1), 0, end);
+        String firstLine;
+
+        try {
+            firstLine = TextUtils.substring(mCursor.getString(1), 0, end);
+        } catch (StringIndexOutOfBoundsException e) {
+            firstLine = mCursor.getString(1);
+        }
+
         String hymnNumber = mCursor.getString(0);
 
         if (viewHolder.holderId == TYPE_HYMN_ROW) {
