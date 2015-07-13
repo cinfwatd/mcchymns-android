@@ -20,6 +20,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -63,7 +64,17 @@ public class FavoritesFragment extends Fragment implements
 
     private CharSequence mCurrentFilter;
     private boolean mIsSearchViewOpen;
-    private int mSortType = -1;
+    private int mSortType;
+
+    private boolean mIsLoaded;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mIsLoaded = false;
+        mSortType = -1;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -105,6 +116,15 @@ public class FavoritesFragment extends Fragment implements
 
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.scrollToPosition(scrollPosition);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if (savedInstanceState == null && !mIsLoaded) {
+            mIsLoaded = true;
+        }
     }
 
     @Override
@@ -251,6 +271,8 @@ public class FavoritesFragment extends Fragment implements
          */
         if (mCurrentFilter != null && mIsSearchViewOpen == false) {
             mIsSearchViewOpen = true;
+        } else if (mIsLoaded) {
+            getLoaderManager().restartLoader(LOADER_ID, null, this);
         }
     }
 
