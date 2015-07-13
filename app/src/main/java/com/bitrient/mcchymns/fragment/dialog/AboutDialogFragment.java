@@ -33,7 +33,7 @@ public class AboutDialogFragment extends DialogFragment {
         mCustomTitle = (RelativeLayout) layoutInflater.inflate(R.layout.custom_dialog_title, null);
 
         ImageView logo = (ImageView) mCustomTitle.findViewById(R.id.left_icon);
-        logo.setImageResource(R.mipmap.ic_launcher2);
+        logo.setImageResource(R.mipmap.ic_launcher);
         TextView title = (TextView) mCustomTitle.findViewById(R.id.title);
         title.setText(R.string.about);
         TextView version = (TextView) mCustomTitle.findViewById(R.id.version);
