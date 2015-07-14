@@ -12,6 +12,12 @@
 
     </android.support.v4.view.ViewPager>
 
+    <com.bitrient.mcchymns.view.pageIndicator.LinePageIndicator
+        android:id="@+id/pager_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"/>
+
     <RelativeLayout
         android:id="@+id/dev_block"
         android:layout_width="match_parent"

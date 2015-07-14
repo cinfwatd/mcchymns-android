@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 
 import com.bitrient.mcchymns.R;
 import com.bitrient.mcchymns.fragment.dialog.AboutDialogFragment;
+import com.bitrient.mcchymns.view.pageIndicator.LinePageIndicator;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -55,6 +56,9 @@ public class HelpFragment extends Fragment {
         mPager = (ViewPager) rootView.findViewById(R.id.help_pager);
         mPagerAdapter = new HelpSlidePagerAdapter(getChildFragmentManager());
         mPager.setAdapter(mPagerAdapter);
+
+        LinePageIndicator indicator = (LinePageIndicator) rootView.findViewById(R.id.pager_indicator);
+        indicator.setViewPager(mPager);
 
         return rootView;
     }
