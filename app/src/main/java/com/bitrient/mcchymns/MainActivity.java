@@ -1,6 +1,7 @@
 package com.bitrient.mcchymns;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -340,6 +341,11 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void setTitle(CharSequence title) {
+        if (title.equals(getText(R.string.help))) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+        }
         mTitle = title;
         getSupportActionBar().setTitle(mTitle);
     }
