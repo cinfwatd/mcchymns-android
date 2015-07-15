@@ -26,7 +26,7 @@ import com.bitrient.mcchymns.view.pageIndicator.LinePageIndicator;
  */
 public class HelpFragment extends Fragment {
 
-    private static final int NUM_PAGES = 5;
+    private static final int NUM_PAGES = 4;
 
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
@@ -117,7 +117,7 @@ public class HelpFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
-            return HelpPageFragment.newInstance("Cinfwat", "Probity");
+            return HelpPageFragment.newInstance(position);
         }
 
         @Override

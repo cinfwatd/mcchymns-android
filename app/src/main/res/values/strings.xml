@@ -93,7 +93,17 @@
     <string name="color_swatch_description">Color <xliff:g id="color_index" example="14">%1$d</xliff:g></string>
     <!-- Content description for a selected color square. -->
     <string name="color_swatch_description_selected">Color <xliff:g id="color_index" example="14">%1$d</xliff:g> selected</string>
-    <string name="title_activity_about">AboutActivity</string>
-    <string name="title_activity_feedback">FeedbackActivity</string>
 
+    <!-- help fragment page titles-->
+    <string name="hymn_chorus_pane">Hymn chorus pane</string>
+    <string name="hymn_chorus_pane_details">Double tap hymn screen to show or hide the chorus pane.</string>
+
+    <string name="sliding_navigation_pane">Sliding navigation pane</string>
+    <string name="sliding_navigation_pane_details"></string>
+
+    <string name="quick_goto_hymn">Quick goto hymn</string>
+    <string name="quick_goto_hymn_details"></string>
+
+    <string name="favorites_collection">Favorites collection</string>
+    <string name="favorites_collection_details"></string>
 </resources>

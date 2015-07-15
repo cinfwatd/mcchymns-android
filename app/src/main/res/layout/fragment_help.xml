@@ -16,7 +16,8 @@
         android:id="@+id/pager_indicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"/>
+        android:layout_above="@+id/dev_block"
+        android:layout_marginBottom="20dp"/>
 
     <RelativeLayout
         android:id="@+id/dev_block"
