@@ -101,27 +101,28 @@ public class TopicDialogFragment extends DialogFragment implements LoaderManager
                     }
                 });
 
-        builder.setMultiChoiceItems(cursor, null, HymnContract.TopicEntry.COLUMN_NAME_TOPIC, new DialogInterface.OnMultiChoiceClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-
-            }
-        });
-//        CharSequence[] charsequeneArr = new  CharSequence[] {
-//                "Love",
-//                "Peace"
-//        };
-//
-//        boolean[] checked = new boolean[2];
-//        checked[0] = true;
-//
-//        int checkedInt = 0;
-//        builder.setMultiChoiceItems(charsequeneArr, checked, new DialogInterface.OnMultiChoiceClickListener() {
+//        builder.setMultiChoiceItems(cursor, null, HymnContract.TopicEntry.COLUMN_NAME_TOPIC, new DialogInterface.OnMultiChoiceClickListener() {
 //            @Override
 //            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
 //
 //            }
 //        });
+
+        CharSequence[] charsequeneArr = new  CharSequence[] {
+                "Love",
+                "Peace"
+        };
+
+        boolean[] checked = new boolean[2];
+        checked[0] = true;
+
+        int checkedInt = 0;
+        builder.setMultiChoiceItems(charsequeneArr, checked, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+
+            }
+        });
         return builder.create();
     }
 

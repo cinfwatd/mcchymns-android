@@ -70,14 +70,14 @@ public class MainActivity extends AppCompatActivity implements
         mMenuTitles = new HashMap<>(5);
         mMenuTitles.put(0, getString(R.string.app_name));
         mMenuTitles.put(1, getString(R.string.favorites));
-        mMenuTitles.put(2, getString(R.string.search));
-        mMenuTitles.put(3, getString(R.string.settings));
-        mMenuTitles.put(4, getString(R.string.help));
+//        mMenuTitles.put(2, getString(R.string.search));
+        mMenuTitles.put(2, getString(R.string.settings));
+        mMenuTitles.put(3, getString(R.string.help));
 
         final int menuIcons[] = {
                 R.mipmap.ic_action_queue_music,
                 R.mipmap.ic_action_badge,
-                R.mipmap.ic_action_magnifier,
+//                R.mipmap.ic_action_magnifier,
                 R.mipmap.ic_action_sliders,
                 R.mipmap.ic_action_bulb
         };
@@ -298,17 +298,17 @@ public class MainActivity extends AppCompatActivity implements
                 replaceFragment(favoritesFragment, position);
 
                 break;
-            case 2: // Advance Search
-                final SearchFragment searchFragment
-                        = new SearchFragment();
-                replaceFragment(searchFragment, position);
-
-                break;
-            case 3: // Settings
+//            case 2: // Advance Search
+//                final SearchFragment searchFragment
+//                        = new SearchFragment();
+//                replaceFragment(searchFragment, position);
+//
+//                break;
+            case 2: // Settings
                 Intent settingsIntent = new Intent(this, SettingsActivity.class);
                 startActivity(settingsIntent);
                 break;
-            case 4: // Help
+            case 3: // Help
                 final HelpFragment helpFragment = new HelpFragment();
                 replaceFragment(helpFragment, position);
                 break;
@@ -321,7 +321,7 @@ public class MainActivity extends AppCompatActivity implements
      * @param position The position to toggle.
      */
     private void toggleSelection(int position) {
-        if (position == 3) return; //ignore settings.
+        if (position == 2) return; //ignore settings.
         mAdapter.clearSelection();
         mAdapter.toggleSelection(position);
     }
