@@ -63,4 +63,18 @@
         </ScrollView>
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/inline_help"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:padding="3dp"
+        android:visibility="gone">
+        <TextView
+            android:gravity="center_horizontal"
+            android:text="Double tab screen to show or hide chorus pane."
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
 </RelativeLayout>

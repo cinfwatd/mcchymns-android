@@ -3,12 +3,8 @@ package com.bitrient.mcchymns.fragment;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Build;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.Fragment;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,28 +12,27 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import com.bitrient.mcchymns.BuildConfig;
 import com.bitrient.mcchymns.R;
-import com.bitrient.mcchymns.fragment.dialog.AboutDialogFragment;
-import com.bitrient.mcchymns.view.pageIndicator.LinePageIndicator;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class HelpFragment extends Fragment {
+public class AboutFragment extends Fragment {
 
-    private static final int NUM_PAGES = 4;
-
-    private ViewPager mPager;
-    private PagerAdapter mPagerAdapter;
-
-    public HelpFragment() {
+    public AboutFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+//        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
     }
 
     @Override
@@ -45,20 +40,26 @@ public class HelpFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
 
-        inflater.inflate(R.menu.menu_help, menu);
+        inflater.inflate(R.menu.menu_about, menu);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_help, container, false);
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_about, container, false);
 
-        mPager = (ViewPager) rootView.findViewById(R.id.help_pager);
-        mPagerAdapter = new HelpSlidePagerAdapter(getChildFragmentManager());
-        mPager.setAdapter(mPagerAdapter);
+        ImageView logo = (ImageView) rootView.findViewById(R.id.left_icon);
+        logo.setImageResource(R.mipmap.ic_launcher);
 
-        LinePageIndicator indicator = (LinePageIndicator) rootView.findViewById(R.id.pager_indicator);
-        indicator.setViewPager(mPager);
+        TextView version = (TextView) rootView.findViewById(R.id.version);
+
+        ProgressBar splashProgress = (ProgressBar) rootView.findViewById(R.id.splash_progress);
+        splashProgress.setIndeterminate(false);
+        splashProgress.setMax(10);
+        splashProgress.setProgress(10);
+
+        version.setText(BuildConfig.VERSION_NAME);
+
 
         return rootView;
     }
@@ -66,12 +67,6 @@ public class HelpFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.about:
-//                Intent aboutIntent = new Intent(getActivity(), AboutActivity.class);
-//                startActivity(aboutIntent);
-                AboutDialogFragment aboutFragment = new AboutDialogFragment();
-                aboutFragment.show(getFragmentManager(), "about");
-                break;
             case R.id.feedback:
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
                 emailIntent.setType("text/email");
@@ -107,22 +102,5 @@ public class HelpFragment extends Fragment {
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private class HelpSlidePagerAdapter extends FragmentStatePagerAdapter {
-
-        public HelpSlidePagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return HelpPageFragment.newInstance(position);
-        }
-
-        @Override
-        public int getCount() {
-            return NUM_PAGES;
-        }
     }
 }

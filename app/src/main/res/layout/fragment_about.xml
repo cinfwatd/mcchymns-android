@@ -1,0 +1,165 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/title_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="53dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="9dp"
+        android:paddingStart="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingEnd="16dp"
+
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:id="@+id/left_icon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="3dp"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/left_icon"
+            android:layout_toRightOf="@+id/left_icon"
+            android:paddingTop="8dp"
+            android:paddingBottom="1dp"
+            android:paddingLeft="14dp"
+            android:paddingEnd="14dp"
+            android:paddingRight="14dp"
+            style="?android:attr/windowTitleStyle" />
+
+        <TextView
+            android:id="@+id/version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:paddingTop="13dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical"
+        android:gravity="center_vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_above="@+id/credit_block">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:gravity="center_horizontal"
+                android:singleLine="true"
+                android:shadowColor="@color/gray"
+                android:shadowRadius="5"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:textColor="@android:color/white"
+                android:textSize="26sp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/ssands"
+                android:textColor="@color/gransboro"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/twelve_hundred_hymns"
+                android:textColor="@color/silver"
+                android:layout_marginTop="30dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/as_compiled"
+                android:textColor="@color/silver" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/irad_d_sankey"
+                android:textSize="16sp"
+                android:textColor="@color/gransboro" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/splash_progress"
+            android:layout_marginTop="-7dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@android:style/Widget.Holo.ProgressBar.Horizontal"
+            android:indeterminate="true"
+            android:layout_alignParentTop="true"
+            android:background="@color/selected_overlay"/>
+
+        <LinearLayout
+            android:id="@+id/credit_block"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:layout_marginTop="8dp"
+            android:padding="8dp"
+            android:layout_alignParentBottom="true">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:gravity="center_horizontal">
+                <TextView
+                    android:id="@+id/developers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bitrient"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp"/>
+
+                <TextView
+                    android:id="@+id/year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/year"
+                    android:layout_toEndOf="@+id/developers"
+                    android:layout_toRightOf="@+id/developers"
+                    android:textAppearance="?android:attr/textAppearanceSmallPopupMenu"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginEnd="8dp"/>
+
+                <TextView
+                    android:id="@+id/all_rights_reserved"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/all_rights_reserved"
+                    android:layout_toEndOf="@+id/year"
+                    android:layout_toRightOf="@+id/year"
+                    android:textAppearance="?android:attr/textAppearanceSmallPopupMenu" />
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

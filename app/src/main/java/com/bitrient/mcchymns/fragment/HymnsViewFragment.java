@@ -58,6 +58,7 @@ public class HymnsViewFragment extends Fragment implements LoaderManager.LoaderC
      */
     private static final int SET_FAVORITE_INITIALIZE = 0;
     private static final int SET_FAVORITE_CLICKED = 1;
+    private static final String SHOW_INLINE_HELP = "show_inline_help";
 
     private int mFavoritesIconType = 0;
     private GestureDetector mGestureDetector;
@@ -189,6 +190,11 @@ public class HymnsViewFragment extends Fragment implements LoaderManager.LoaderC
         final ScrollView stanzaScrollView = (ScrollView) rootView.findViewById(R.id.stanza_scroll_view);
         final ScrollView chorusScrollView = (ScrollView) rootView.findViewById(R.id.chorus_scroll_view);
 
+        final RelativeLayout inlineHelp = (RelativeLayout) rootView.findViewById(R.id.inline_help);
+
+        final SharedPreferences preferences =
+                PreferenceManager.getDefaultSharedPreferences(getActivity());
+
         mGestureDetector = new GestureDetector(getActivity(), new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onDoubleTap(MotionEvent e) {
@@ -201,6 +207,11 @@ public class HymnsViewFragment extends Fragment implements LoaderManager.LoaderC
                     if (!TextUtils.isEmpty(chorus.getText())) {
                         chorusContainer.setVisibility(View.VISIBLE);
                         mHideChorus = false;
+
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putBoolean(SHOW_INLINE_HELP, false);
+                        editor.commit();
+                        inlineHelp.setVisibility(View.GONE);
                     }
                 }
                 return true;
@@ -227,9 +238,6 @@ public class HymnsViewFragment extends Fragment implements LoaderManager.LoaderC
             }
         });
 
-        final SharedPreferences preferences =
-                PreferenceManager.getDefaultSharedPreferences(getActivity());
-
         final String fontName = preferences.getString(SettingsActivityFragment.KEY_PREF_FONTS, "lilac_malaria.ttf");
         final Typeface typeface = FontCache.get(fontName, getActivity());
 
@@ -247,6 +255,7 @@ public class HymnsViewFragment extends Fragment implements LoaderManager.LoaderC
 //
 //        final int backgroundId = getActivity().getResources().getIdentifier(bGName, "drawable", getActivity().getPackageName());
 //        rootView.setBackgroundResource(backgroundId);
+        final boolean showInlineHint = preferences.getBoolean(SHOW_INLINE_HELP, true);
 
         final int backgroundColor = preferences.getInt(SettingsActivityFragment.KEY_PREF_HYMN_BACKGROUND_COLOR, Color.WHITE);
         final boolean useTexture = preferences.getBoolean(SettingsActivityFragment.KEY_PREF_USE_TEXTURE, false);
@@ -308,6 +317,8 @@ public class HymnsViewFragment extends Fragment implements LoaderManager.LoaderC
                 chorus.setTypeface(typeface);
                 chorus.setTextColor(fontColor);
                 chorus.setTextSize(fontSize);
+
+                if (showInlineHint) inlineHelp.setVisibility(View.VISIBLE);
 
                 if (!mHideChorus) chorusContainer.setVisibility(View.VISIBLE);
                 continue;

@@ -23,7 +23,7 @@ import android.view.View;
 
 import com.bitrient.mcchymns.adapter.NavigationDrawerAdapter;
 import com.bitrient.mcchymns.fragment.FavoritesFragment;
-import com.bitrient.mcchymns.fragment.HelpFragment;
+import com.bitrient.mcchymns.fragment.AboutFragment;
 import com.bitrient.mcchymns.fragment.HymnsFragment;
 import com.bitrient.mcchymns.fragment.HymnsViewFragment;
 import com.bitrient.mcchymns.fragment.SearchFragment;
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements
         mMenuTitles.put(1, getString(R.string.favorites));
 //        mMenuTitles.put(2, getString(R.string.search));
         mMenuTitles.put(2, getString(R.string.settings));
-        mMenuTitles.put(3, getString(R.string.help));
+        mMenuTitles.put(3, getString(R.string.about));
 
         final int menuIcons[] = {
                 R.mipmap.ic_action_queue_music,
@@ -164,8 +164,8 @@ public class MainActivity extends AppCompatActivity implements
 
         if (fragmentClassName.equals(FavoritesFragment.class.getName())) {
             setTitle(getText(R.string.favorites));
-        } else if (fragmentClassName.equals(HelpFragment.class.getName())) {
-            setTitle(getText(R.string.help));
+        } else if (fragmentClassName.equals(AboutFragment.class.getName())) {
+            setTitle(getText(R.string.about));
         } else if (fragmentClassName.equals(HymnsFragment.class.getName())) {
             setTitle(getText(R.string.app_name));
         } else if (fragmentClassName.equals(SearchFragment.class.getName())) {
@@ -309,8 +309,8 @@ public class MainActivity extends AppCompatActivity implements
                 startActivity(settingsIntent);
                 break;
             case 3: // Help
-                final HelpFragment helpFragment = new HelpFragment();
-                replaceFragment(helpFragment, position);
+                final AboutFragment aboutFragment = new AboutFragment();
+                replaceFragment(aboutFragment, position);
                 break;
         }
     }
@@ -360,8 +360,10 @@ public class MainActivity extends AppCompatActivity implements
             MenuItem menuSearch = menu.findItem(R.id.action_search);
             MenuItem menuSort = menu.findItem(R.id.action_sort);
 
-            menuSearch.setVisible(!drawerOpen);
-            menuSort.setVisible(!drawerOpen);
+            if (menuSearch !=null && menuSort != null) {
+                menuSearch.setVisible(!drawerOpen);
+                menuSort.setVisible(!drawerOpen);
+            }
         }
 
         if (mTitle.equals(getText(R.string.favorites))) {
