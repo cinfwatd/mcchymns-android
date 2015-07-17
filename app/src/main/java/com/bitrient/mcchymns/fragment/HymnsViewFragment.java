@@ -143,7 +143,6 @@ public class HymnsViewFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-//        Log.d(TAG, "TEST - fragement on prepareOptionsMenu called - Icon_type = " + mFavoritesIconType);
         MenuItem favoriteMenuItem = menu.findItem(R.id.action_add_to_favorite);
 
         switch (mFavoritesIconType) {
@@ -354,7 +353,6 @@ public class HymnsViewFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-//        Log.d(TAG, "Cursor loading finished - " + data.getCount());
 
         loadHymn(data);
     }
@@ -400,7 +398,6 @@ public class HymnsViewFragment extends Fragment implements LoaderManager.LoaderC
 
             contentResolver.update(HymnContract.HymnEntry.CONTENT_URI, values, selection, selectionArgs);
 
-//            Log.d(TAG, "YES - " + isNotFavorite);
             return result;
         }
 
@@ -409,7 +406,6 @@ public class HymnsViewFragment extends Fragment implements LoaderManager.LoaderC
             mFavoritesIconType = result;
             if (getActivity() != null) getActivity().invalidateOptionsMenu();
 
-//            Log.d(TAG, "Finished");
             super.onPostExecute(result);
         }
     }

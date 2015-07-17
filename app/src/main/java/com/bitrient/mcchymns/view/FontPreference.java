@@ -112,7 +112,6 @@ public class FontPreference extends DialogPreference implements DialogInterface.
 
         // Get the current value to find the checked item
         String selectedFontPath = getSharedPreferences().getString( getKey(), getContext().getString(R.string.pref_default_font));
-        Log.d("TAG", "YES - fonts path - " + selectedFontPath);
         int idx = 0, checked_item = 0;
 
         for ( String path : fonts.keySet() )

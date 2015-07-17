@@ -76,7 +76,6 @@ public class HymnDbHelper extends SQLiteOpenHelper{
 
         db.setTransactionSuccessful();
         db.endTransaction();
-        Log.d(TAG, "THe number of inserts - " + result);
     }
 
     /**

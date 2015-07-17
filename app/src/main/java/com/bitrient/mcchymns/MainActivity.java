@@ -160,7 +160,6 @@ public class MainActivity extends AppCompatActivity implements
      */
     private void updateTitle(Fragment fragment) {
         final String fragmentClassName = fragment.getClass().getName();
-//        Log.d("TAG", "YES _ class name = " + fragmentClassName);
 
         if (fragmentClassName.equals(FavoritesFragment.class.getName())) {
             setTitle(getText(R.string.favorites));
@@ -263,7 +262,6 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        Log.d("TAG", "YES - title - " + mTitle);
         outState.putCharSequence(KEY_TITLE, mTitle);
         outState.putIntegerArrayList(SELECTED_MENU_ITEM, new ArrayList<>(mAdapter.getSelectedItems()));
         super.onSaveInstanceState(outState);

@@ -78,7 +78,6 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 //        add goto hymn dialog button
-        Log.d(TAG, "YES - onCreateOptionsMenu");
         inflater.inflate(R.menu.menu_goto_hymn, menu);
 
         mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
@@ -127,7 +126,6 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_goto:
-//                Log.d(TAG, "YES - got to clicked.");
                 GotoHymnDialogFragment hymnDialogFragment
                         = GotoHymnDialogFragment.newInstance();
                 hymnDialogFragment.show(getFragmentManager(), "HymnDialogFragment");
@@ -149,10 +147,7 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
         if (mSearchView != null && !mSearchView.isIconified()) {
             outState.putCharSequence(QUERY_STRING, mSearchView.getQuery());
 
-//            Log.d(TAG, "YES - Is iconified. - " + mSearchView.getQuery());
         }
-
-//        Log.d(TAG, "YES - saved instance state called. ");
         super.onSaveInstanceState(outState);
     }
 
@@ -161,10 +156,7 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
         if (savedInstanceState != null && savedInstanceState.containsKey(QUERY_STRING)) {
             mCurrentFilter = savedInstanceState.getCharSequence(QUERY_STRING);
             mIsSearchViewOpen = true;
-            Log.d(TAG, "YES - viewstaterestored - " + mCurrentFilter);
         }
-
-        Log.d(TAG, "YES - viewstaterestored");
         super.onViewStateRestored(savedInstanceState);
     }
 

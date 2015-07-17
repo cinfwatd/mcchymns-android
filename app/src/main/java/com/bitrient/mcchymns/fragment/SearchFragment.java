@@ -149,11 +149,11 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onDialogPositiveClicked(DialogFragment dialog) {
-        Log.d(TAG, "DIALOG== positve clicked.");
+//        Log.d(TAG, "DIALOG== positve clicked.");
     }
 
     @Override
     public void onDialogNegativeClicked(DialogFragment dialog) {
-        Log.d(TAG, "DIALOG== negative clicked.");
+//        Log.d(TAG, "DIALOG== negative clicked.");
     }
 }

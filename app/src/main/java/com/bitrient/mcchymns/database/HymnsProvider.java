@@ -10,11 +10,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.util.HashMap;
 
 public class HymnsProvider extends ContentProvider {
+    @SuppressWarnings("unused")
     private static final String TAG = "HymnsProvider";
 
     private HymnDbHelper dbHelper;
@@ -116,14 +116,11 @@ public class HymnsProvider extends ContentProvider {
             return insertedHymnUri;
         }
 
-        Log.i(TAG, "ROW_ID = " + rowId);
-
         throw new SQLException("Failed to insert row into " + uri);
     }
 
     @Override
     public boolean onCreate() {
-        Log.d(TAG, "main onCreate Called");
         dbHelper = HymnDbHelper.getInstance(getContext());
 
         return true;
@@ -166,7 +163,6 @@ public class HymnsProvider extends ContentProvider {
                 queryBuilder.setProjectionMap(hymnsProjectionMap);
                 queryBuilder.appendWhere(
                         HymnContract.StanzaEntry.COLUMN_NAME_STANZA + " MATCH '" + uri.getPathSegments().get(2) + "'");
-                Log.d(TAG, "QUERY BUILDER = " + queryBuilder.buildQuery(null, null, null, null, null, null));
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
@@ -182,8 +178,6 @@ public class HymnsProvider extends ContentProvider {
 
 //        get the database and run the query
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Log.d(TAG, "QUERY BUILDER@ = " + queryBuilder.buildQuery(projection, selection,
-                groupBy,  having, sortOrder, null));
         Cursor cursor = queryBuilder.query(db, projection, selection, selectionArgs,
                 groupBy, having, orderBy);
 
