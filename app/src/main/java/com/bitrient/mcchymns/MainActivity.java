@@ -366,7 +366,10 @@ public class MainActivity extends AppCompatActivity implements
 
         if (mTitle.equals(getText(R.string.favorites))) {
             MenuItem menuFav = menu.findItem(R.id.action_remove_all);
-            menuFav.setVisible(!drawerOpen);
+
+            if (menuFav != null) {
+                menuFav.setVisible(!drawerOpen);
+            }
         }
 
         /**

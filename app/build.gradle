@@ -8,7 +8,7 @@ android {
         applicationId "com.bitrient.mcchymns"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 2
+        versionCode 3
         versionName "0.9.6 Beta"
     }
     buildTypes {
