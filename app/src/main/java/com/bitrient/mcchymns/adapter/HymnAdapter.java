@@ -79,6 +79,9 @@ public class HymnAdapter extends SelectableAdapter<HymnAdapter.ViewHolder>  {
         }
 
         String hymnNumber = mCursor.getString(0);
+        String stanzaNumber = mCursor.getString(2);
+
+        if (stanzaNumber.equals("0")) stanzaNumber = "Ch.";
 
         if (viewHolder.holderId == TYPE_HYMN_ROW) {
             viewHolder.firstLineTextView.setText(firstLine);
@@ -87,6 +90,7 @@ public class HymnAdapter extends SelectableAdapter<HymnAdapter.ViewHolder>  {
             viewHolder.firstLineTextView.setText(firstLine);
             viewHolder.hymnNumberTextView.setText(hymnNumber);
             // prepare search view row
+            viewHolder.hymnStanzaNumberTextView.setText(stanzaNumber);
         }
 //            highlight the item if it's selected
         viewHolder.selectedOverlay.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
@@ -146,6 +150,7 @@ public class HymnAdapter extends SelectableAdapter<HymnAdapter.ViewHolder>  {
 
         private TextView firstLineTextView;
         private TextView hymnNumberTextView;
+        private TextView hymnStanzaNumberTextView;
 
         private View selectedOverlay;
 
@@ -165,7 +170,7 @@ public class HymnAdapter extends SelectableAdapter<HymnAdapter.ViewHolder>  {
                 hymnNumberTextView = (TextView) itemView.findViewById(R.id.hymn_row_number);
                 holderId = TYPE_HYMN_ROW;
             } else {
-
+                hymnStanzaNumberTextView = (TextView) itemView.findViewById(R.id.hymn_stanza_number);
                 firstLineTextView = (TextView) itemView.findViewById(R.id.hymn_row_title);
                 hymnNumberTextView = (TextView) itemView.findViewById(R.id.hymn_row_number);
 //                set search view info here
