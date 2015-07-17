@@ -9,6 +9,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 
+import com.afollestad.materialdialogs.AlertDialogWrapper;
 import com.bitrient.mcchymns.R;
 
 /**
@@ -23,7 +24,7 @@ public class SortDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialogWrapper.Builder builder = new AlertDialogWrapper.Builder(getActivity());
         builder.setTitle(R.string.sort_by)
                 .setItems(R.array.sort_type, new DialogInterface.OnClickListener() {
                     @Override

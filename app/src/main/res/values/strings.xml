@@ -24,7 +24,7 @@
     <string name="hymn_icon">Image representation of hymns</string>
     <string name="open_navigation_drawer_description">Open navigation drawer</string>
     <string name="close_navigation_drawer_desc">Close navigation drawer.</string>
-    <string name="favorites_confirm_remove">Remove from favorites?</string>
+    <string name="favorites_confirm_remove">Remove all from favorites?</string>
     <string name="favorites_confirm_accept">Remove</string>
     <string name="confirm_decline">Cancel</string>
     <string name="confirm_accept">Open</string>

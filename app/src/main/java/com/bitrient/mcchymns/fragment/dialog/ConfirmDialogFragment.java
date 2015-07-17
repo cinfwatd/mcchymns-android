@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
+import com.afollestad.materialdialogs.AlertDialogWrapper;
 import com.bitrient.mcchymns.R;
 import com.bitrient.mcchymns.database.HymnContract;
 
@@ -25,7 +26,7 @@ public class ConfirmDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialogWrapper.Builder builder = new AlertDialogWrapper.Builder(getActivity());
         builder.setTitle(getActivity().getResources().getString(R.string.favorites_confirm_remove));
         builder.setIcon(R.mipmap.ic_action_discard);
         builder.setPositiveButton(getActivity().getResources().getString(R.string.favorites_confirm_accept),
