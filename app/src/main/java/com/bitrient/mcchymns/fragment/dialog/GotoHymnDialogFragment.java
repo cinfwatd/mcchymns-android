@@ -2,19 +2,25 @@ package com.bitrient.mcchymns.fragment.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bitrient.mcchymns.R;
 import com.bitrient.mcchymns.fragment.HymnsViewFragment;
 
@@ -76,26 +82,44 @@ public class GotoHymnDialogFragment extends DialogFragment implements View.OnCli
         Button zeroBtn = (Button) mDialogView.findViewById(R.id.btn_zero);
         zeroBtn.setOnClickListener(this);
 
-        Button acceptBtn = (Button) mDialogView.findViewById(R.id.btn_accept);
-        Button declineBtn = (Button) mDialogView.findViewById(R.id.btn_cancel);
-
-        Button clearBtn = (Button) mDialogView.findViewById(R.id.btn_clear);
-
         if (savedInstanceState != null) {
             mSelectedHymnTextView.setText(savedInstanceState.getString(HymnsViewFragment.SELECTED_HYMN));
         }
 
-        declineBtn.setOnClickListener(new View.OnClickListener() {
+        mSelectedHymnTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dismiss();
+                String value = mSelectedHymnTextView.getText().toString();
+                int length = value.length();
+                if (length >= 1) mSelectedHymnTextView.setText(TextUtils.substring(value, 0, length -1));
             }
         });
 
-        acceptBtn.setOnClickListener(new View.OnClickListener() {
+        mSelectedHymnTextView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onLongClick(View v) {
+                String value = mSelectedHymnTextView.getText().toString();
+                if (!TextUtils.isEmpty(value)) mSelectedHymnTextView.setText("");
+                return true;
+            }
+        });
+    }
 
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity());
+
+        builder.customView(mDialogView, true);
+        builder.negativeText(R.string.confirm_decline);
+        builder.autoDismiss(false);
+
+        builder.positiveText(R.string.confirm_accept);
+
+        builder.callback(new MaterialDialog.ButtonCallback() {
+            @Override
+            public void onPositive(MaterialDialog dialog) {
                 if (!TextUtils.isEmpty(mSelectedHymnTextView.getText())
                         && (Integer.parseInt(String.valueOf(mSelectedHymnTextView.getText())) > 0)) {
 
@@ -116,40 +140,16 @@ public class GotoHymnDialogFragment extends DialogFragment implements View.OnCli
                             getResources().getString(R.string.empty_hymn_number), Toast.LENGTH_SHORT).show();
                 }
 
-            }
-        });
 
-        clearBtn.setOnClickListener(new View.OnClickListener() {
+            }
+
             @Override
-            public void onClick(View v) {
-                String value = mSelectedHymnTextView.getText().toString();
-                int length = value.length();
-                if (length >= 1) mSelectedHymnTextView.setText(TextUtils.substring(value, 0, length -1));
+            public void onNegative(MaterialDialog dialog) {
+                dismiss();
             }
         });
 
-        clearBtn.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                String value = mSelectedHymnTextView.getText().toString();
-                if (!TextUtils.isEmpty(value)) mSelectedHymnTextView.setText("");
-                return true;
-            }
-        });
-    }
-
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(getActivity().getResources().getString(R.string.select_hymn_number));
-
-        builder.setView(mDialogView);
-        final AlertDialog gotoDialog = builder.create();
-        gotoDialog.getWindow().setBackgroundDrawableResource(android.R.color.white);
-
-        return gotoDialog;
+        return builder.build();
     }
 
     @Override

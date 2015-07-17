@@ -2,6 +2,7 @@
 <resources>
     <color name="colorPrimary">#C9004A</color>
     <color name="colorPrimaryDark">#E64A19</color>
+    <color name="accentColor">#EF9A9A</color>
     <color name="chorusColor">#62371A</color>
     <!-- Shades of gray-->
     <color name="gransboro">#DCDCDC</color>
