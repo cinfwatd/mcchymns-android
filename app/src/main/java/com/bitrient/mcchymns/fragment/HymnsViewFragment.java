@@ -308,7 +308,16 @@ public class HymnsViewFragment extends Fragment implements LoaderManager.LoaderC
                 chorusDividerTop.setBackgroundColor(dividerColor);
                 chorusDividerBottom.setBackgroundColor(dividerColor);
 
-                chorus.setText(cursorStanzaBody);
+                CharSequence oldValue = chorus.getText();
+                CharSequence separator = "\n--------------------\n";
+
+                if (!TextUtils.isEmpty(oldValue)) {
+                    oldValue = String.format("%S%S", oldValue, separator);
+                } else {
+                    oldValue = "";
+                }
+
+                chorus.setText(oldValue + cursorStanzaBody);
 
                 chorusTitle.setTypeface(typeface);
                 chorusTitle.setTextColor(fontColor);
@@ -345,7 +354,7 @@ public class HymnsViewFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Log.d(TAG, "Cursor loading finished - " + data.getCount());
+//        Log.d(TAG, "Cursor loading finished - " + data.getCount());
 
         loadHymn(data);
     }
