@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/hymn_dialer_bottom_sheet"
+    android:layout_width="match_parent"
+    android:layout_margin="4dp"
+    android:layout_height="350dp"
+    app:cardCornerRadius="2dp"
+    app:cardElevation="4dp"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:text="@string/large_text1"-->
+            <!--android:textSize="16sp"-->
+            <!--android:padding="16dp"/>-->
+        <GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:columnCount="3"
+            android:rowCount="5">
+
+            <EditText
+                android:id="@+id/selected_hymn"
+                android:layout_width="256dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:focusable="false"
+                android:cursorVisible="false"
+                android:inputType="none"
+                android:paddingLeft="23dp"
+                android:layout_columnSpan="3"
+                android:layout_row="1"
+                android:drawableEnd="@drawable/ic_action_backspace"
+                android:drawableRight="@drawable/ic_action_backspace"
+                android:layout_gravity="center_horizontal"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <Button android:text="1"
+                android:id="@+id/btn_one"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                style="?android:attr/borderlessButtonStyle"/>
+            <Button android:text="2"
+                android:id="@+id/btn_two"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                style="?android:attr/borderlessButtonStyle"/>
+            <Button android:text="3"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/btn_three"
+                style="?android:attr/borderlessButtonStyle"/>
+            <Button android:text="4"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/btn_four"
+                style="?android:attr/borderlessButtonStyle"/>
+            <Button android:text="5"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/btn_five"
+                style="?android:attr/borderlessButtonStyle"/>
+            <Button android:text="6"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/btn_six"
+                style="?android:attr/borderlessButtonStyle"/>
+            <Button android:text="7"
+                android:id="@+id/btn_seven"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                style="?android:attr/borderlessButtonStyle"/>
+            <Button android:text="8"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/btn_eight"
+                style="?android:attr/borderlessButtonStyle"/>
+            <Button android:text="9"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/btn_nine"
+                style="?android:attr/borderlessButtonStyle"/>
+
+            <Button
+            android:id="@+id/btn_zero"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="0" android:layout_column="1" style="?android:attr/borderlessButtonStyle"/>
+        </GridLayout>
+    </android.support.v4.widget.NestedScrollView>
+</android.support.v7.widget.CardView>

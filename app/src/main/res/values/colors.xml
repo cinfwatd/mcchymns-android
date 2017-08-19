@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#C9004A</color>
+    <color name="colorPrimaryDark">#A3003C</color>
+    <color name="colorAccent">#607D8A</color>
+
+    <color name="default_hymn_background_color">#fff0d8a9</color>
+    <color name="default_hymn_font_color">#62371A</color>
+
+    <string-array name="default_color_choice_values" translatable="false">
+        <item>#33b5e5</item>
+        <item>#aa66cc</item>
+        <item>#99cc00</item>
+        <item>#ffbb33</item>
+        <item>#ff4444</item>
+        <item>#0099cc</item>
+        <item>#fff7ebcb</item>
+        <item>#669900</item>
+        <item>#ff8800</item>
+        <item>#fff0d8a9</item>
+        <item>#62371A</item>
+        <item>#eeeeee</item>
+        <item>#cccccc</item>
+        <item>#888888</item>
+        <item>#000000</item>
+        <item>#ffffff</item>
+    </string-array>
+
+    <color name="black_overlay">#66000000</color>
+    <color name="selected_overlay">#4DEF9A9A</color>
+    <color name="gransboro">#DCDCDC</color>
+    <color name="silver">#C0C0C0</color>
+    <color name="gray">#808080</color>
+    <color name="darkgray">#A9A9A9</color>
+
+    <color name="hymn_header_background">#E6FFFFFF</color>
+</resources>

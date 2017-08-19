@@ -1,4 +1,6 @@
-##MCCHymns
-**Psalm 96:1** *Sing to the LORD a new song; sing to the LORD, all the earth.*
+# README #
 
-Android implementation of the Twelve Hundred Hymns (1200) Hymns compiled by Ira D. Sankey as the **Sacred Songs & Solos**
+Sing on to the Lord a new song.
+
+### What is this repository for? ###
+A complete re-write of the MCCHymns Android app.

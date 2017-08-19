@@ -10,31 +10,42 @@ import android.widget.TextView;
 
 import com.bitrient.mcchymns.R;
 import com.bitrient.mcchymns.database.HymnContract;
+import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
 /**
  * @author Cinfwat Probity <czprobity@bitrient.com>
  * @since 6/10/15
  */
-public class HymnAdapter extends SelectableAdapter<HymnAdapter.ViewHolder>  {
+public class HymnAdapter extends SelectableAdapter<HymnAdapter.ViewHolder> implements StickyRecyclerHeadersAdapter<HymnAdapter.HeaderViewHolder> {
     private static final int TYPE_HYMN_ROW = 1;
     private static final int TYPE_SEARCH_HYMN_ROW = 2;
 
     private Cursor mCursor;
     private int mRowIdColumn;
     private int mRowNumberColumn;
+    private int mRowTopicIdColumn;
+
+    private int mTopicColumn;
+    private int mSubjectColumn;
 
     private boolean mIsSearch;
+    private boolean mHideHeaders;
 
     private ViewHolder.ClickListener clickListener;
 
     public HymnAdapter(Cursor cursor, ViewHolder.ClickListener clickListener) {
         mCursor = cursor;
 
-        mRowIdColumn = cursor != null ? cursor.getColumnIndex(HymnContract.StanzaEntry._ID) : -1;
+        mRowIdColumn = cursor != null ? cursor.getColumnIndex(HymnContract.HymnEntry._ID) : -1;
         mRowNumberColumn = cursor != null ? cursor.getColumnIndex(HymnContract.StanzaEntry.COLUMN_NAME_HYMN_NUMBER) : -1;
+        mRowTopicIdColumn = cursor != null ? cursor.getColumnIndex(HymnContract.HymnEntry.COLUMN_NAME_TOPIC_ID) : -1;
+
+        mTopicColumn = cursor != null ? cursor.getColumnIndex(HymnContract.TopicEntry.COLUMN_NAME_TOPIC) : -1;
+        mSubjectColumn = cursor != null ? cursor.getColumnIndex(HymnContract.SubjectEntry.COLUMN_NAME_SUBJECT) : -1;
 
         this.clickListener = clickListener;
         mIsSearch = false;
+        mHideHeaders = false;
     }
 
     @Override
@@ -122,6 +133,32 @@ public class HymnAdapter extends SelectableAdapter<HymnAdapter.ViewHolder>  {
     }
 
     @Override
+    public long getHeaderId(int position) {
+
+        if (mCursor != null && mCursor.moveToPosition(position) && !mHideHeaders) {
+            return mCursor.getLong(mRowTopicIdColumn);
+        }
+
+        return -1;
+    }
+
+    @Override
+    public HeaderViewHolder onCreateHeaderViewHolder(ViewGroup viewGroup) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.hymn_list_header, viewGroup, false);
+
+        return new HeaderViewHolder(view);
+    }
+
+    @Override
+    public void onBindHeaderViewHolder(HeaderViewHolder headerViewHolder, int position) {
+
+        if (mCursor != null && mCursor.moveToPosition(position)) {
+            headerViewHolder.category.setText(mCursor.getString(mSubjectColumn));
+            headerViewHolder.topic.setText(mCursor.getString(mTopicColumn));
+        }
+    }
+
+    @Override
     public int getItemCount() {
         if (mCursor == null) return 0;
         return mCursor.getCount();
@@ -134,9 +171,17 @@ public class HymnAdapter extends SelectableAdapter<HymnAdapter.ViewHolder>  {
         if (mCursor != null) {
             mRowIdColumn = cursor.getColumnIndexOrThrow(HymnContract.StanzaEntry._ID);
             mRowNumberColumn = cursor.getColumnIndexOrThrow(HymnContract.StanzaEntry.COLUMN_NAME_HYMN_NUMBER);
+            mRowTopicIdColumn = cursor.getColumnIndexOrThrow(HymnContract.HymnEntry.COLUMN_NAME_TOPIC_ID);
+
+            mTopicColumn = cursor.getColumnIndexOrThrow(HymnContract.TopicEntry.COLUMN_NAME_TOPIC);
+            mSubjectColumn = cursor.getColumnIndexOrThrow(HymnContract.SubjectEntry.COLUMN_NAME_SUBJECT);
         } else {
             mRowIdColumn = -1;
             mRowNumberColumn = -1;
+            mRowTopicIdColumn = -1;
+
+            mTopicColumn = -1;
+            mSubjectColumn = -1;
         }
 
         notifyDataSetChanged();
@@ -206,11 +251,28 @@ public class HymnAdapter extends SelectableAdapter<HymnAdapter.ViewHolder>  {
         }
     }
 
+    public static class HeaderViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView category;
+        private TextView topic;
+
+        public HeaderViewHolder(View itemView) {
+            super(itemView);
+
+            category = (TextView) itemView.findViewById(R.id.hymn_category);
+            topic = (TextView) itemView.findViewById(R.id.hymn_topic);
+        }
+    }
+
     private boolean isSearch() {
         return mIsSearch;
     }
 
     public void setIsSearch(boolean isSearch) {
         mIsSearch = isSearch;
+    }
+
+    public void setHideHeaders(boolean hideHeaders) {
+        mHideHeaders = hideHeaders;
     }
 }

@@ -6,33 +6,32 @@ package com.bitrient.mcchymns.view;
  * you may not use this file except in compliance with the License.
  */
 
-        import java.util.ArrayList;
-        import java.util.HashMap;
-        import java.util.List;
+import android.app.AlertDialog.Builder;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences.Editor;
+import android.graphics.Typeface;
+import android.preference.DialogPreference;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.CheckedTextView;
 
-        import android.app.AlertDialog.Builder;
-        import android.content.Context;
-        import android.content.DialogInterface;
-        import android.content.SharedPreferences.Editor;
-        import android.graphics.Typeface;
-        import android.preference.DialogPreference;
-        import android.util.AttributeSet;
-        import android.util.Log;
-        import android.view.LayoutInflater;
-        import android.view.View;
-        import android.view.ViewGroup;
-        import android.widget.BaseAdapter;
-        import android.widget.CheckedTextView;
+import com.bitrient.mcchymns.R;
+import com.bitrient.mcchymns.util.FontCache;
+import com.bitrient.mcchymns.util.FontManager;
 
-        import com.bitrient.mcchymns.R;
-        import com.bitrient.mcchymns.util.FontCache;
-        import com.bitrient.mcchymns.util.FontManager;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class FontPreference extends DialogPreference implements DialogInterface.OnClickListener
 {
     // Keeps the font file paths and names in separate arrays
-    private List< String >    m_fontPaths;
-    private List< String >    m_fontNames;
+    private List<String> fontPaths;
+    private List<String> fontNames;
 
     // Font adaptor responsible for redrawing the item TextView with the appropriate font.
     // We use BaseAdapter since we need both arrays, and the effort is quite small.
@@ -41,13 +40,13 @@ public class FontPreference extends DialogPreference implements DialogInterface.
         @Override
         public int getCount()
         {
-            return m_fontNames.size();
+            return fontNames.size();
         }
 
         @Override
         public Object getItem(int position)
         {
-            return m_fontNames.get( position );
+            return fontNames.get( position );
         }
 
         @Override
@@ -72,30 +71,30 @@ public class FontPreference extends DialogPreference implements DialogInterface.
 
                 // And inflate the view android.R.layout.select_dialog_singlechoice
                 // Why? See com.android.internal.app.AlertController method createListView()
-                view = inflater.inflate( android.R.layout.select_dialog_singlechoice, parent, false);
+                view = inflater.inflate( R.layout.my_select_dialog_singlechoice, parent, false);
             }
 
             if ( view != null )
             {
                 // Find the text view from our interface
-                CheckedTextView textView = (CheckedTextView) view.findViewById( android.R.id.text1 );
+                CheckedTextView textView = (CheckedTextView) view.findViewById( R.id.my_text1 );
 
                 // Replace the string with the current font name using our typeface
-                Typeface typeface = FontCache.get(m_fontPaths.get(position), getContext());
+                Typeface typeface = FontCache.get(fontPaths.get(position), getContext());
                 textView.setTypeface(typeface);
 
                 // If you want to make the selected item having different foreground or background color,
                 // be aware of themes. In some of them your foreground color may be the background color.
                 // So we don't mess with anything here and just add the extra stars to have the selected
                 // font to stand out.
-                textView.setText(m_fontNames.get(position));
+                textView.setText(fontNames.get(position));
             }
 
             return view;
         }
     }
 
-    public FontPreference( Context context, AttributeSet attrs )
+    public FontPreference(Context context, AttributeSet attrs )
     {
         super(context, attrs);
     }
@@ -107,8 +106,8 @@ public class FontPreference extends DialogPreference implements DialogInterface.
 
         // Get the fonts on the device
         HashMap< String, String > fonts = FontManager.enumerateFonts(getContext());
-        m_fontPaths = new ArrayList< String >();
-        m_fontNames = new ArrayList< String >();
+        fontPaths = new ArrayList<>();
+        fontNames = new ArrayList<>();
 
         // Get the current value to find the checked item
         String selectedFontPath = getSharedPreferences().getString( getKey(), getContext().getString(R.string.pref_default_font));
@@ -119,8 +118,8 @@ public class FontPreference extends DialogPreference implements DialogInterface.
             if ( path.equals( selectedFontPath  ) )
                 checked_item = idx;
 
-            m_fontPaths.add( path );
-            m_fontNames.add( fonts.get(path) );
+            fontPaths.add( path );
+            fontNames.add( fonts.get(path) );
             idx++;
         }
 
@@ -137,13 +136,15 @@ public class FontPreference extends DialogPreference implements DialogInterface.
 
     public void onClick(DialogInterface dialog, int which)
     {
-        if ( which >=0 && which < m_fontPaths.size() )
+        if ( which >=0 && which < fontPaths.size() )
         {
-            String selectedFontPath = m_fontPaths.get( which );
+            String selectedFontPath = fontPaths.get( which );
             Editor editor = getSharedPreferences().edit();
             editor.putString( getKey(), selectedFontPath );
-            editor.commit();
+//            editor.commit();
+            editor.apply();
 
+            callChangeListener(selectedFontPath);
             dialog.dismiss();
         }
     }

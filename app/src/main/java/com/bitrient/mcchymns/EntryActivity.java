@@ -6,10 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.TaskStackBuilder;
 
 import com.bitrient.mcchymns.database.HymnDbHelper;
-import com.bitrient.mcchymns.fragment.SettingsActivityFragment;
 
 import java.io.File;
 
@@ -24,6 +22,10 @@ public class EntryActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        PreferenceManager.setDefaultValues(this, R.xml.pref_appearance, false);
+        PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
+        PreferenceManager.setDefaultValues(this, R.xml.pref_information, false);
+
 //        check for loadingActivity first
         if (databaseExists(getApplicationContext(), HymnDbHelper.DATABASE_NAME)) {
 
@@ -31,13 +33,14 @@ public class EntryActivity extends Activity {
                     PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
             Bundle args = new Bundle();
+            final String favourites_pref_key = getString(R.string.pref_key_favourites);
             if (preferences
-                    .getBoolean(SettingsActivityFragment.KEY_PREF_SHOW_FAVORITES, false)) {
+                    .getBoolean(favourites_pref_key, false)) {
 
                 args.putBoolean(START_FAVORITES, true);
             }
 
-            Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
+            Intent mainIntent = new Intent(getApplicationContext(), HomeActivity.class);
             mainIntent.putExtras(args);
             startActivity(mainIntent);
 

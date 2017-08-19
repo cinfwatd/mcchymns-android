@@ -5,6 +5,7 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
@@ -38,6 +39,13 @@ public class HymnsProvider extends ContentProvider {
                 HymnContract.StanzaEntry.COLUMN_NAME_HYMN_NUMBER);
         hymnsProjectionMap.put(HymnContract.StanzaEntry.COLUMN_NAME_STANZA_NUMBER,
                 HymnContract.StanzaEntry.COLUMN_NAME_STANZA_NUMBER);
+
+        hymnsProjectionMap.put(HymnContract.HymnEntry.COLUMN_NAME_TOPIC_ID,
+                HymnContract.HymnEntry.COLUMN_NAME_TOPIC_ID);
+        hymnsProjectionMap.put(HymnContract.SubjectEntry.COLUMN_NAME_SUBJECT,
+                HymnContract.SubjectEntry.COLUMN_NAME_SUBJECT);
+        hymnsProjectionMap.put(HymnContract.TopicEntry.COLUMN_NAME_TOPIC,
+                HymnContract.TopicEntry.COLUMN_NAME_TOPIC);
     }
 
     /**
@@ -162,7 +170,9 @@ public class HymnsProvider extends ContentProvider {
                 queryBuilder.setTables(HymnContract.HYMNS_VIEW);
                 queryBuilder.setProjectionMap(hymnsProjectionMap);
                 queryBuilder.appendWhere(
-                        HymnContract.StanzaEntry.COLUMN_NAME_STANZA + " MATCH '" + uri.getPathSegments().get(2) + "'");
+                        HymnContract.StanzaEntry.COLUMN_NAME_STANZA + " MATCH "
+                                + DatabaseUtils.sqlEscapeString(uri.getPathSegments().get(2))
+                                .replace("\"", ""));
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
@@ -207,7 +217,7 @@ public class HymnsProvider extends ContentProvider {
             case HYMNS_FTS_ID:
                 String hymnNumber = uri.getPathSegments().get(1);
                 count = db.update(HymnContract.HymnEntry.TABLE_NAME, values, HymnContract.HymnEntry.COLUMN_NAME_HYMN_NUMBER + "=" + hymnNumber
-                + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), selectionArgs);
+                        + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), selectionArgs);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);

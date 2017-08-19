@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_menu_hymns_alt"
+        android:title="@string/hymns" />
+
+    <item
+        android:id="@+id/navigation_favourites"
+        android:icon="@drawable/ic_star_border_black_24dp"
+        android:title="@string/favourites" />
+
+    <item
+        android:id="@+id/navigation_hymn_dialer"
+        android:icon="@drawable/ic_action_dialpad"
+        android:title="Hymn number dialer" />
+
+    <item
+        android:id="@+id/navigation_settings"
+        android:icon="@drawable/ic_settings_black_24dp"
+        android:title="@string/settings" />
+
+</menu>

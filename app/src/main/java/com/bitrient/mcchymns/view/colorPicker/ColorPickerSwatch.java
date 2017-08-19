@@ -21,6 +21,7 @@ package com.bitrient.mcchymns.view.colorPicker;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -54,7 +55,7 @@ public class ColorPickerSwatch extends FrameLayout implements View.OnClickListen
         mColor = color;
         mOnColorSelectedListener = listener;
 
-        LayoutInflater.from(context).inflate(R.layout.calendar_color_picker_swatch, this);
+        LayoutInflater.from(context).inflate(R.layout.color_picker_swatch, this);
         mSwatchImage = (ImageView) findViewById(R.id.color_picker_swatch);
         mCheckmarkImage = (ImageView) findViewById(R.id.color_picker_checkmark);
         setColor(color);
@@ -64,7 +65,7 @@ public class ColorPickerSwatch extends FrameLayout implements View.OnClickListen
 
     protected void setColor(int color) {
         Drawable[] colorDrawable = new Drawable[]
-                {getContext().getResources().getDrawable(R.drawable.calendar_color_picker_swatch)};
+                {ContextCompat.getDrawable(getContext(), R.drawable.color_picker_swatch)};
         mSwatchImage.setImageDrawable(new ColorStateDrawable(colorDrawable, color));
     }
 

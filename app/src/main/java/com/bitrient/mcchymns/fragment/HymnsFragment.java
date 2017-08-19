@@ -1,10 +1,10 @@
 package com.bitrient.mcchymns.fragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -13,7 +13,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,17 +21,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
+import com.bitrient.mcchymns.HymnActivity;
 import com.bitrient.mcchymns.R;
 import com.bitrient.mcchymns.adapter.HymnAdapter;
 import com.bitrient.mcchymns.database.HymnContract;
-import com.bitrient.mcchymns.fragment.dialog.GotoHymnDialogFragment;
-import com.bitrient.mcchymns.fragment.dialog.SortDialog;
+//import com.bitrient.mcchymns.fragment.dialog.GotoHymnDialogFragment;
+//import com.bitrient.mcchymns.fragment.dialog.SortDialog;
 import com.bitrient.mcchymns.view.EmptiableRecyclerView;
+import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.ClickListener,
-        LoaderManager.LoaderCallbacks<Cursor>, SortDialog.SortDialogListener {
+            LoaderManager.LoaderCallbacks<Cursor>, SortDialogFragment.SortDialogListener {
     @SuppressWarnings("unused")
-    private static final String TAG = FavoritesFragment.class.getSimpleName();
+    private static final String TAG = HymnsFragment.class.getSimpleName();
     private static final int LOADER_ID = 5;
     private final String QUERY_STRING = "queryString4";
 
@@ -45,7 +46,7 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
     private boolean mIsSearchViewOpen;
     private int mSortType = -1;
 
-    private GotoHymnDialogFragment.HymnSelectionListener mSelectionListener;
+    private HymnActivity.HymnSelectionListener mSelectionListener;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -71,21 +72,24 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
         mRecyclerView.setAdapter(mHymnAdapter);
 
         setRecyclerViewLayoutManager(mRecyclerView);
+        mRecyclerView.addItemDecoration(new StickyRecyclerHeadersDecoration(mHymnAdapter));
 
         return rootView;
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        add goto hymn dialog button
-        inflater.inflate(R.menu.menu_goto_hymn, menu);
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
 
-        if (getActivity() != null) mSearchView.setQueryHint(getActivity().getResources().getString(R.string.search_hint));
+        if (getActivity() != null) mSearchView.setQueryHint(getActivity().getResources().getString(R.string.search));
 
-        View searchPlate = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_plate);
-        searchPlate.setBackgroundResource(R.drawable.textfield_search_selected_dashed);
+//        View searchPlate = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_plate);
+//        searchPlate.setBackgroundResource(R.drawable.textfield_search_selected_dashed);
 
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -124,19 +128,11 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_goto:
-                GotoHymnDialogFragment hymnDialogFragment
-                        = GotoHymnDialogFragment.newInstance();
-                hymnDialogFragment.show(getFragmentManager(), "HymnDialogFragment");
-                return true;
-
-            case R.id.action_sort:
-                final SortDialog sortDialog = new SortDialog();
-                sortDialog.setTargetFragment(this, 1);
-                sortDialog.show(getFragmentManager(), "sortDialog");
-                return true;
-
+        if (item.getItemId() == R.id.action_sort) {
+            final SortDialogFragment sortDialog = new SortDialogFragment();
+            sortDialog.setTargetFragment(this, 1);
+            sortDialog.show(getFragmentManager(), "sortDialog");
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -161,14 +157,14 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
 
         try {
-            mSelectionListener = (GotoHymnDialogFragment.HymnSelectionListener) activity;
+            mSelectionListener = (HymnActivity.HymnSelectionListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() +
-                " must implement the HymnSelectionListener interface.");
+            throw new ClassCastException(context.toString() +
+                    " must implement the HymnSelectionListener interface.");
         }
     }
 
@@ -176,9 +172,8 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
     public void onResume() {
         super.onResume();
 
-        /**
-         * Returning from backstack scenario
-         */
+
+//         Returning from backstack scenario
         if (mCurrentFilter != null && mIsSearchViewOpen == false) {
             mIsSearchViewOpen = true;
         }
@@ -188,10 +183,10 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
     public void onPause() {
         super.onPause();
 
-        /**
-         * Hide softkey if open.
-         * Like when a user searches for a hymn and selects one.
-         */
+
+//         Hide softkey if open.
+//         Like when a user searches for a hymn and selects one.
+//        TODO: Review if still needed. as it might throw error!!! ( according to IDE)
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm.isAcceptingText()) imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
     }
@@ -226,7 +221,7 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
         }
 
         final long itemNumber = mHymnAdapter.getItemNumber(position);
-        mSelectionListener.hymnSelected((int) itemNumber);
+        mSelectionListener.onHymnSelectedInteraction((int) itemNumber);
     }
 
     @Override
@@ -250,11 +245,14 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
                 HymnContract.StanzaEntry.COLUMN_NAME_HYMN_NUMBER,
                 HymnContract.StanzaEntry.COLUMN_NAME_STANZA,
                 HymnContract.StanzaEntry.COLUMN_NAME_STANZA_NUMBER,
-                HymnContract.StanzaEntry._ID
+                HymnContract.HymnEntry._ID,
+                HymnContract.HymnEntry.COLUMN_NAME_TOPIC_ID,
+                HymnContract.TopicEntry.COLUMN_NAME_TOPIC,
+                HymnContract.SubjectEntry.COLUMN_NAME_SUBJECT
         };
 
         String sortType;
-        if (mSortType == SortDialog.SORT_BY_FIRST_LINES) {
+        if (mSortType == SortDialogFragment.SORT_BY_FIRST_LINES) {
             sortType = HymnContract.StanzaEntry.FIRST_LINES_SORT_ORDER;
         } else {
             sortType = HymnContract.StanzaEntry.DEFAULT_SORT_ORDER;
@@ -267,6 +265,7 @@ public class HymnsFragment extends Fragment implements HymnAdapter.ViewHolder.Cl
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         final boolean isSearch = mCurrentFilter != null;
 
+        mHymnAdapter.setHideHeaders(mSortType == SortDialogFragment.SORT_BY_FIRST_LINES);
         mHymnAdapter.setIsSearch(isSearch);
         mHymnAdapter.swapCursor(data);
     }

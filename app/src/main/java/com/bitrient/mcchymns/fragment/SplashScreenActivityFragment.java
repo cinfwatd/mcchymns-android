@@ -12,8 +12,6 @@ import android.view.ViewGroup;
 import com.bitrient.mcchymns.R;
 import com.bitrient.mcchymns.database.HymnDbHelper;
 
-import java.io.IOException;
-
 
 /**
  * A placeholder fragment containing a simple view.
@@ -23,13 +21,13 @@ public class SplashScreenActivityFragment extends Fragment {
     SplashListener mListener;
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
 
         try {
-            mListener = (SplashListener) activity;
+            mListener = (SplashListener) context;
         } catch (ClassCastException e) {
-            throw new RuntimeException(activity.getLocalClassName() + " must implement the SplashListener interface.");
+            throw new RuntimeException(getActivity().getLocalClassName() + " must implement the SplashListener interface.");
         }
     }
 

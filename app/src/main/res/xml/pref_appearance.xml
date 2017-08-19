@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="@string/pref_key_background_texture"
+        android:summary="@string/pref_summary_background_texture"
+        android:title="@string/pref_title_background_texture" />
+
+    <ListPreference
+        android:key="@string/pref_key_font_size"
+        android:title="@string/pref_title_hymn_font_size"
+        android:defaultValue="@string/pref_default_font_size"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:entries="@array/pref_font_size_entries"
+        android:entryValues="@array/pref_font_size_values" />
+
+    <com.bitrient.mcchymns.view.FontPreference
+        android:key="@string/pref_key_font_style"
+        android:title="@string/pref_title_font_style"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:defaultValue="@string/pref_default_font" />
+
+    <com.bitrient.mcchymns.view.colorPicker.ColorPickerPreference
+        android:key="@string/pref_key_font_color"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_title_hymn_font_color"
+        android:defaultValue="@color/default_hymn_font_color"
+        app:itemLayout="@layout/color_picker_grid_item"
+        app:numColumns="4"/>
+
+    <com.bitrient.mcchymns.view.colorPicker.ColorPickerPreference
+        android:key="@string/pref_key_background_color"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_title_hymn_bg_color"
+        android:defaultValue="@color/default_hymn_background_color"
+        app:itemLayout="@layout/color_picker_grid_item"
+        app:numColumns="4"/>
+
+</PreferenceScreen>

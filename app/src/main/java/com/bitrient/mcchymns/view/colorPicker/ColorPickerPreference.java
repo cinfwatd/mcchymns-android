@@ -41,7 +41,7 @@ public class ColorPickerPreference extends Preference {
 	
 	private int[] mColorChoices = {};
     private int mValue = 0;
-    private int mItemLayoutId = R.layout.calendar_grid_item_color;
+    private int mItemLayoutId = R.layout.color_picker_grid_item;
     private int mNumColumns = 5;
     private View mPreviewView;
 
@@ -67,9 +67,9 @@ public class ColorPickerPreference extends Preference {
                 attrs, R.styleable.ColorPickerPreference, defStyle, defStyle);
 
         try {
-            mItemLayoutId = a.getResourceId(R.styleable.ColorPickerPreference_cal_itemLayout, mItemLayoutId);
-            mNumColumns = a.getInteger(R.styleable.ColorPickerPreference_cal_numColumns, mNumColumns);
-            int choicesResId = a.getResourceId(R.styleable.ColorPickerPreference_cal_choices,
+            mItemLayoutId = a.getResourceId(R.styleable.ColorPickerPreference_itemLayout, mItemLayoutId);
+            mNumColumns = a.getInteger(R.styleable.ColorPickerPreference_numColumns, mNumColumns);
+            int choicesResId = a.getResourceId(R.styleable.ColorPickerPreference_choices,
                     R.array.default_color_choice_values);
             if (choicesResId > 0) {
                 String[] choices = a.getResources().getStringArray(choicesResId);
@@ -79,7 +79,7 @@ public class ColorPickerPreference extends Preference {
                 }
             }
 
-            mDialogTitle = a.getString(R.styleable.ColorPickerPreference_cal_dialogTitle);
+            mDialogTitle = a.getString(R.styleable.ColorPickerPreference_dialogTitle);
             if (mDialogTitle == null) {
                 // Fallback on the regular title of the preference
                 // (the one that is seen in the list)

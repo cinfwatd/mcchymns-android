@@ -17,7 +17,7 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
 
     @Override
     public void onLoadFinished() {
-        Intent mainActivityIntent = new Intent(this, MainActivity.class);
+        Intent mainActivityIntent = new Intent(this, HomeActivity.class);
         startActivity(mainActivityIntent);
 
         finish();

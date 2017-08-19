@@ -19,11 +19,20 @@ public final class HymnContract {
 
     public static final String HYMNS_VIEW = "hymns_view";
     public static final String SQL_CREATE_HYMNS_VIEW = "CREATE VIEW " + HYMNS_VIEW +
-            " AS SELECT s." + StanzaEntry._ID + ", s." + StanzaEntry.COLUMN_NAME_HYMN_NUMBER +
+            " AS SELECT h." + HymnEntry._ID + ", s." + StanzaEntry.COLUMN_NAME_HYMN_NUMBER +
             ", s." + StanzaEntry.COLUMN_NAME_STANZA_NUMBER + ", s." + StanzaEntry.COLUMN_NAME_STANZA +
             ", h." + HymnEntry.COLUMN_NAME_FAVOURITE + ", h." + HymnEntry.COLUMN_NAME_TOPIC_ID +
+
+            ", t." + TopicEntry.COLUMN_NAME_TOPIC + ", c." + SubjectEntry.COLUMN_NAME_SUBJECT +
+
             " FROM " + StanzaEntry.TABLE_NAME + " AS s LEFT OUTER JOIN " + HymnEntry.TABLE_NAME + " AS h " +
-            "ON s." + StanzaEntry.COLUMN_NAME_HYMN_NUMBER + " = h." + HymnEntry.COLUMN_NAME_HYMN_NUMBER;
+            "ON s." + StanzaEntry.COLUMN_NAME_HYMN_NUMBER + " = h." + HymnEntry.COLUMN_NAME_HYMN_NUMBER +
+
+            " LEFT JOIN " + TopicEntry.TABLE_NAME + " AS t ON h." + HymnEntry.COLUMN_NAME_TOPIC_ID + " = t." +
+            TopicEntry._ID + " LEFT JOIN " + SubjectEntry.TABLE_NAME + " AS c ON t." + TopicEntry.COLUMN_NAME_SUBJECT_ID
+            + " = c." + SubjectEntry._ID;
+
+
     public static final String SQL_DELETE_HYMNS_VIEW = "DROP VIEW " + HYMNS_VIEW;
 
     public static abstract class HymnEntry implements BaseColumns {
@@ -65,7 +74,7 @@ public final class HymnContract {
         public static final String COLUMN_NAME_STANZA = "stanza_";
         public static final String COLUMN_NAME_IS_CHORUS = "is_chorus";
         public static final String DEFAULT_SORT_ORDER = COLUMN_NAME_HYMN_NUMBER + " COLLATE LOCALIZED ASC";
-        public static final String FIRST_LINES_SORT_ORDER = COLUMN_NAME_STANZA + " COLLATE LOCALIZED ASC";
+        public static final String FIRST_LINES_SORT_ORDER = HymnEntry._ID + " COLLATE LOCALIZED ASC";
 
         public static final String SQL_CREATE_ENTRIES =
                 "CREATE VIRTUAL TABLE " + TABLE_NAME + " USING fts3 (" +
